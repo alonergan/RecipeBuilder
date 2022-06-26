@@ -3,6 +3,7 @@ package org.cs564.recipeapp;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -54,4 +55,37 @@ public class LoginSceneController {
 
     }
 
+    @FXML
+    void loginSubmitButtonClicked() {
+        String usernameText = usernameTextField.getCharacters().toString();
+        String passwordText = usernameTextField.getCharacters().toString();
+
+        // Check for text entries
+        if (usernameText.isEmpty()) {
+            Alert usernameError = new Alert(Alert.AlertType.ERROR);
+            usernameError.setContentText("You must enter a valid username");
+            usernameError.showAndWait();
+            return;
+        } else if (passwordText.length() < 8) {
+            Alert passwordError = new Alert(Alert.AlertType.ERROR);
+            passwordError.setContentText("Password must be at least 8 characters long");
+            passwordError.showAndWait();
+            return;
+        }
+
+        // Handle login
+        boolean loginCorrect = Users.verifyLogin(usernameText, passwordText);
+        if (!loginCorrect) {
+            Alert loginError = new Alert(Alert.AlertType.ERROR);
+            loginError.setContentText("Username and password invalid\nPlease try again");
+            loginError.showAndWait();
+        } else {
+            // Handle scene change and login information
+        }
+
+    }
+
+    void loginNewUserButtonClicked() {
+        // Change scene or create popup window for registration
+    }
 }
