@@ -87,5 +87,6 @@ public class LoginSceneController {
 
     void loginNewUserButtonClicked() {
         // Change scene or create popup window for registration
+        // TODO
     }
 }

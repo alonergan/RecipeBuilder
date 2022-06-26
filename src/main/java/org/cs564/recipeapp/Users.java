@@ -9,7 +9,7 @@ public class Users {
      * Adds new login to users array and checks for duplicate usernames
      * @param username  username to be added
      * @param password  password for username
-     * @return          true if username was added
+     * @return          true if username was added, false otherwise
      */
     public static boolean addLogin(String username, String password) {
         // Check if username exists
