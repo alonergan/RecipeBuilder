@@ -5,10 +5,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -44,7 +41,7 @@ public class LoginSceneController {
     private Label mainTitle;
 
     @FXML
-    private TextField passwordTextField;
+    private PasswordField passwordTextField;
 
     @FXML
     private TextField usernameTextField;
@@ -65,7 +62,7 @@ public class LoginSceneController {
     @FXML
     void loginSubmitButtonClicked() {
         String usernameText = usernameTextField.getText();
-        String passwordText = usernameTextField.getText();
+        String passwordText = passwordTextField.getText();
 
         // Check for text entries
         if (usernameText.isEmpty()) {

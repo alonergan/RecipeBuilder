@@ -37,6 +37,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -71,9 +72,9 @@
                <children>
                   <Label fx:id="loginPaneLabel" layoutX="5.0" layoutY="14.0" text="Please enter your login information" />
                   <TextField id="usernameTextField" fx:id="usernameTextField" layoutX="24.0" layoutY="39.0" promptText="Username" />
-                  <TextField id="passwordTextField" fx:id="passwordTextField" layoutX="24.0" layoutY="75.0" promptText="Password" />
                   <Button id="loginSubmitButton" fx:id="loginSubmitButton" layoutX="119.0" layoutY="112.0" mnemonicParsing="false" onAction="#loginSubmitButtonClicked" text="Submit" />
                   <Button fx:id="loginNewUserButton" layoutX="24.0" layoutY="112.0" mnemonicParsing="false" onAction="#loginNewUserButtonClicked" text="New User" />
+                  <PasswordField fx:id="passwordTextField" layoutX="24.0" layoutY="75.0" promptText="Password" />
                </children>
             </Pane>
       </children>
