@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cs564.recipeapp.HomeSceneController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Preferences" />
+                  <MenuItem mnemonicParsing="false" text="Quit" />
+               </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <AnchorPane prefHeight="800.0" prefWidth="1200.0">
+         <children>
+            <SplitPane prefHeight="775.0" prefWidth="1200.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <Pane layoutX="274.0" layoutY="62.0" prefHeight="650.0" prefWidth="650.0">
+                           <children>
+                              <Label layoutX="34.0" layoutY="69.0" text="What would you like to do?">
+                                 <font>
+                                    <Font size="48.0" />
+                                 </font>
+                              </Label>
+                              <VBox alignment="CENTER" layoutX="75.0" layoutY="206.0" prefHeight="100.0" prefWidth="500.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="424.0" spacing="10.0">
+                                       <children>
+                                          <Button fx:id="findRecipeButton" mnemonicParsing="false" text="Find Recipe" />
+                                          <Button fx:id="browseRecipesButton" mnemonicParsing="false" text="Browse Recipes" />
+                                          <Button fx:id="addRecipesButton" mnemonicParsing="false" text="Add Recipes" />
+                                          <Button fx:id="userProfileButton" mnemonicParsing="false" text="User Profile" />
+                                       </children>
+                                    </HBox>
+                                    <Button fx:id="logoutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleLogoutButtonClicked" text="Logout" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

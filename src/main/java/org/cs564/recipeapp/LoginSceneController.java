@@ -4,11 +4,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 
@@ -60,7 +62,7 @@ public class LoginSceneController {
     }
 
     @FXML
-    void loginSubmitButtonClicked() {
+    void loginSubmitButtonClicked() throws IOException {
         String usernameText = usernameTextField.getText();
         String passwordText = passwordTextField.getText();
 
@@ -81,21 +83,25 @@ public class LoginSceneController {
 
         if (!Users.verifyLogin(usernameText, passwordText)) {
             Alert loginError = new Alert(Alert.AlertType.ERROR);
-            loginError.setContentText("Username and password invalid\nPlease try again");
+            loginError.setContentText("Username and/or password invalid\nPlease try again");
             loginError.showAndWait();
         } else {
             // Handle scene change and login information
+            Parent homeScene = FXMLLoader.load(RecipeApp.class.getResource("homeSceneController.fxml"));
+            Stage window = (Stage) loginSubmitButton.getScene().getWindow();
+            window.setScene(new Scene(homeScene, 1200, 800));
         }
 
     }
     @FXML
     void loginNewUserButtonClicked() throws IOException {
         // Change scene or create popup window for registration
-        FXMLLoader fxmlLoader = new FXMLLoader(RecipeApp.class.getResource("registrationSceneController.fxml"));
-        Scene registrationScene = new Scene(fxmlLoader.load(), 600, 400);
-        registrationStage.setTitle("Registration");
-        registrationStage.setScene(registrationScene);
-        registrationStage.show();
+        Parent registrationScene = FXMLLoader.load(RecipeApp.class.getResource("registrationSceneController.fxml"));
+        Stage window = (Stage) loginNewUserButton.getScene().getWindow();
+        window.setScene(new Scene(registrationScene, 600, 400));
+        //registrationStage.setTitle("Registration");
+        //registrationStage.setScene(registrationScene);
+        //registrationStage.show();
     }
 }
 

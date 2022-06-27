@@ -1,9 +1,12 @@
 package org.cs564.recipeapp;
 
-import java.util.ArrayList;
+import javafx.scene.control.Alert;
+
+import java.io.*;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class Users {
-    static ArrayList<ArrayList<String>> users = new ArrayList<>();
 
     /**
      * Adds new login to users array and checks for duplicate usernames
@@ -13,18 +16,43 @@ public class Users {
      */
     public static boolean addLogin(String username, String password) {
         // Check if username exists
-        for (ArrayList<String> user : users) {
-            if (user.get(0).equals(username)) {
-                return false;
-            }
-        }
+        try {
+            File file = new File("src/main/resources/userData.txt");
+            Scanner scnr = new Scanner(file);
+            scnr.nextLine(); // Skip header
+            String line;
+            String[] userData;
 
-        // Add username to ArrayList
-        ArrayList<String> newUser = new ArrayList<>(2);
-        newUser.add(username);
-        newUser.add(password);
-        users.add(newUser);
-        return true;
+            // Check all usernames for duplicates
+            while (scnr.hasNextLine()) {
+                line = scnr.nextLine();
+                userData = line.split(",");
+                if (userData[0].equals(username)) {
+                    return false;
+                }
+            }
+
+            // Add login
+            FileWriter fw = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter writer = new PrintWriter(bw);
+            writer.println(username + "," + password);
+            writer.close();
+            bw.close();
+            fw.close();
+            scnr.close();
+            return true;
+
+        } catch (IOException e) {
+            Alert ioError = new Alert(Alert.AlertType.ERROR);
+            ioError.setContentText("IOException: Could not find user data");
+            ioError.showAndWait();
+            e.printStackTrace();
+            return false;
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -34,14 +62,32 @@ public class Users {
      * @return          true if correct false otherwise
      */
     public static boolean verifyLogin(String username, String password) {
-        // Check for username in users
-        for (ArrayList<String> user : users) {
-            if (user.get(0).equals(username)) {
-                if (user.get(1).equals(password)) {
+        try {
+            File file = new File("src/main/resources/userData.txt");
+            Scanner scnr = new Scanner(file);
+            scnr.nextLine(); // Skip header
+            String line;
+            String[] userData;
+
+            // Find username
+            while (scnr.hasNextLine()) {
+                line = scnr.nextLine();
+                userData = line.split(",");
+                if (userData[0].equals(username) && userData[1].equals(password)) {
                     return true;
                 }
             }
+            return false;
+
+        } catch (IOException e) {
+            Alert ioError = new Alert(Alert.AlertType.ERROR);
+            ioError.setContentText("IOException: Could not find user data");
+            ioError.showAndWait();
+            e.printStackTrace();
+            return false;
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
 }
