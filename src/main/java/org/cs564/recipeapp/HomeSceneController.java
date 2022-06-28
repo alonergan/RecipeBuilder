@@ -49,4 +49,32 @@ public class HomeSceneController {
         Stage window = (Stage) logoutButton.getScene().getWindow();
         window.setScene(new Scene(loginScene, 1200, 800));
     }
+
+    @FXML
+    void handleFindRecipeButtonClicked() throws IOException {
+        Parent findRecipeScene = FXMLLoader.load(RecipeApp.class.getResource("findRecipeSceneController.fxml"));
+        Stage window = (Stage) logoutButton.getScene().getWindow();
+        window.setScene(new Scene(findRecipeScene, 1200, 800));
+    }
+
+    @FXML
+    void handleBrowseRecipesButtonClicked() throws IOException {
+        Parent browseRecipesScene = FXMLLoader.load(RecipeApp.class.getResource("browseRecipesSceneController.fxml"));
+        Stage window = (Stage) logoutButton.getScene().getWindow();
+        window.setScene(new Scene(browseRecipesScene, 1200, 800));
+    }
+
+    @FXML
+    void handleUserProfileButtonClicked() throws IOException {
+        Parent userProfileScene = FXMLLoader.load(RecipeApp.class.getResource("userProfileSceneController.fxml"));
+        Stage window = (Stage) logoutButton.getScene().getWindow();
+        window.setScene(new Scene(userProfileScene, 1200, 800));
+    }
+
+    @FXML
+    void handleAddRecipeButtonClicked() throws IOException {
+        Parent addRecipeScene = FXMLLoader.load(RecipeApp.class.getResource("addRecipeSceneController.fxml"));
+        Stage window = (Stage) logoutButton.getScene().getWindow();
+        window.setScene(new Scene(addRecipeScene, 1200, 800));
+    }
 }

@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cs564.recipeapp.HomeSceneController">
    <children>
       <MenuBar>
@@ -47,10 +46,10 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="424.0" spacing="10.0">
                                        <children>
-                                          <Button fx:id="findRecipeButton" mnemonicParsing="false" text="Find Recipe" />
-                                          <Button fx:id="browseRecipesButton" mnemonicParsing="false" text="Browse Recipes" />
-                                          <Button fx:id="addRecipesButton" mnemonicParsing="false" text="Add Recipes" />
-                                          <Button fx:id="userProfileButton" mnemonicParsing="false" text="User Profile" />
+                                          <Button fx:id="findRecipeButton" mnemonicParsing="false" onAction="#handleFindRecipeButtonClicked" text="Find Recipe" />
+                                          <Button fx:id="browseRecipesButton" mnemonicParsing="false" onAction="#handleBrowseRecipesButtonClicked" text="Browse Recipes" />
+                                          <Button fx:id="addRecipesButton" mnemonicParsing="false" onAction="#handleAddRecipeButtonClicked" text="Add Recipes" />
+                                          <Button fx:id="userProfileButton" mnemonicParsing="false" onAction="#handleUserProfileButtonClicked" text="User Profile" />
                                        </children>
                                     </HBox>
                                     <Button fx:id="logoutButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleLogoutButtonClicked" text="Logout" />

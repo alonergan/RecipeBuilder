@@ -67,7 +67,6 @@ public class RegistrationSceneController {
         } else {
             Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
             successAlert.setContentText("User successfully registered");
-            LoginSceneController.registrationStage.close();
             successAlert.show();
 
             // Switch back to login page

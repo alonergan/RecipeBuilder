@@ -16,8 +16,6 @@ import java.io.IOException;
 
 public class LoginSceneController {
 
-    static Stage registrationStage = new Stage();
-
     @FXML
     private ResourceBundle resources;
 
@@ -99,9 +97,6 @@ public class LoginSceneController {
         Parent registrationScene = FXMLLoader.load(RecipeApp.class.getResource("registrationSceneController.fxml"));
         Stage window = (Stage) loginNewUserButton.getScene().getWindow();
         window.setScene(new Scene(registrationScene, 600, 400));
-        //registrationStage.setTitle("Registration");
-        //registrationStage.setScene(registrationScene);
-        //registrationStage.show();
     }
 }
 
