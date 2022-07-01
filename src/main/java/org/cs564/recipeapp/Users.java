@@ -17,7 +17,7 @@ public class Users {
     public static boolean addLogin(String username, String password) {
         // Check if username exists
         try {
-            File file = new File("src/main/resources/userData.txt");
+            File file = new File("src/main/resources/org/cs564/recipeapp/data/userData.txt");
             Scanner scnr = new Scanner(file);
             scnr.nextLine(); // Skip header
             String line;
@@ -63,7 +63,7 @@ public class Users {
      */
     public static boolean verifyLogin(String username, String password) {
         try {
-            File file = new File("src/main/resources/userData.txt");
+            File file = new File("src/main/resources/org/cs564/recipeapp/data/userData.txt");
             Scanner scnr = new Scanner(file);
             scnr.nextLine(); // Skip header
             String line;

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cs564.recipeapp.RegistrationSceneController">
+   <children>
+      <BorderPane layoutX="500.0" layoutY="-53.0" prefHeight="778.0" prefWidth="1242.0" style="-fx-background-color: #607D8B;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <HBox prefHeight="49.0" prefWidth="1215.0" style="-fx-background-color: #455A64;" BorderPane.alignment="CENTER" />
+         </top>
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane prefHeight="690.0" prefWidth="1200.0">
+                     <children>
+                        <Pane layoutX="420.0" layoutY="198.0" prefHeight="280.0" prefWidth="360.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-color: #9E9E9E; -fx-border-width: 7; -fx-border-radius: 5;">
+                           <children>
+                              <VBox alignment="CENTER" layoutX="105.0" layoutY="38.0" prefHeight="205.0" prefWidth="150.0" spacing="10.0">
+                                 <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="0.0" prefWidth="150.0" text="Register Your Account" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                                       <padding>
+                                          <Insets top="25.0" />
+                                       </padding></Label>
+                                    <TextField fx:id="usernameTextField" alignment="CENTER" prefHeight="25.0" prefWidth="40.0" promptText="Username" style="-fx-border-color: #BDBDBD;" />
+                                    <PasswordField fx:id="passwordTextField" alignment="CENTER" promptText="Password" style="-fx-border-color: #BDBDBD;" />
+                                    <PasswordField fx:id="confirmPasswordTextField" alignment="CENTER" promptText="Confirm Password" style="-fx-border-color: #BDBDBD;" />
+                                    <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                                       <children>
+                                          <Button fx:id="returnButton" mnemonicParsing="false" onAction="#returnButtonClicked" style="-fx-background-color: #455A64; -fx-text-fill: #FFFFFF;" text="Return" />
+                                          <Button fx:id="submitButton" mnemonicParsing="false" onAction="#submitButtonClicked" style="-fx-background-color: #455A64; -fx-text-fill: #FFFFFF;" text="Submit" />
+                                       </children>
+                                    </HBox>
+                                    <Label opacity="0.0" prefHeight="7.0" prefWidth="92.0" text="ERROR MESSAGE" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

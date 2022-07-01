@@ -23,39 +23,23 @@ public class LoginSceneController {
     private URL location;
 
     @FXML
-    private Button loginNewUserButton;
-
-    @FXML
-    private Label loginPaneLabel;
-
-    @FXML
-    private Button loginSubmitButton;
-
-    @FXML
-    private AnchorPane mainAnchorPane;
-
-    @FXML
-    private Pane mainLoginPane;
-
-    @FXML
-    private Label mainTitle;
+    private Button newUserButton;
 
     @FXML
     private PasswordField passwordTextField;
+
+    @FXML
+    private Button signInButton;
 
     @FXML
     private TextField usernameTextField;
 
     @FXML
     void initialize() {
-        assert loginNewUserButton != null : "fx:id=\"loginNewUserButton\" was not injected: check your FXML file 'Untitled'.";
-        assert loginPaneLabel != null : "fx:id=\"loginPaneLabel\" was not injected: check your FXML file 'Untitled'.";
-        assert loginSubmitButton != null : "fx:id=\"loginSubmitButton\" was not injected: check your FXML file 'Untitled'.";
-        assert mainAnchorPane != null : "fx:id=\"mainAnchorPane\" was not injected: check your FXML file 'Untitled'.";
-        assert mainLoginPane != null : "fx:id=\"mainLoginPane\" was not injected: check your FXML file 'Untitled'.";
-        assert mainTitle != null : "fx:id=\"mainTitle\" was not injected: check your FXML file 'Untitled'.";
-        assert passwordTextField != null : "fx:id=\"passwordTextField\" was not injected: check your FXML file 'Untitled'.";
-        assert usernameTextField != null : "fx:id=\"usernameTextField\" was not injected: check your FXML file 'Untitled'.";
+        assert newUserButton != null : "fx:id=\"newUserButton\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
+        assert passwordTextField != null : "fx:id=\"passwordTextField\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
+        assert signInButton != null : "fx:id=\"signInButton\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
+        assert usernameTextField != null : "fx:id=\"usernameTextField\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
 
     }
 
@@ -85,18 +69,18 @@ public class LoginSceneController {
             loginError.showAndWait();
         } else {
             // Handle scene change and login information
-            Parent homeScene = FXMLLoader.load(RecipeApp.class.getResource("homeSceneController.fxml"));
-            Stage window = (Stage) loginSubmitButton.getScene().getWindow();
-            window.setScene(new Scene(homeScene, 1200, 800));
+            Parent homeScene = FXMLLoader.load(RecipeApp.class.getResource("fxml/homeSceneController.fxml"));
+            Stage window = (Stage) signInButton.getScene().getWindow();
+            window.setScene(new Scene(homeScene, 1200, 725));
         }
 
     }
     @FXML
     void loginNewUserButtonClicked() throws IOException {
         // Change scene or create popup window for registration
-        Parent registrationScene = FXMLLoader.load(RecipeApp.class.getResource("registrationSceneController.fxml"));
-        Stage window = (Stage) loginNewUserButton.getScene().getWindow();
-        window.setScene(new Scene(registrationScene, 600, 400));
+        Parent registrationScene = FXMLLoader.load(RecipeApp.class.getResource("fxml/registrationSceneController.fxml"));
+        Stage window = (Stage) newUserButton.getScene().getWindow();
+        window.setScene(new Scene(registrationScene, 1200, 725));
     }
 }
 

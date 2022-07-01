@@ -21,7 +21,10 @@ public class RegistrationSceneController {
     private PasswordField passwordTextField;
 
     @FXML
-    private Button registrationSubmitButton;
+    private Button submitButton;
+
+    @FXML
+    private Button returnButton;
 
     @FXML
     private TextField usernameTextField;
@@ -30,8 +33,9 @@ public class RegistrationSceneController {
     void initialize() {
         assert confirmPasswordTextField != null : "fx:id=\"confirmPasswordTextField\" was not injected: check your FXML file 'registrationSceneController.fxml'.";
         assert passwordTextField != null : "fx:id=\"passwordTextField\" was not injected: check your FXML file 'registrationSceneController.fxml'.";
-        assert registrationSubmitButton != null : "fx:id=\"registrationSubmitButton\" was not injected: check your FXML file 'registrationSceneController.fxml'.";
+        assert submitButton != null : "fx:id=\"registrationSubmitButton\" was not injected: check your FXML file 'registrationSceneController.fxml'.";
         assert usernameTextField != null : "fx:id=\"usernameTextField\" was not injected: check your FXML file 'registrationSceneController.fxml'.";
+        assert returnButton != null : "fx:id=\"returnButton\" was not injected: check your FXML file 'registrationSceneController.fxml'.";
 
     }
 
@@ -70,9 +74,17 @@ public class RegistrationSceneController {
             successAlert.show();
 
             // Switch back to login page
-            Parent loginScene = FXMLLoader.load(RecipeApp.class.getResource("loginSceneController.fxml"));
-            Stage window = (Stage) registrationSubmitButton.getScene().getWindow();
-            window.setScene(new Scene(loginScene, 1200, 800));
+            Parent loginScene = FXMLLoader.load(RecipeApp.class.getResource("fxml/loginSceneController.fxml"));
+            Stage window = (Stage) submitButton.getScene().getWindow();
+            window.setScene(new Scene(loginScene, 1200, 725));
         }
+    }
+
+    @FXML
+    void returnButtonClicked() throws IOException {
+        // Switch back to login page
+        Parent loginScene = FXMLLoader.load(RecipeApp.class.getResource("fxml/loginSceneController.fxml"));
+        Stage window = (Stage) submitButton.getScene().getWindow();
+        window.setScene(new Scene(loginScene, 1200, 725));
     }
 }

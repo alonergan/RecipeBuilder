@@ -10,8 +10,8 @@ import java.io.IOException;
 public class RecipeApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(RecipeApp.class.getResource("loginSceneController.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
+        FXMLLoader fxmlLoader = new FXMLLoader(RecipeApp.class.getResource("fxml/loginSceneController.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 725);
         stage.setTitle("Recipe Builder");
         stage.setScene(scene);
         stage.show();
