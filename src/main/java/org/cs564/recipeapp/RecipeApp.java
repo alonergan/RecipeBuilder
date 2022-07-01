@@ -2,19 +2,34 @@ package org.cs564.recipeapp;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class RecipeApp extends Application {
+    private double x, y;
+
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(RecipeApp.class.getResource("fxml/loginSceneController.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 725);
-        stage.setTitle("Recipe Builder");
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) throws IOException {
+        // Load login page
+        Parent root = FXMLLoader.load(getClass().getResource("loginSceneController.fxml"));
+        primaryStage.setScene(new Scene(root));
+        primaryStage.setTitle("Recipe Builder");
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+
+        root.setOnMousePressed(event -> {
+            x = event.getSceneX();
+            y = event.getSceneY();
+        });
+
+        root.setOnMouseDragged(event -> {
+            primaryStage.setX(event.getScreenX() - x);
+            primaryStage.setY(event.getScreenY() - y);
+        });
+
+        primaryStage.show();
     }
 
     public static void main(String[] args) {

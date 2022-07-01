@@ -74,7 +74,7 @@ public class RegistrationSceneController {
             successAlert.show();
 
             // Switch back to login page
-            Parent loginScene = FXMLLoader.load(RecipeApp.class.getResource("fxml/loginSceneController.fxml"));
+            Parent loginScene = FXMLLoader.load(RecipeApp.class.getResource("loginSceneController.fxml"));
             Stage window = (Stage) submitButton.getScene().getWindow();
             window.setScene(new Scene(loginScene, 1200, 725));
         }
@@ -83,7 +83,7 @@ public class RegistrationSceneController {
     @FXML
     void returnButtonClicked() throws IOException {
         // Switch back to login page
-        Parent loginScene = FXMLLoader.load(RecipeApp.class.getResource("fxml/loginSceneController.fxml"));
+        Parent loginScene = FXMLLoader.load(RecipeApp.class.getResource("loginSceneController.fxml"));
         Stage window = (Stage) submitButton.getScene().getWindow();
         window.setScene(new Scene(loginScene, 1200, 725));
     }
