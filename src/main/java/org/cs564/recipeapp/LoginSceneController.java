@@ -7,10 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.IOException;
 
@@ -69,7 +66,7 @@ public class LoginSceneController {
             loginError.showAndWait();
         } else {
             // Handle scene change and login information
-            Parent homeScene = FXMLLoader.load(RecipeApp.class.getResource("homeSceneController.fxml"));
+            Parent homeScene = FXMLLoader.load(MainApplication.class.getResource("homeSceneController.fxml"));
             Stage window = (Stage) signInButton.getScene().getWindow();
             window.setScene(new Scene(homeScene, 1200, 725));
         }
@@ -78,7 +75,7 @@ public class LoginSceneController {
     @FXML
     void loginNewUserButtonClicked() throws IOException {
         // Change scene or create popup window for registration
-        Parent registrationScene = FXMLLoader.load(RecipeApp.class.getResource("registrationSceneController.fxml"));
+        Parent registrationScene = FXMLLoader.load(MainApplication.class.getResource("registrationSceneController.fxml"));
         Stage window = (Stage) newUserButton.getScene().getWindow();
         window.setScene(new Scene(registrationScene, 1200, 725));
     }

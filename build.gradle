@@ -25,7 +25,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'org.cs564.recipeapp'
-    mainClass = 'org.cs564.recipeapp.RecipeApp'
+    mainClass = 'org.cs564.recipeapp.MainApplication'
 }
 
 javafx {
@@ -37,6 +37,8 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    implementation("mysql:mysql-connector-java:8.0.29")
+
 }
 
 test {

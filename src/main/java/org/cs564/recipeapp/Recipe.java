@@ -10,7 +10,6 @@ public class Recipe {
     int n_ingredients;
     int n_minutes;
     int n_steps;
-    int contributorID;
     String name;
     String dateSubmitted;
     String description;
@@ -24,7 +23,6 @@ public class Recipe {
         this.n_ingredients = n_ingredients;
         this.n_minutes = n_minutes;
         this.n_steps = n_steps;
-        this.contributorID = contributorID;
         this.name = name;
         this.dateSubmitted = dateSubmitted;
         this.description = description;
@@ -64,14 +62,6 @@ public class Recipe {
 
     public void setN_steps(int n_steps) {
         this.n_steps = n_steps;
-    }
-
-    public int getContributorID() {
-        return contributorID;
-    }
-
-    public void setContributorID(int contributorID) {
-        this.contributorID = contributorID;
     }
 
     public String getName() {
