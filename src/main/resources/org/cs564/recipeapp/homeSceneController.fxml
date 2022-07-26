@@ -48,133 +48,6 @@
          <center>
             <StackPane BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="searchPane1" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-                                 <children>
-                                    <Label text="Step 1: Please select ingredients you have or would like to use">
-                                       <font>
-                                          <Font size="29.0" />
-                                       </font>
-                                    </Label>
-                                    <Button fx:id="searchSubmitButton1" mnemonicParsing="false" text="Submit">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="675.0" prefWidth="965.0">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
-                                       <children>
-                                          <Label text="Protein">
-                                             <font>
-                                                <Font size="36.0" />
-                                             </font>
-                                          </Label>
-                                          <Label layoutX="74.0" layoutY="196.0" text="(Choose 1)">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Label>
-                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                             <padding>
-                                                <Insets left="50.0" />
-                                             </padding>
-                                             <children>
-                                                <Group>
-                                                   <children>
-                                                      <RadioButton fx:id="chickenRadioButton" mnemonicParsing="false" text="Chicken">
-                                                         <toggleGroup>
-                                                            <ToggleGroup fx:id="proteinGroup" />
-                                                         </toggleGroup>
-                                                      </RadioButton>
-                                                      <RadioButton fx:id="beefRadioButton" layoutY="32.0" mnemonicParsing="false" text="Beef" toggleGroup="$proteinGroup" />
-                                                      <RadioButton fx:id="fishRadioButton" layoutY="64.0" mnemonicParsing="false" text="Fish" toggleGroup="$proteinGroup" />
-                                                      <RadioButton fx:id="eggsRadioButton" layoutY="96.0" mnemonicParsing="false" text="Eggs" toggleGroup="$proteinGroup" />
-                                                   </children>
-                                                </Group>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
-                                       <children>
-                                          <Label text="Starch">
-                                             <font>
-                                                <Font size="36.0" />
-                                             </font>
-                                          </Label>
-                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                                             <children>
-                                                <CheckBox fx:id="potatoCheckBox" mnemonicParsing="false" text="Potato" />
-                                                <CheckBox fx:id="riceCheckBox" mnemonicParsing="false" text="Rice" />
-                                                <CheckBox fx:id="pastaCheckBox" mnemonicParsing="false" text="Pasta / Noodle" />
-                                             </children>
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                             <padding>
-                                                <Insets left="50.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
-                                       <children>
-                                          <Label text="Vegetables">
-                                             <font>
-                                                <Font size="36.0" />
-                                             </font>
-                                          </Label>
-                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                                             <children>
-                                                <CheckBox fx:id="spinachCheckBox" mnemonicParsing="false" text="Spinach" />
-                                                <CheckBox fx:id="tomatoCheckBox" mnemonicParsing="false" text="Tomato" />
-                                                <CheckBox fx:id="pepperCheckBox" mnemonicParsing="false" text="Pepper" />
-                                                <CheckBox fx:id="onionCheckBox" mnemonicParsing="false" text="Onion" />
-                                                <CheckBox fx:id="carrotCheckBox" mnemonicParsing="false" text="Carrots" />
-                                                <CheckBox fx:id="garlicCheckBox" mnemonicParsing="false" text="Garlic" />
-                                                <CheckBox fx:id="cornCheckBox" layoutX="60.0" layoutY="150.0" mnemonicParsing="false" text="Corn" />
-                                             </children>
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                             <padding>
-                                                <Insets left="50.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="242.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
-                                       <children>
-                                          <Label text="Other">
-                                             <font>
-                                                <Font size="36.0" />
-                                             </font>
-                                          </Label>
-                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                             <padding>
-                                                <Insets left="50.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
                   <Pane fx:id="profilePane">
                      <children>
                         <VBox alignment="CENTER" prefHeight="676.0" prefWidth="965.0" spacing="25.0" style="-fx-background-color: #FFFFFF;">
@@ -367,6 +240,141 @@
                                           </Label>
                                           <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" text="No Description" wrapText="true" />
                                           <Label text="Maybe rating/reviews here?" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="searchPane1" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                                 <children>
+                                    <Label text="Step 1: Please select ingredients you have or would like to use">
+                                       <font>
+                                          <Font size="29.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="searchSubmitButton1" mnemonicParsing="false" onAction="#handleSearchSubmit" text="Submit">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="675.0" prefWidth="965.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
+                                       <children>
+                                          <Label text="Protein">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="74.0" layoutY="196.0" text="(Choose 1)">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets left="50.0" />
+                                             </padding>
+                                             <children>
+                                                <Group>
+                                                   <children>
+                                                      <RadioButton fx:id="chickenRadioButton" mnemonicParsing="false" text="Chicken">
+                                                         <toggleGroup>
+                                                            <ToggleGroup fx:id="proteinGroup" />
+                                                         </toggleGroup>
+                                                      </RadioButton>
+                                                      <RadioButton fx:id="beefRadioButton" layoutY="32.0" mnemonicParsing="false" text="Beef" toggleGroup="$proteinGroup" />
+                                                      <RadioButton fx:id="fishRadioButton" layoutY="64.0" mnemonicParsing="false" text="Fish" toggleGroup="$proteinGroup" />
+                                                      <RadioButton fx:id="eggsRadioButton" layoutY="96.0" mnemonicParsing="false" text="Eggs" toggleGroup="$proteinGroup" />
+                                                   </children>
+                                                </Group>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
+                                       <children>
+                                          <Label text="Starch">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                                             <children>
+                                                <Group fx:id="starchCheckBoxGroup">
+                                                   <children>
+                                                      <CheckBox fx:id="potatoCheckBox" mnemonicParsing="false" text="Potato" />
+                                                      <CheckBox fx:id="riceCheckBox" layoutY="32.0" mnemonicParsing="false" text="Rice" />
+                                                      <CheckBox fx:id="pastaCheckBox" layoutY="64.0" mnemonicParsing="false" text="Pasta / Noodle" />
+                                                   </children>
+                                                </Group>
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets left="50.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
+                                       <children>
+                                          <Label text="Vegetables">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                                             <children>
+                                                <Group fx:id="vegetableCheckBoxGroup">
+                                                   <children>
+                                                      <CheckBox fx:id="spinachCheckBox" mnemonicParsing="false" text="Spinach" />
+                                                      <CheckBox fx:id="tomatoCheckBox" layoutY="32.0" mnemonicParsing="false" text="Tomato" />
+                                                      <CheckBox fx:id="pepperCheckBox" layoutY="64.0" mnemonicParsing="false" text="Pepper" />
+                                                      <CheckBox fx:id="onionCheckBox" layoutY="96.0" mnemonicParsing="false" text="Onion" />
+                                                      <CheckBox fx:id="carrotCheckBox" layoutY="128.0" mnemonicParsing="false" text="Carrots" />
+                                                      <CheckBox fx:id="garlicCheckBox" layoutY="160.0" mnemonicParsing="false" text="Garlic" />
+                                                      <CheckBox fx:id="cornCheckBox" layoutY="192.0" mnemonicParsing="false" text="Corn" />
+                                                   </children>
+                                                </Group>
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets left="50.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="242.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
+                                       <children>
+                                          <Label text="Other">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets left="50.0" />
+                                             </padding>
+                                          </VBox>
                                        </children>
                                     </VBox>
                                  </children>

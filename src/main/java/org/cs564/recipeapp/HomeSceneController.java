@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,6 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.net.URL;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -157,6 +160,15 @@ public class HomeSceneController {
 
     @FXML
     private TextArea descriptionTextArea;
+
+    @FXML
+    private Group starchCheckBoxGroup;
+
+    @FXML
+    private Group vegetableCheckBoxGroup;
+
+    @FXML
+    private Group otherCheckBoxGroup;
 
     @FXML
     void initialize() throws Exception {
@@ -324,7 +336,30 @@ public class HomeSceneController {
         // Step 1
         if (event.getSource() == searchSubmitButton1) {
             // Get selections
+            String proteinChoice = ((RadioButton) proteinGroup.getSelectedToggle()).getText().toLowerCase();
+            ArrayList<String> starchChoices = new ArrayList<String>();
+            ArrayList<String> vegetableChoices = new ArrayList<String>();
+
+            ObservableList<Node> starchgroup = starchCheckBoxGroup.getChildren();
+            for (Node cb : starchgroup) {
+                if (cb instanceof CheckBox) {
+                    if (((CheckBox) cb).isSelected()) {
+                        starchChoices.add(((CheckBox) cb).getText().toLowerCase());
+                    }
+                }
+            }
+
+            ObservableList<Node> vegetableGroup = vegetableCheckBoxGroup.getChildren();
+            for (Node cb : vegetableGroup) {
+                if (cb instanceof CheckBox) {
+                    if (((CheckBox) cb).isSelected()) {
+                        vegetableChoices.add(((CheckBox) cb).getText().toLowerCase());
+                    }
+                }
+            }
+
             // Get subtable of ingredients from recipes containing selections
+
             // Bring searchPane2 to front
             // Display other ingredients as group of check boxes
             return;
