@@ -340,8 +340,7 @@ public class HomeSceneController {
             ArrayList<String> starchChoices = new ArrayList<String>();
             ArrayList<String> vegetableChoices = new ArrayList<String>();
 
-            ObservableList<Node> starchgroup = starchCheckBoxGroup.getChildren();
-            for (Node cb : starchgroup) {
+            for (Node cb : starchCheckBoxGroup.getChildren()) {
                 if (cb instanceof CheckBox) {
                     if (((CheckBox) cb).isSelected()) {
                         starchChoices.add(((CheckBox) cb).getText().toLowerCase());
@@ -349,8 +348,7 @@ public class HomeSceneController {
                 }
             }
 
-            ObservableList<Node> vegetableGroup = vegetableCheckBoxGroup.getChildren();
-            for (Node cb : vegetableGroup) {
+            for (Node cb : vegetableCheckBoxGroup.getChildren()) {
                 if (cb instanceof CheckBox) {
                     if (((CheckBox) cb).isSelected()) {
                         vegetableChoices.add(((CheckBox) cb).getText().toLowerCase());
@@ -358,7 +356,8 @@ public class HomeSceneController {
                 }
             }
 
-            // Get subtable of ingredients from recipes containing selections
+            // Get subtable/list of ingredients from recipes containing selections
+            // TODO: SQL query
 
             // Bring searchPane2 to front
             // Display other ingredients as group of check boxes

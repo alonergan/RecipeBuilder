@@ -367,13 +367,13 @@
                                                 <Font size="36.0" />
                                              </font>
                                           </Label>
-                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                                              <opaqueInsets>
                                                 <Insets />
                                              </opaqueInsets>
-                                             <padding>
-                                                <Insets left="50.0" />
-                                             </padding>
+                                             <children>
+                                                <Label text="TODO: Add other ingredients? Not sure which ones" wrapText="true" />
+                                             </children>
                                           </VBox>
                                        </children>
                                     </VBox>
