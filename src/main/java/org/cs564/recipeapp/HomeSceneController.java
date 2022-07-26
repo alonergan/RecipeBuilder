@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -47,7 +48,7 @@ public class HomeSceneController {
     private CheckBox cornCheckBox;
 
     @FXML
-    private TableColumn<?, ?> dateCol;
+    private TableColumn<Recipe, String> dateCol;
 
     @FXML
     private RadioButton eggsRadioButton;
@@ -62,16 +63,16 @@ public class HomeSceneController {
     private Button homeButton;
 
     @FXML
-    private TableColumn<?, ?> ingredCol;
+    private TableColumn<Recipe, Integer> ingredCol;
 
     @FXML
     private Button logoutButton;
 
     @FXML
-    private TableColumn<?, ?> minutesCol;
+    private TableColumn<Recipe, Integer> minutesCol;
 
     @FXML
-    private TableColumn<?, ?> nameCol;
+    private TableColumn<Recipe, String> nameCol;
 
     @FXML
     private Button nextPageButton;
@@ -128,16 +129,19 @@ public class HomeSceneController {
     private CheckBox spinachCheckBox;
 
     @FXML
-    private TableColumn<?, ?> stepsCol;
+    private TableColumn<Recipe, Integer> stepsCol;
 
     @FXML
-    private TableView<TableModel> table;
+    private TableView<Recipe> browseTable;
 
     @FXML
     private CheckBox tomatoCheckBox;
 
     @FXML
-    void initialize() {
+    private AnchorPane recipeViewPane;
+
+    @FXML
+    void initialize() throws Exception {
         assert beefRadioButton != null : "fx:id=\"beefRadioButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert browsePane != null : "fx:id=\"browsePane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert browseRecipeButton != null : "fx:id=\"browseRecipeButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -171,15 +175,19 @@ public class HomeSceneController {
         assert settingsPane != null : "fx:id=\"settingsPane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert spinachCheckBox != null : "fx:id=\"spinachCheckBox\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert stepsCol != null : "fx:id=\"stepsCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
-        assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'homeSceneController.fxml'.";
+        assert browseTable != null : "fx:id=\"table\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert tomatoCheckBox != null : "fx:id=\"tomatoCheckBox\" was not injected: check your FXML file 'homeSceneController.fxml'.";
 
+        // Setup home page and connect to database
+        profilePane.toFront();
+        connection = DatabaseConnector.getConnection();
     }
 
     // MY CODE ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    ObservableList<TableModel> oblist = FXCollections.observableArrayList();
-    ObservableList<TableModel> curPage = FXCollections.observableArrayList();
+    private double x, y; // Used for manipulating window
+    ObservableList<Recipe> oblist = FXCollections.observableArrayList(); // Table list of recipes from SQL query
+    ObservableList<Recipe> curPage = FXCollections.observableArrayList(); // Page of recipes from obList
     private final int rowsPerPage = 25;
     private int pageIndex;
     private int maxPages;
@@ -212,22 +220,25 @@ public class HomeSceneController {
         try {
             int count = 0;
             String sqlStatement = "SELECT recipe_name, minutes, n_steps, n_ingredients, submitted FROM recipe";
-            connection = DatabaseConnector.getConnection();
-            rs = connection.createStatement().executeQuery(sqlStatement);
+            rs = executeQuery(sqlStatement);
 
             // Add all contents to oblist for storage
             while (rs.next()) {
-                oblist.add(new TableModel(rs.getString("recipe_name"), rs.getInt("minutes"), rs.getInt("n_steps"), rs.getInt("n_ingredients"), rs.getString("submitted")));
+                // If empty recipe skip
+                if (rs.getInt("n_ingredients") == 0) {
+                    continue;
+                }
+                oblist.add(new Recipe(rs.getString("recipe_name"), rs.getInt("minutes"), rs.getInt("n_steps"), rs.getInt("n_ingredients"), rs.getString("submitted")));
             }
 
             // Set pages and update table
             pageIndex = 0;
-            maxPages = (oblist.size() / rowsPerPage);
-            nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
-            minutesCol.setCellValueFactory(new PropertyValueFactory<>("Minutes"));
-            stepsCol.setCellValueFactory(new PropertyValueFactory<>("Steps"));
-            ingredCol.setCellValueFactory(new PropertyValueFactory<>("numIngredients"));
-            dateCol.setCellValueFactory(new PropertyValueFactory<>("Date"));
+            maxPages = Math.ceilDiv(oblist.size(), rowsPerPage);
+            nameCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
+            minutesCol.setCellValueFactory(new PropertyValueFactory<Recipe, Integer>("minutes"));
+            stepsCol.setCellValueFactory(new PropertyValueFactory<Recipe, Integer>("n_steps"));
+            ingredCol.setCellValueFactory(new PropertyValueFactory<Recipe, Integer>("n_ingredients"));
+            dateCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("dateSubmitted"));
             updatePage(pageIndex);
 
         } catch (SQLException e) {
@@ -256,6 +267,33 @@ public class HomeSceneController {
         }
     }
 
+    private void updatePage(int pageIndex) throws SQLException {
+        if (oblist.size() == 0) {
+            System.out.println("oblist empty");
+            return;
+        }
+
+        // Get start index
+        int i = pageIndex * rowsPerPage;
+        int count = 0;
+        if (curPage.size() != 0) {
+            while (oblist.get(i) != null && count < rowsPerPage) {
+                curPage.set(count, oblist.get(i));
+                count++;
+                i++;
+            }
+        } else {
+            while (oblist.get(i) != null && count < rowsPerPage) {
+                curPage.add(count, oblist.get(i));
+                count++;
+                i++;
+            }
+        }
+
+        browseTable.setItems(curPage);
+        pageNumber.setPromptText(String.valueOf(pageIndex + 1));
+    }
+
     /*
      * Search will work as follows (Still working this out...)
      * Step 1: Select a basic set of options to narrow down the immense amount of recipes
@@ -281,36 +319,31 @@ public class HomeSceneController {
         }
     }
 
+    /**
+     * Returns a sub-table/result set given an SQL query
+     * @param query
+     * @return
+     */
+    public ResultSet executeQuery(String query) throws SQLException {
+        if (query == null || query.isEmpty()) {
+            return null;
+        }
+        return connection.createStatement().executeQuery(query);
+    }
+
+    /**
+     * Opens recipe view pane when user selects recipe from table in browse or search
+     * @param event
+     */
+    @FXML
+    public void selectRecipe(MouseEvent event) {
+        if (event.getClickCount() > 1) {
+            //TableModel row = browseTable.getSelectionModel();
+        }
+    }
+
     @FXML
     public void quitApplication() {
         Platform.exit();
     }
-
-    private void updatePage(int pageIndex) throws SQLException {
-        if (oblist.size() == 0) {
-            System.out.println("oblist empty");
-            return;
-        }
-
-        // get start index
-        int i1 = pageIndex * rowsPerPage;
-        int count = 0;
-        if (curPage.size() != 0) {
-            while (oblist.get(i1) != null && count < rowsPerPage) {
-                curPage.set(count, oblist.get(i1));
-                count++;
-                i1++;
-            }
-        } else {
-            while (oblist.get(i1) != null && count < rowsPerPage) {
-                curPage.add(count, oblist.get(i1));
-                count++;
-                i1++;
-            }
-        }
-
-        table.setItems(curPage);
-        pageNumber.setPromptText(String.valueOf(pageIndex));
-    }
-
 }

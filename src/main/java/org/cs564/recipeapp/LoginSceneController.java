@@ -2,6 +2,8 @@ package org.cs564.recipeapp;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,6 +32,9 @@ public class LoginSceneController {
 
     @FXML
     private TextField usernameTextField;
+
+    @FXML
+    private Button quitButton;
 
     @FXML
     void initialize() {
@@ -78,6 +83,11 @@ public class LoginSceneController {
         Parent registrationScene = FXMLLoader.load(MainApplication.class.getResource("registrationSceneController.fxml"));
         Stage window = (Stage) newUserButton.getScene().getWindow();
         window.setScene(new Scene(registrationScene, 1200, 725));
+    }
+
+    @FXML
+    public void quitApplication() {
+        Platform.exit();
     }
 }
 
