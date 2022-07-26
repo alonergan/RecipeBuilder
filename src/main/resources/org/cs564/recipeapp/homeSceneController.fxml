@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cs564.recipeapp.HomeSceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cs564.recipeapp.HomeSceneController">
    <children>
       <BorderPane layoutX="500.0" layoutY="-53.0" prefHeight="725.0" prefWidth="1200.0" style="-fx-background-color: #607D8B;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -144,95 +159,6 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="browsePane" prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="675.0" prefWidth="965.0" style="-fx-background-color: #FFFFFF;">
-                           <children>
-                              <Label text="Browse Recipes">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
-                                       <children>
-                                          <Button fx:id="prevPageButton" mnemonicParsing="false" onAction="#handlePageEvent" prefHeight="25.0" prefWidth="25.0" text="&lt;" />
-                                          <TextField fx:id="pageNumber" alignment="CENTER" onKeyTyped="#handlePageEvent" prefHeight="25.0" prefWidth="37.0" promptText="1" />
-                                          <Button fx:id="nextPageButton" mnemonicParsing="false" onAction="#handlePageEvent" prefHeight="25.0" prefWidth="25.0" text="&gt;" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </HBox>
-                              <TableView fx:id="browseTable" onMouseClicked="#selectRecipe" prefHeight="625.0" prefWidth="965.0" style="-fx-background-color: #FFFFFF;">
-                                 <columns>
-                                    <TableColumn fx:id="nameCol" editable="false" prefWidth="501.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Name" />
-                                    <TableColumn fx:id="minutesCol" editable="false" prefWidth="97.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Minutes" />
-                                    <TableColumn fx:id="stepsCol" editable="false" prefWidth="107.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Steps" />
-                                    <TableColumn fx:id="ingredCol" editable="false" prefWidth="134.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="# Ingredients" />
-                                    <TableColumn fx:id="dateCol" editable="false" minWidth="0.0" prefWidth="123.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Date" />
-                                 </columns>
-                              </TableView>
-                           </children>
-                           <padding>
-                              <Insets top="15.0" />
-                           </padding>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="recipeViewPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;">
-                     <children>
-                        <VBox alignment="CENTER" layoutX="433.0" layoutY="313.0" prefHeight="675.0" prefWidth="965.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Label fx:id="recipeViewNameLabel" text="Recipe Name">
-                                 <font>
-                                    <Font size="32.0" />
-                                 </font>
-                              </Label>
-                              <HBox prefHeight="487.0" prefWidth="965.0">
-                                 <children>
-                                    <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="227.0" style="-fx-border-color: #BDBDBD;">
-                                       <children>
-                                          <Label text="Ingredients">
-                                             <font>
-                                                <Font size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <ListView fx:id="ingredientListView" prefHeight="466.0" prefWidth="225.0" />
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="283.0" style="-fx-border-color: #BDBDBD;">
-                                       <children>
-                                          <Label text="Steps">
-                                             <font>
-                                                <Font size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <TableView fx:id="stepTableView" prefHeight="480.0" prefWidth="281.0">
-                                            <columns>
-                                              <TableColumn fx:id="stepNumColumn" editable="false" prefWidth="25.0" sortable="false" text="#" />
-                                              <TableColumn fx:id="stepNameColumn" editable="false" prefWidth="256.0" sortable="false" text="Step" />
-                                            </columns>
-                                          </TableView>
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="455.0" style="-fx-border-color: #BDBDBD;">
-                                       <children>
-                                          <Label text="Description">
-                                             <font>
-                                                <Font size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" text="No Description" wrapText="true" />
-                                          <Label text="Maybe rating/reviews here?" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="searchPane1" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
                      <children>
                         <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -265,29 +191,20 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                             <padding>
-                                                <Insets left="50.0" />
-                                             </padding>
+                                          <Group>
                                              <children>
-                                                <Group>
-                                                   <children>
-                                                      <RadioButton fx:id="beefRadioButton" layoutX="-29.0" layoutY="125.0" mnemonicParsing="false" text="Beef">
-                                                         <toggleGroup>
-                                                            <ToggleGroup fx:id="proteinGroup" />
-                                                         </toggleGroup></RadioButton>
-                                                      <RadioButton fx:id="eggsRadioButton" layoutX="-30.0" layoutY="39.0" mnemonicParsing="false" text="Eggs" toggleGroup="$proteinGroup" />
-                                                      <RadioButton layoutX="-28.0" layoutY="71.0" mnemonicParsing="false" text="Pork" />
-                                                      <RadioButton fx:id="fishRadioButton" layoutX="-27.0" layoutY="97.0" mnemonicParsing="false" text="Fish" toggleGroup="$proteinGroup" />
-                                                      <RadioButton fx:id="chickenRadioButton" layoutX="-36.0" layoutY="13.0" mnemonicParsing="false" prefWidth="105.0" text="Chicken/Poultry" toggleGroup="$proteinGroup" />
-                                                      <RadioButton layoutX="-29.0" layoutY="150.0" mnemonicParsing="false" text="Vegetarian/Vegan" />
-                                                   </children>
-                                                </Group>
+                                                <RadioButton fx:id="beefRadioButton" layoutX="-30.0" layoutY="125.0" mnemonicParsing="false" text="Beef">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="proteinGroup" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton fx:id="eggsRadioButton" layoutX="-30.0" layoutY="39.0" mnemonicParsing="false" text="Eggs" toggleGroup="$proteinGroup" />
+                                                <RadioButton layoutX="-30.0" layoutY="68.0" mnemonicParsing="false" text="Pork" />
+                                                <RadioButton fx:id="fishRadioButton" layoutX="-30.0" layoutY="97.0" mnemonicParsing="false" text="Fish" toggleGroup="$proteinGroup" />
+                                                <RadioButton fx:id="chickenRadioButton" layoutX="-30.0" layoutY="13.0" mnemonicParsing="false" prefWidth="105.0" text="Chicken" toggleGroup="$proteinGroup" />
+                                                <RadioButton layoutX="-30.0" layoutY="150.0" mnemonicParsing="false" text="Vegetarian/Vegan" />
                                              </children>
-                                          </VBox>
+                                          </Group>
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
@@ -362,6 +279,95 @@
                                                 <Label text="TODO: Add other ingredients? Not sure which ones" wrapText="true" />
                                              </children>
                                           </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="browsePane" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="675.0" prefWidth="965.0" style="-fx-background-color: #FFFFFF;">
+                           <children>
+                              <Label text="Browse Recipes">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <children>
+                                          <Button fx:id="prevPageButton" mnemonicParsing="false" onAction="#handlePageEvent" prefHeight="25.0" prefWidth="25.0" text="&lt;" />
+                                          <TextField fx:id="pageNumber" alignment="CENTER" onKeyTyped="#handlePageEvent" prefHeight="25.0" prefWidth="37.0" promptText="1" />
+                                          <Button fx:id="nextPageButton" mnemonicParsing="false" onAction="#handlePageEvent" prefHeight="25.0" prefWidth="25.0" text="&gt;" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <TableView fx:id="browseTable" onMouseClicked="#selectRecipe" prefHeight="625.0" prefWidth="965.0" style="-fx-background-color: #FFFFFF;">
+                                 <columns>
+                                    <TableColumn fx:id="nameCol" editable="false" prefWidth="501.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Name" />
+                                    <TableColumn fx:id="minutesCol" editable="false" prefWidth="97.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Minutes" />
+                                    <TableColumn fx:id="stepsCol" editable="false" prefWidth="107.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Steps" />
+                                    <TableColumn fx:id="ingredCol" editable="false" prefWidth="134.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="# Ingredients" />
+                                    <TableColumn fx:id="dateCol" editable="false" minWidth="0.0" prefWidth="123.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Date" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                           <padding>
+                              <Insets top="15.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="recipeViewPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;">
+                     <children>
+                        <VBox alignment="CENTER" layoutX="433.0" layoutY="313.0" prefHeight="675.0" prefWidth="965.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Label fx:id="recipeViewNameLabel" text="Recipe Name">
+                                 <font>
+                                    <Font size="32.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="487.0" prefWidth="965.0">
+                                 <children>
+                                    <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="227.0" style="-fx-border-color: #BDBDBD;">
+                                       <children>
+                                          <Label text="Ingredients">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <ListView fx:id="ingredientListView" prefHeight="466.0" prefWidth="225.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="283.0" style="-fx-border-color: #BDBDBD;">
+                                       <children>
+                                          <Label text="Steps">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <TableView fx:id="stepTableView" prefHeight="480.0" prefWidth="281.0">
+                                            <columns>
+                                              <TableColumn fx:id="stepNumColumn" editable="false" prefWidth="25.0" sortable="false" text="#" />
+                                              <TableColumn fx:id="stepNameColumn" editable="false" prefWidth="255.0" sortable="false" text="Step" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="455.0" style="-fx-border-color: #BDBDBD;">
+                                       <children>
+                                          <Label text="Description">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" text="No Description" wrapText="true" />
+                                          <Label text="Maybe rating/reviews here?" />
                                        </children>
                                     </VBox>
                                  </children>

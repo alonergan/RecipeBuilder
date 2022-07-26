@@ -224,6 +224,9 @@ public class HomeSceneController {
     Connection connection;
     ResultSet rs;
 
+    /*
+     * Handles events when user clicks menu buttons on left side of screen
+     */
     public void handleClicks(ActionEvent event) throws Exception {
         if (event.getSource() == homeButton) {
             profilePane.toFront();
@@ -246,6 +249,9 @@ public class HomeSceneController {
         }
     }
 
+    /*
+     * Initializes the browse table with all recipes from table Recipe
+     */
     public void browseInitialize() throws Exception {
 
         try {
@@ -277,6 +283,9 @@ public class HomeSceneController {
         }
     }
 
+    /*
+     * Updates current page in browse tableView when user advances page number
+     */
     @FXML
     public void handlePageEvent(ActionEvent event) throws SQLException {
         if (event.getSource() == nextPageButton && pageIndex != maxPages - 1) {
@@ -298,6 +307,9 @@ public class HomeSceneController {
         }
     }
 
+    /*
+     * Given a page index, this function will fill tableView with the correct recipes
+     */
     private void updatePage(int pageIndex) throws SQLException {
         if (oblist.size() == 0) {
             System.out.println("oblist empty");
@@ -333,7 +345,7 @@ public class HomeSceneController {
      */
     @FXML
     public void handleSearchSubmit(ActionEvent event) {
-        // Step 1
+        // STEP 1
         if (event.getSource() == searchSubmitButton1) {
             // Get selections
             String proteinChoice = ((RadioButton) proteinGroup.getSelectedToggle()).getText().toLowerCase();
@@ -358,12 +370,16 @@ public class HomeSceneController {
 
             // Get subtable/list of ingredients from recipes containing selections
             // TODO: SQL query
+            String step1Query = "SELECT i.ingredient_name " +
+                                "FROM Recipe r " +
+                                "INNER JOIN Ingredient i ON r.recipe_id = i.recipe_id " +
+                                "WHERE ";
 
             // Bring searchPane2 to front
             // Display other ingredients as group of check boxes
             return;
         }
-        // Step 2 + 3 TODO
+        // STEP 2 + 3 TODO
         if (event.getSource() == searchSubmitButton2) {
             // Get subtable of recipes containing all selections
             // Bring searchPane3 to front
@@ -391,6 +407,8 @@ public class HomeSceneController {
     @FXML
     public void selectRecipe(MouseEvent event) throws SQLException {
         if (event.getClickCount() > 1) {
+            // TODO CLEAR RECIPE DATA FROM PREVIOUS
+
             // Grab recipe from row
             Recipe selectedRecipe = browseTable.getSelectionModel().getSelectedItem();
 
