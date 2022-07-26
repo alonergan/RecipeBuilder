@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cs564.recipeapp.HomeSceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cs564.recipeapp.HomeSceneController">
    <children>
       <BorderPane layoutX="500.0" layoutY="-53.0" prefHeight="725.0" prefWidth="1200.0" style="-fx-background-color: #607D8B;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -290,14 +275,15 @@
                                              <children>
                                                 <Group>
                                                    <children>
-                                                      <RadioButton fx:id="chickenRadioButton" mnemonicParsing="false" text="Chicken">
+                                                      <RadioButton fx:id="beefRadioButton" layoutX="-29.0" layoutY="125.0" mnemonicParsing="false" text="Beef">
                                                          <toggleGroup>
                                                             <ToggleGroup fx:id="proteinGroup" />
-                                                         </toggleGroup>
-                                                      </RadioButton>
-                                                      <RadioButton fx:id="beefRadioButton" layoutY="32.0" mnemonicParsing="false" text="Beef" toggleGroup="$proteinGroup" />
-                                                      <RadioButton fx:id="fishRadioButton" layoutY="64.0" mnemonicParsing="false" text="Fish" toggleGroup="$proteinGroup" />
-                                                      <RadioButton fx:id="eggsRadioButton" layoutY="96.0" mnemonicParsing="false" text="Eggs" toggleGroup="$proteinGroup" />
+                                                         </toggleGroup></RadioButton>
+                                                      <RadioButton fx:id="eggsRadioButton" layoutX="-30.0" layoutY="39.0" mnemonicParsing="false" text="Eggs" toggleGroup="$proteinGroup" />
+                                                      <RadioButton layoutX="-28.0" layoutY="71.0" mnemonicParsing="false" text="Pork" />
+                                                      <RadioButton fx:id="fishRadioButton" layoutX="-27.0" layoutY="97.0" mnemonicParsing="false" text="Fish" toggleGroup="$proteinGroup" />
+                                                      <RadioButton fx:id="chickenRadioButton" layoutX="-36.0" layoutY="13.0" mnemonicParsing="false" prefWidth="105.0" text="Chicken/Poultry" toggleGroup="$proteinGroup" />
+                                                      <RadioButton layoutX="-29.0" layoutY="150.0" mnemonicParsing="false" text="Vegetarian/Vegan" />
                                                    </children>
                                                 </Group>
                                              </children>
@@ -316,8 +302,9 @@
                                                 <Group fx:id="starchCheckBoxGroup">
                                                    <children>
                                                       <CheckBox fx:id="potatoCheckBox" mnemonicParsing="false" text="Potato" />
-                                                      <CheckBox fx:id="riceCheckBox" layoutY="32.0" mnemonicParsing="false" text="Rice" />
-                                                      <CheckBox fx:id="pastaCheckBox" layoutY="64.0" mnemonicParsing="false" text="Pasta / Noodle" />
+                                                      <CheckBox fx:id="riceCheckBox" layoutY="28.0" mnemonicParsing="false" text="Rice" />
+                                                      <CheckBox fx:id="pastaCheckBox" layoutY="57.0" mnemonicParsing="false" text="Pasta / Noodle" />
+                                                      <CheckBox fx:id="pastaCheckBox1" layoutY="84.0" mnemonicParsing="false" text="Wheat" />
                                                    </children>
                                                 </Group>
                                              </children>
