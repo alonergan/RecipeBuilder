@@ -1,13 +1,19 @@
 package org.cs564.recipeapp;
 
-public class Ingredient {
+public class Step {
     private int recipe_id;
-    private int ingredient_num;
+    private int step_num;
     private String name;
 
-    public Ingredient(int recipe_id, int ingredient_num, String name) {
+    public Step(int recipe_id, int step_num, String name) {
         this.recipe_id = recipe_id;
-        this.ingredient_num = ingredient_num;
+        this.step_num = step_num;
+        this.name = name;
+    }
+
+    // For displaying step in a tableView (no recipe_id needed)
+    public Step(int step_num, String name) {
+        this.step_num = step_num;
         this.name = name;
     }
 
@@ -19,12 +25,12 @@ public class Ingredient {
         this.recipe_id = recipe_id;
     }
 
-    public int getIngredient_num() {
-        return ingredient_num;
+    public int getStep_num() {
+        return step_num;
     }
 
-    public void setIngredient_num(int ingredient_num) {
-        this.ingredient_num = ingredient_num;
+    public void setStep_num(int step_num) {
+        this.step_num = step_num;
     }
 
     public String getName() {

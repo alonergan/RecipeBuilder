@@ -1,12 +1,16 @@
-/*
-Basic CSS for RecipeBuilder
-*/
+.button {
+    -fx-background-color: #607D8B;
+    -fx-border-color: #607D8B;
+    -fx-border-radius: 2;
+    -fx-text-fill: #FFFFFF;
+}
 
-.dark-primary-color    { background: #455A64; }
-.default-primary-color { background: #607D8B; }
-.light-primary-color   { background: #CFD8DC; }
-.text-primary-color    { color: #FFFFFF; }
-.accent-color          { background: #9E9E9E; }
-.primary-text-color    { color: #212121; }
-.secondary-text-color  { color: #757575; }
-.divider-color         { border-color: #BDBDBD; }
+.button:hover {
+    -fx-background-color: #455A64;
+    -fx-border-color: #BDBDBD;
+    -fx-text-fill: #FFFFFF;
+}
+
+.pane {
+    -fx-background-color: #CFD8DC;
+}

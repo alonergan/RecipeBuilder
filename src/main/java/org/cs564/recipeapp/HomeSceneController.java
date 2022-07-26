@@ -141,6 +141,24 @@ public class HomeSceneController {
     private AnchorPane recipeViewPane;
 
     @FXML
+    private Label recipeViewNameLabel;
+
+    @FXML
+    private ListView<String> ingredientListView;
+
+    @FXML
+    private TableView<Step>  stepTableView;
+
+    @FXML
+    private TableColumn<Step, Integer> stepNumColumn;
+
+    @FXML
+    private TableColumn<Step, String> stepNameColumn;
+
+    @FXML
+    private TextArea descriptionTextArea;
+
+    @FXML
     void initialize() throws Exception {
         assert beefRadioButton != null : "fx:id=\"beefRadioButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert browsePane != null : "fx:id=\"browsePane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -210,6 +228,7 @@ public class HomeSceneController {
         }
         if (event.getSource() == logoutButton) {
             Parent scene = FXMLLoader.load(getClass().getResource("loginSceneController.fxml"));
+            scene.getStylesheets().add(getClass().getResource("css/style.css").toExternalForm());
             Stage stage = (Stage) logoutButton.getScene().getWindow();
             stage.setScene(new Scene(scene));
         }
@@ -219,7 +238,7 @@ public class HomeSceneController {
 
         try {
             int count = 0;
-            String sqlStatement = "SELECT recipe_name, minutes, n_steps, n_ingredients, submitted FROM recipe";
+            String sqlStatement = "SELECT * FROM recipe";
             rs = executeQuery(sqlStatement);
 
             // Add all contents to oblist for storage
@@ -228,7 +247,7 @@ public class HomeSceneController {
                 if (rs.getInt("n_ingredients") == 0) {
                     continue;
                 }
-                oblist.add(new Recipe(rs.getString("recipe_name"), rs.getInt("minutes"), rs.getInt("n_steps"), rs.getInt("n_ingredients"), rs.getString("submitted")));
+                oblist.add(new Recipe(rs.getString("recipe_name"), rs.getInt("minutes"), rs.getInt("n_steps"), rs.getInt("n_ingredients"), rs.getString("submitted"), rs.getInt("recipe_id"), rs.getString("description")));
             }
 
             // Set pages and update table
@@ -336,9 +355,37 @@ public class HomeSceneController {
      * @param event
      */
     @FXML
-    public void selectRecipe(MouseEvent event) {
+    public void selectRecipe(MouseEvent event) throws SQLException {
         if (event.getClickCount() > 1) {
-            //TableModel row = browseTable.getSelectionModel();
+            // Grab recipe from row
+            Recipe selectedRecipe = browseTable.getSelectionModel().getSelectedItem();
+
+            // Execute SQL query to find ingredient and steps data from recipe in table
+            String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + String.valueOf(selectedRecipe.recipe_id);
+            ResultSet ingredientData = executeQuery(ingredientQuery);
+            String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + String.valueOf(selectedRecipe.recipe_id);
+            ResultSet stepData = executeQuery(stepQuery);
+
+            // Set ingredients
+            while (ingredientData.next()) {
+                ingredientListView.getItems().add(ingredientData.getString("ingredient_name"));
+            }
+
+            // Set steps
+            stepNumColumn.setCellValueFactory(new PropertyValueFactory<Step, Integer>("step_num"));
+            stepNameColumn.setCellValueFactory(new PropertyValueFactory<Step, String>("name"));
+            while (stepData.next()) {
+                stepTableView.getItems().add(new Step(stepData.getInt("step_num"), stepData.getString("step_name")));
+            }
+
+            // Set remaining values and descriptions
+            recipeViewNameLabel.setText(selectedRecipe.name.substring(0, 1).toUpperCase() + selectedRecipe.name.substring(1));
+            if (!selectedRecipe.description.isEmpty()) {
+                descriptionTextArea.setText(selectedRecipe.description);
+            }
+
+            // Bring recipeViewPane to front
+            recipeViewPane.toFront();
         }
     }
 

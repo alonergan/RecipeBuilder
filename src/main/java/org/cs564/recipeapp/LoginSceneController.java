@@ -72,6 +72,7 @@ public class LoginSceneController {
         } else {
             // Handle scene change and login information
             Parent homeScene = FXMLLoader.load(MainApplication.class.getResource("homeSceneController.fxml"));
+            homeScene.getStylesheets().add(getClass().getResource("css/style.css").toExternalForm());
             Stage window = (Stage) signInButton.getScene().getWindow();
             window.setScene(new Scene(homeScene, 1200, 725));
         }

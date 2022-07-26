@@ -15,9 +15,11 @@ public class MainApplication extends Application {
     public void start(Stage primaryStage) throws IOException {
         // Load login page
         Parent root = FXMLLoader.load(getClass().getResource("homeSceneController.fxml"));
+        root.getStylesheets().add(getClass().getResource("css/style.css").toExternalForm());
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Recipe Builder");
         primaryStage.initStyle(StageStyle.UNDECORATED);
+
 
         root.setOnMousePressed(event -> {
             x = event.getSceneX();
