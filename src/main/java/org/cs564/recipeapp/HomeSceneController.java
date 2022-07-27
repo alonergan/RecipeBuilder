@@ -371,11 +371,23 @@ public class HomeSceneController {
         // Create query
         switch (filter) {
             case "Name":
-
+                query = "SELECT * " +
+                        "FROM Recipe r" +
+                        "WHERE r.recipe_name LIKE '%" + input + "%;";
             case "Tag":
+                query = "SELECT * " +
+                        "FROM Recipe r INNER JOIN Tag t ON r.recipe_id = t.recipe_id" +
+                        "WHERE t.tag_name LIKE '%" + input + "%;";
             case "Time":
+                query = "SELECT * " +
+                        "FROM Recipe r" +
+                        "WHERE r.minute < " + input + ";";
             case "Rating":
+                // TODO: Rating query
             case "Ingredient":
+                query = "SELECT * " +
+                        "FROM Recipe r INNER JOIN Ingredient i ON r.recipe_id = i.recipe_id" +
+                        "WHERE i.ingredient_name LIKE '%" + input + "%;";
         }
 
         // Execute query and populate table
