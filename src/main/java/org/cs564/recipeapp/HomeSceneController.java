@@ -171,6 +171,12 @@ public class HomeSceneController {
     private Group otherCheckBoxGroup;
 
     @FXML
+    private TableView<Ingredient> step2IngredientList;
+
+    @FXML
+    private TableColumn<Ingredient, String> step2IngredientName;
+
+    @FXML
     void initialize() throws Exception {
         assert beefRadioButton != null : "fx:id=\"beefRadioButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert browsePane != null : "fx:id=\"browsePane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -368,12 +374,12 @@ public class HomeSceneController {
                 }
             }
 
-            // Get subtable/list of ingredients from recipes containing selections
-            // TODO: SQL query
-            String step1Query = "SELECT i.ingredient_name " +
+            // Get all recipe_id with ingredients from step1
+            String step1Query = "SELECT r.recipe_id " +
                                 "FROM Recipe r " +
                                 "INNER JOIN Ingredient i ON r.recipe_id = i.recipe_id " +
                                 "WHERE ";
+
 
             // Bring searchPane2 to front
             // Display other ingredients as group of check boxes

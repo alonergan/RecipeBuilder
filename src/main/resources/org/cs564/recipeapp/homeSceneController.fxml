@@ -118,47 +118,6 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="searchPane2" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-                                 <children>
-                                    <Label text="Step 2: Choose more ingredients you have or continue">
-                                       <font>
-                                          <Font size="29.0" />
-                                       </font>
-                                    </Label>
-                                    <Button fx:id="searchSubmitButton2" mnemonicParsing="false" text="Submit">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="675.0" prefWidth="965.0">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;" />
-                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;" />
-                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="241.0" spacing="10.0" style="-fx-border-color: #BDBDBD;" />
-                                    <VBox alignment="CENTER" prefHeight="675.0" prefWidth="242.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
-                                       <children>
-                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                             <padding>
-                                                <Insets left="50.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="searchPane1" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
                      <children>
                         <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -370,6 +329,42 @@
                                           <Label text="Maybe rating/reviews here?" />
                                        </children>
                                     </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="searchPane2" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                                 <children>
+                                    <Label text="Step 2: Choose more ingredients you have or continue">
+                                       <font>
+                                          <Font size="29.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="searchSubmitButton2" mnemonicParsing="false" text="Submit">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="675.0" prefWidth="965.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="625.0" prefWidth="448.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
+                                       <children>
+                                          <TableView fx:id="step2IngredientList" prefHeight="645.0" prefWidth="438.0">
+                                            <columns>
+                                              <TableColumn fx:id="step2IngredientName" prefWidth="360.0" text="Ingredient" />
+                                              <TableColumn minWidth="0.0" prefWidth="77.0" />
+                                            </columns>
+                                          </TableView>
+                                       </children></VBox>
+                                    <VBox alignment="CENTER" prefHeight="625.0" prefWidth="533.0" spacing="10.0" style="-fx-border-color: #BDBDBD;" />
                                  </children>
                               </HBox>
                            </children>
