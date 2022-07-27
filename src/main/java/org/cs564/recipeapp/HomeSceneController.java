@@ -117,7 +117,7 @@ public class HomeSceneController {
     private Button searchRecipeButton;
 
     @FXML
-    private Button searchSubmitButton1;
+    private Button searchSubmitButton;
 
     @FXML
     private Button searchSubmitButton2;
@@ -162,19 +162,26 @@ public class HomeSceneController {
     private TextArea descriptionTextArea;
 
     @FXML
-    private Group starchCheckBoxGroup;
+    private TextField searchTextField;
 
     @FXML
-    private Group vegetableCheckBoxGroup;
+    private ChoiceBox<String> searchFilter;
+    private String[] searchFilters = {"Name", "Tag", "Time", "Rating", "Ingredient"};
 
     @FXML
-    private Group otherCheckBoxGroup;
+    private TableView<Recipe> searchTable;
 
     @FXML
-    private TableView<Ingredient> step2IngredientList;
+    private TableColumn<?, ?> searchNameCol;
 
     @FXML
-    private TableColumn<Ingredient, String> step2IngredientName;
+    private TableColumn<?, ?> searchMinutesCol;
+
+    @FXML
+    private TableColumn<?, ?> searchStepsCol;
+
+    @FXML
+    private TableColumn<?, ?> searchIngredientsCol;
 
     @FXML
     void initialize() throws Exception {
@@ -206,7 +213,7 @@ public class HomeSceneController {
         assert riceCheckBox != null : "fx:id=\"riceCheckBox\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert searchPane1 != null : "fx:id=\"searchPane1\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert searchRecipeButton != null : "fx:id=\"searchRecipeButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
-        assert searchSubmitButton1 != null : "fx:id=\"searchSubmitButton1\" was not injected: check your FXML file 'homeSceneController.fxml'.";
+        assert searchSubmitButton != null : "fx:id=\"searchSubmitButton1\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert settingsPane != null : "fx:id=\"settingsPane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert spinachCheckBox != null : "fx:id=\"spinachCheckBox\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -245,6 +252,7 @@ public class HomeSceneController {
             browseInitialize();
         }
         if (event.getSource() == searchRecipeButton) {
+            initializeSearch();
             searchPane1.toFront();
         }
         if (event.getSource() == logoutButton) {
@@ -287,6 +295,13 @@ public class HomeSceneController {
         } catch (SQLException e) {
             Logger.getLogger(HomeSceneController.class.getName()).log(Level.SEVERE, null, e);
         }
+    }
+
+    /*
+     * Initializes search pane
+     */
+    public void initializeSearch() {
+        searchFilter.getItems().addAll(searchFilters);
     }
 
     /*
@@ -344,54 +359,27 @@ public class HomeSceneController {
     }
 
     /*
-     * Search will work as follows (Still working this out...)
-     * Step 1: Select a basic set of options to narrow down the immense amount of recipes
-     * Step 2: From the sub-table created in step 1 create a list of check boxes for ingredients
-     * Step 3: Show results?
+     * Handle search based on filter chosen
      */
     @FXML
     public void handleSearchSubmit(ActionEvent event) {
-        // STEP 1
-        if (event.getSource() == searchSubmitButton1) {
-            // Get selections
-            String proteinChoice = ((RadioButton) proteinGroup.getSelectedToggle()).getText().toLowerCase();
-            ArrayList<String> starchChoices = new ArrayList<String>();
-            ArrayList<String> vegetableChoices = new ArrayList<String>();
+        // Get input
+        String filter = searchFilter.getValue();
+        String input = searchTextField.getText();
+        String query;
 
-            for (Node cb : starchCheckBoxGroup.getChildren()) {
-                if (cb instanceof CheckBox) {
-                    if (((CheckBox) cb).isSelected()) {
-                        starchChoices.add(((CheckBox) cb).getText().toLowerCase());
-                    }
-                }
-            }
+        // Create query
+        switch (filter) {
+            case "Name":
 
-            for (Node cb : vegetableCheckBoxGroup.getChildren()) {
-                if (cb instanceof CheckBox) {
-                    if (((CheckBox) cb).isSelected()) {
-                        vegetableChoices.add(((CheckBox) cb).getText().toLowerCase());
-                    }
-                }
-            }
-
-            // Get all recipe_id with ingredients from step1
-            String step1Query = "SELECT r.recipe_id " +
-                                "FROM Recipe r " +
-                                "INNER JOIN Ingredient i ON r.recipe_id = i.recipe_id " +
-                                "WHERE ";
-
-
-            // Bring searchPane2 to front
-            // Display other ingredients as group of check boxes
-            return;
+            case "Tag":
+            case "Time":
+            case "Rating":
+            case "Ingredient":
         }
-        // STEP 2 + 3 TODO
-        if (event.getSource() == searchSubmitButton2) {
-            // Get subtable of recipes containing all selections
-            // Bring searchPane3 to front
-            // Display subtable of recipes containing ingredients ordered ascending by the num of ingredients you have
-            return;
-        }
+
+        // Execute query and populate table
+
     }
 
     /**
