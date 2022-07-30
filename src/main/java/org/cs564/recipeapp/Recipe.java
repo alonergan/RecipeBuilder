@@ -1,45 +1,42 @@
 package org.cs564.recipeapp;
 
-import java.util.ArrayList;
-
 /**
  * Class to represent recipe object in database
  */
 public class Recipe {
-    int id;
-    int n_ingredients;
-    int n_minutes;
-    int n_steps;
-    int contributorID;
     String name;
+    int minutes;
+    int n_steps;
+    int n_ingredients;
     String dateSubmitted;
+    int recipe_id;
     String description;
-    ArrayList<String> tags;
-    ArrayList<Double> nutrition;
-    ArrayList<String> steps;
-    ArrayList<String> ingredients;
 
-    public Recipe(int id, int n_ingredients, int n_minutes, int n_steps, int contributorID, String name, String dateSubmitted, String description, ArrayList<String> tags, ArrayList<Double> nutrition, ArrayList<String> steps, ArrayList<String> ingredients) {
-        this.id = id;
+    // Main constructor
+    public Recipe(String name, int minutes, int n_steps, int n_ingredients, String dateSubmitted, int recipe_id, String description) {
+        this.recipe_id = recipe_id;
         this.n_ingredients = n_ingredients;
-        this.n_minutes = n_minutes;
+        this.minutes = minutes;
         this.n_steps = n_steps;
-        this.contributorID = contributorID;
         this.name = name;
         this.dateSubmitted = dateSubmitted;
         this.description = description;
-        this.tags = tags;
-        this.nutrition = nutrition;
-        this.steps = steps;
-        this.ingredients = ingredients;
     }
 
+    // Used for browse function
+    public Recipe(String name, int minutes, int n_steps, int n_ingredients, String dateSubmitted) {
+        this.n_ingredients = n_ingredients;
+        this.minutes = minutes;
+        this.n_steps = n_steps;
+        this.name = name;
+        this.dateSubmitted = dateSubmitted;
+    }
     public int getId() {
-        return id;
+        return recipe_id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.recipe_id = id;
     }
 
     public int getN_ingredients() {
@@ -50,12 +47,12 @@ public class Recipe {
         this.n_ingredients = n_ingredients;
     }
 
-    public int getN_minutes() {
-        return n_minutes;
+    public int getMinutes() {
+        return minutes;
     }
 
-    public void setN_minutes(int n_minutes) {
-        this.n_minutes = n_minutes;
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
     }
 
     public int getN_steps() {
@@ -64,14 +61,6 @@ public class Recipe {
 
     public void setN_steps(int n_steps) {
         this.n_steps = n_steps;
-    }
-
-    public int getContributorID() {
-        return contributorID;
-    }
-
-    public void setContributorID(int contributorID) {
-        this.contributorID = contributorID;
     }
 
     public String getName() {
@@ -98,35 +87,4 @@ public class Recipe {
         this.description = description;
     }
 
-    public ArrayList<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(ArrayList<String> tags) {
-        this.tags = tags;
-    }
-
-    public ArrayList<Double> getNutrition() {
-        return nutrition;
-    }
-
-    public void setNutrition(ArrayList<Double> nutrition) {
-        this.nutrition = nutrition;
-    }
-
-    public ArrayList<String> getSteps() {
-        return steps;
-    }
-
-    public void setSteps(ArrayList<String> steps) {
-        this.steps = steps;
-    }
-
-    public ArrayList<String> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(ArrayList<String> ingredients) {
-        this.ingredients = ingredients;
-    }
 }

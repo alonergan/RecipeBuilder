@@ -3,27 +3,17 @@ package org.cs564.recipeapp;
 /**
  * Class to represent recipe review in database
  */
-public class Interaction {
-    int userID;
+public class Review {
     int recipeID;
     int rating;
     String date;
     String review;
 
-    public Interaction(int userID, int recipeID, int rating, String date, String review) {
-        this.userID = userID;
+    public Review(int userID, int recipeID, int rating, String date, String review) {
         this.recipeID = recipeID;
         this.rating = rating;
         this.date = date;
         this.review = review;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
     }
 
     public int getRecipeID() {
