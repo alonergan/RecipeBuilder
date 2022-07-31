@@ -89,6 +89,8 @@ public class HomeSceneController {
     @FXML
     private TableColumn<Recipe, Integer> stepsCol;
     @FXML
+    private TableColumn<Recipe, Double> ratingCol;
+    @FXML
     private AnchorPane recipeViewPane;
     @FXML
     private Label recipeViewNameLabel;
@@ -108,7 +110,6 @@ public class HomeSceneController {
     private ChoiceBox<String> searchFilter;
     @FXML
     private TableView<Recipe> searchTable;
-
     @FXML
     private Label filterDescriptionTextBox;
 
@@ -118,7 +119,7 @@ public class HomeSceneController {
     public ObservableList<Recipe> obj_list = FXCollections.observableArrayList(); // Table list of recipes from SQL query
     public ObservableList<Recipe> curPage = FXCollections.observableArrayList(); // Page of recipes from obList
     public ObservableList<?> pantryList = FXCollections.observableArrayList(); // List of ingredients user has in kitchen
-    private final int rowsPerPage = 25;
+    private final int rowsPerPage = 27;
     private int pageIndex;
     private int maxPages;
     public Connection connection;
@@ -145,9 +146,11 @@ public class HomeSceneController {
         assert deleteUserButton != null : "fx:id=\"deleteUserButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert confirmDeletionPane != null : "fx:id=\"confirmDeletionPane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert pantryPane != null : "fx:id=\"pantryPane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
-        searchFilter.getItems().addAll(searchFilters);
+
         // Setup home page and connect to database
         profilePane.toFront();
+        searchFilter.getItems().addAll(searchFilters);
+        searchFilter.setValue(searchFilter.getItems().get(0));
         connection = DatabaseConnector.getConnection();
     }
 
@@ -176,7 +179,6 @@ public class HomeSceneController {
             pantryPane.toFront();
         }
         if (eventSource == searchRecipeButton) {
-            searchSubmitButton.setDisable(true);
             searchPane.toFront();
         }
         if (eventSource == logoutButton) {
@@ -297,10 +299,18 @@ public class HomeSceneController {
             if (rs.getInt("n_ingredients") == 0) {
                 continue;
             }
+
+            // Get rating for each recipe TODO: Get average rating for each recipe_id
+            //System.out.println("Getting rating");
+            //String getRecipeRating = "SELECT AVG(rating) rating FROM Review r WHERE r.recipe_id = " + rs.getInt("recipe_id") + ";";
+            //ResultSet rating = executeQuery(getRecipeRating);
+            double rating = 0.0;
+
+            // Add new recipe
             obj_list.add(new Recipe(rs.getString("recipe_name"),
                     rs.getInt("minutes"), rs.getInt("n_steps"),
                     rs.getInt("n_ingredients"), rs.getString("submitted"),
-                    rs.getInt("recipe_id"), rs.getString("description")));
+                    rs.getInt("recipe_id"), rs.getString("description"), rating));
         }
 
         // Set pages and update table
@@ -311,6 +321,7 @@ public class HomeSceneController {
         stepsCol.setCellValueFactory(new PropertyValueFactory<>("n_steps"));
         n_ingredients_Col.setCellValueFactory(new PropertyValueFactory<>("n_ingredients"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("dateSubmitted"));
+        ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
         updatePage(pageIndex);
     }
     /**
@@ -396,10 +407,7 @@ public class HomeSceneController {
         try {
             if (query == null) return;
             rs = executeQuery(query);
-            if (!filter.equals("Rating"))
-                constructRecipeTable(searchTable);
-            else ;  //TODO: construct review table?
-            System.out.println("DONE??\n");
+            constructRecipeTable(searchTable);
         } catch (SQLException e) {
             Logger.getLogger(HomeSceneController.class.getName()).log(Level.SEVERE, null, e);
         }
