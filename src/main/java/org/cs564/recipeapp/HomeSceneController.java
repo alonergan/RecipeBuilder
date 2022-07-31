@@ -109,6 +109,9 @@ public class HomeSceneController {
     @FXML
     private TableView<Recipe> searchTable;
 
+    @FXML
+    private Label filterDescriptionTextBox;
+
     // Global variables
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
     private double x, y; // Used for manipulating window
@@ -207,17 +210,22 @@ public class HomeSceneController {
      */
     @FXML
     public void handleSearchFilterEvent() {
-        searchSubmitButton.setDisable(false);
-        String boxValue = searchFilter.getValue();
-        searchTextField.setDisable(boxValue == null || boxValue.equals("All Recipes"));
-    }
-
-    /**
-     * Handle the events that occur in the Pantry pane
-     */
-    public void handlePantryEvent(ActionEvent event) {
-        Object eventSource = event.getSource();
-        /** inventoryAddField populated; enable Add button */
+        String filter = searchFilter.getValue();
+        String description = " ";
+        switch (filter) {
+            case "Time":
+                description = "Search for recipes under _ minutes:";
+                break;
+            case "Rating":
+                description = "Search for recipes at least rating:";
+                break;
+            case "Ingredient":
+                description = "Search for recipes containing:";
+                break;
+            default:
+                description = " ";
+        }
+        filterDescriptionTextBox.setText(description);
     }
     /**
      * Updates current page in browse tableView when user advances page number
@@ -362,7 +370,7 @@ public class HomeSceneController {
                         "WHERE r.minutes < " + input + ";";
                 break;
             case "Rating":
-                int rating = Integer.parseInt(input);
+                double rating = Double.parseDouble(input);
                 if (rating < 0 || rating > 5)
                     return;
                 // Maybe add some more UI effects to remind the user to enter a valid number.
