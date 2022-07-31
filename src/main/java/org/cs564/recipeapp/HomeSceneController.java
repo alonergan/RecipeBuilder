@@ -103,7 +103,7 @@ public class HomeSceneController {
     @FXML
     private TableColumn<Step, String> stepNameColumn;
     @FXML
-    private TextArea descriptionTextArea;
+    private Label descriptionTextArea;
     @FXML
     private TextField searchTextField;
     @FXML
@@ -112,6 +112,8 @@ public class HomeSceneController {
     private TableView<Recipe> searchTable;
     @FXML
     private Label filterDescriptionTextBox;
+    @FXML
+    private ProgressBar ratingBar;
 
     // Global variables
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};

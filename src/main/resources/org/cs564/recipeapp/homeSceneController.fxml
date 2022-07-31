@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -100,47 +101,6 @@
                   <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleSettingsClicks" text="Delete User" />
                </VBox>
             </AnchorPane>
-            <AnchorPane fx:id="recipeViewPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;">
-               <VBox alignment="CENTER" layoutX="433.0" layoutY="313.0" prefHeight="675.0" prefWidth="965.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                  <Label fx:id="recipeViewNameLabel" text="Recipe Name">
-                     <font>
-                        <Font size="32.0" />
-                     </font>
-                  </Label>
-                  <HBox prefHeight="487.0" prefWidth="965.0">
-                     <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="227.0" style="-fx-border-color: #BDBDBD;">
-                        <Label text="Ingredients">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ListView fx:id="ingredientListView" prefHeight="466.0" prefWidth="225.0" />
-                     </VBox>
-                     <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="283.0" style="-fx-border-color: #BDBDBD;">
-                        <Label text="Steps">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TableView fx:id="stepTableView" prefHeight="480.0" prefWidth="281.0">
-                           <columns>
-                              <TableColumn fx:id="stepNumColumn" editable="false" prefWidth="25.0" sortable="false" text="#" />
-                              <TableColumn fx:id="stepNameColumn" editable="false" prefWidth="255.0" sortable="false" text="Step" />
-                           </columns>
-                        </TableView>
-                     </VBox>
-                     <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="455.0" style="-fx-border-color: #BDBDBD;">
-                        <Label text="Description">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" text="No Description" wrapText="true" />
-                        <Label text="Maybe rating/reviews here?" />
-                     </VBox>
-                  </HBox>
-               </VBox>
-            </AnchorPane>
             <AnchorPane fx:id="searchPane" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
                <HBox alignment="CENTER_RIGHT" layoutX="350.0" layoutY="329.0" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <VBox alignment="CENTER" prefHeight="675.0" prefWidth="256.0" spacing="10.0">
@@ -222,6 +182,52 @@
                   </HBox>
                </VBox>
             </AnchorPane>
+            <AnchorPane fx:id="recipeViewPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;">
+               <VBox alignment="TOP_CENTER" layoutX="433.0" layoutY="313.0" prefHeight="675.0" prefWidth="965.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Label fx:id="recipeViewNameLabel" text="Recipe Name">
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="639.0" prefWidth="965.0">
+                     <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="227.0" style="-fx-border-color: #BDBDBD;">
+                        <Label text="Ingredients">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <ListView fx:id="ingredientListView" prefHeight="673.0" prefWidth="224.0" />
+                     </VBox>
+                     <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="283.0" style="-fx-border-color: #BDBDBD;">
+                        <Label text="Steps">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="stepTableView" prefHeight="614.0" prefWidth="281.0">
+                           <columns>
+                              <TableColumn fx:id="stepNumColumn" editable="false" prefWidth="25.0" sortable="false" text="#" />
+                              <TableColumn fx:id="stepNameColumn" editable="false" prefWidth="255.0" sortable="false" text="Step" />
+                           </columns>
+                        </TableView>
+                     </VBox>
+                     <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="455.0" spacing="100.0" style="-fx-border-color: #BDBDBD;">
+                        <Label text="Description">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="descriptionTextArea" text="Descrfiption" />
+                        <AnchorPane>
+                           <children>
+                              <Label layoutX="209.0" layoutY="4.0" text="Rating" />
+                              <ProgressBar fx:id="ratingBar" layoutX="126.0" layoutY="31.0" prefWidth="200.0" progress="0.0" />
+                           </children>
+                        </AnchorPane>
+                     </VBox>
+                  </HBox>
+               </VBox>
+            </AnchorPane>
          </StackPane>
       </center>
       <left>
@@ -252,7 +258,7 @@
             <Button fx:id="pantryButton" alignment="CENTER" graphicTextGap="12.0" layoutX="75.0" layoutY="504.0" mnemonicParsing="false" onAction="#handleMenuClicks" text="Pantry" textFill="WHITE">
                <graphic>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@images/icons8_logout_25px.png" />
+                     <Image url="@images/icons8_sidebar_menu_25px.png" />
                   </ImageView>
                </graphic>
             </Button>
