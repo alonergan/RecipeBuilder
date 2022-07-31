@@ -14,117 +14,101 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import java.net.URL;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static org.cs564.recipeapp.Users.deleteAccount;
 
 public class HomeSceneController {
 
     // SCENE BUILDER CODE /////////////////////////////////////////////////////////////////////////////////////////////
-    @FXML
-    private ResourceBundle resources;
+//    @FXML
+//    private ResourceBundle resources;
 
+//    @FXML
+//    private URL location;
     @FXML
-    private URL location;
-
+    public AnchorPane searchPane2;
+    @FXML
+    public TableColumn step2IngredientName;
+    @FXML
+    public TableView step2IngredientList;
+    @FXML
+    public Button searchSubmitButton2;
+    @FXML
+    public AnchorPane appPane;
+    @FXML
+    public Button pantryButton;
+    @FXML
+    public Button confirmDeletionButton;
+    @FXML
+    public Button cancelDeletionButton;
     @FXML
     private TableColumn<Recipe, String> dateCol;
-
     @FXML
     private Button homeButton;
-
     @FXML
-    private TableColumn<Recipe, Integer> ingredCol;
-
+    private TableColumn<Recipe, Integer> ingredient_Col;
     @FXML
     private Button logoutButton;
-
     @FXML
     private TableColumn<Recipe, Integer> minutesCol;
-
     @FXML
     private TableColumn<Recipe, String> nameCol;
-
     @FXML
     private Button nextPageButton;
     @FXML
     private TextField pageNumber;
-
     @FXML
     private Button prevPageButton;
-
     @FXML
     private Pane profilePane;
-
     @FXML
     private Button quitButton;
-
     @FXML
     private AnchorPane searchPane1;
-
     @FXML
     private Button searchRecipeButton;
-
     @FXML
     private Button searchSubmitButton;
-
     @FXML
     private Button settingsButton;
-
+    @FXML
+    private Button deleteUserButton;
     @FXML
     private Pane settingsPane;
-
+    @FXML
+    private AnchorPane confirmDeletionPane;
     @FXML
     private TableColumn<Recipe, Integer> stepsCol;
-
     @FXML
     private AnchorPane recipeViewPane;
-
     @FXML
     private Label recipeViewNameLabel;
-
     @FXML
     private ListView<String> ingredientListView;
-
     @FXML
     private TableView<Step>  stepTableView;
-
     @FXML
     private TableColumn<Step, Integer> stepNumColumn;
-
     @FXML
     private TableColumn<Step, String> stepNameColumn;
-
     @FXML
     private TextArea descriptionTextArea;
-
     @FXML
     private TextField searchTextField;
-
     @FXML
     private ChoiceBox<String> searchFilter;
-
     @FXML
     private TableView<Recipe> searchTable;
 
-    @FXML
-    private TableColumn<?, ?> searchNameCol;
-
-    @FXML
-    private TableColumn<?, ?> searchMinutesCol;
-
-    @FXML
-    private TableColumn<?, ?> searchStepsCol;
-
-    @FXML
-    private TableColumn<?, ?> searchIngredientsCol;
-
     // Global variables
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
-
     private double x, y; // Used for manipulating window
     public ObservableList<Recipe> obj_list = FXCollections.observableArrayList(); // Table list of recipes from SQL query
     public ObservableList<Recipe> curPage = FXCollections.observableArrayList(); // Page of recipes from obList
@@ -137,7 +121,7 @@ public class HomeSceneController {
     void initialize() throws Exception {
         assert dateCol != null : "fx:id=\"dateCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert homeButton != null : "fx:id=\"homeButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
-        assert ingredCol != null : "fx:id=\"ingredCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
+        assert ingredient_Col != null : "fx:id=\"ingredCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert logoutButton != null : "fx:id=\"logoutButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert minutesCol != null : "fx:id=\"minutesCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert nameCol != null : "fx:id=\"nameCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -152,6 +136,8 @@ public class HomeSceneController {
         assert settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert settingsPane != null : "fx:id=\"settingsPane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert stepsCol != null : "fx:id=\"stepsCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
+        assert deleteUserButton != null : "fx:id=\"deleteUserButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
+        assert confirmDeletionPane != null : "fx:id=\"confirmDeletionPane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         searchFilter.getItems().addAll(searchFilters);
         // Setup home page and connect to database
         profilePane.toFront();
@@ -195,6 +181,25 @@ public class HomeSceneController {
     }
 
     /**
+     * Main function for settings/options pane
+     * Add more settings later?
+     */
+    public void handleSettingsClicks(ActionEvent event) {
+        Object eventSource = event.getSource();
+        if (eventSource == deleteUserButton) {
+            confirmDeletionPane.toFront();
+            return;
+        }
+        if (eventSource == confirmDeletionButton) {
+            deleteAccount("branden");
+            return;
+        }
+        if (eventSource == cancelDeletionButton) {
+            confirmDeletionPane.toBack();
+            return;
+        }
+    }
+    /**
      * Change whether searchTextField is enabled, depending on searchFilter
      */
     @FXML
@@ -215,7 +220,7 @@ public class HomeSceneController {
      * Updates current page in browse tableView when user advances page number
      */
     @FXML
-    public void handlePageEvent(ActionEvent event) throws SQLException {
+    public void handlePageEvent(ActionEvent event) {
         Object eventSource = event.getSource();
         if (eventSource == nextPageButton && pageIndex != maxPages - 1) {
             updatePage(pageIndex + 1);
@@ -242,7 +247,7 @@ public class HomeSceneController {
     /**
      * Given a page index, this function will fill tableView with the correct recipes or reviews
      */
-    private void updatePage(int pageIndex) throws SQLException {
+    private void updatePage(int pageIndex) {
         if (obj_list.size() == 0) {
             System.out.println("oblist empty");
             return;
@@ -291,11 +296,11 @@ public class HomeSceneController {
         // Set pages and update table
         pageIndex = 0;
         maxPages = Math.ceilDiv(obj_list.size(), rowsPerPage);
-        nameCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-        minutesCol.setCellValueFactory(new PropertyValueFactory<Recipe, Integer>("minutes"));
-        stepsCol.setCellValueFactory(new PropertyValueFactory<Recipe, Integer>("n_steps"));
-        ingredCol.setCellValueFactory(new PropertyValueFactory<Recipe, Integer>("n_ingredients"));
-        dateCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("dateSubmitted"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        minutesCol.setCellValueFactory(new PropertyValueFactory<>("minutes"));
+        stepsCol.setCellValueFactory(new PropertyValueFactory<>("n_steps"));
+        ingredient_Col.setCellValueFactory(new PropertyValueFactory<>("n_ingredients"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("dateSubmitted"));
         updatePage(pageIndex);
     }
     /**
@@ -323,7 +328,6 @@ public class HomeSceneController {
         }
         return connection.createStatement().executeQuery(query);
     }
-
 
     /**
      * Handle search based on filter chosen
@@ -384,7 +388,7 @@ public class HomeSceneController {
             rs = executeQuery(query);
             if (!filter.equals("Rating"))
                 constructRecipeTable(searchTable);
-            else ;  //TODO: construct review table
+            else ;  //TODO: construct review table?
             System.out.println("DONE??\n");
         } catch (SQLException e) {
             Logger.getLogger(HomeSceneController.class.getName()).log(Level.SEVERE, null, e);
@@ -404,9 +408,9 @@ public class HomeSceneController {
             Recipe selectedRecipe = searchTable.getSelectionModel().getSelectedItem();
 
             // Execute SQL query to find ingredient and steps data from recipe in table
-            String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + String.valueOf(selectedRecipe.recipe_id);
+            String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + selectedRecipe.recipe_id;
             ResultSet ingredientData = executeQuery(ingredientQuery);
-            String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + String.valueOf(selectedRecipe.recipe_id);
+            String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + selectedRecipe.recipe_id;
             ResultSet stepData = executeQuery(stepQuery);
 
             // Set ingredients

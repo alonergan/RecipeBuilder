@@ -90,4 +90,35 @@ public class Users {
             return false;
         }
     }
+
+    /**
+     * Delete the user
+     * TODO: add verification; have user input password for 'security'
+     * But also running out of time and the account is just to keep track of their ingredients on-hand, who cares
+     */
+    public static void deleteAccount(String username) {
+        try {
+            File file = new File("src/main/resources/org/cs564/recipeapp/data/logins.txt");
+            Scanner scnr = new Scanner(file);
+            scnr.nextLine(); // Skip header
+            String line;
+            String[] userData;
+
+            // Find username
+            while (scnr.hasNextLine()) {
+                line = scnr.nextLine();
+                userData = line.split(",");
+                if (userData[0].equals(username)) {
+                }
+            }
+
+        } catch (IOException e) {
+            Alert ioError = new Alert(Alert.AlertType.ERROR);
+            ioError.setContentText("IOException: Could not find user data");
+            ioError.showAndWait();
+            e.printStackTrace();
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
+    }
 }
