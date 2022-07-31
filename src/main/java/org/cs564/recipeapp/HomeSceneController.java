@@ -33,7 +33,7 @@ public class HomeSceneController {
 //    @FXML
 //    private URL location;
     @FXML
-    public AnchorPane searchPane2;
+    public AnchorPane pantryPane;
     @FXML
     public TableColumn step2IngredientName;
     @FXML
@@ -49,11 +49,13 @@ public class HomeSceneController {
     @FXML
     public Button cancelDeletionButton;
     @FXML
+    public TableView inventoryListView;
+    @FXML
     private TableColumn<Recipe, String> dateCol;
     @FXML
     private Button homeButton;
     @FXML
-    private TableColumn<Recipe, Integer> ingredient_Col;
+    private TableColumn<Recipe, Integer> n_ingredients_Col;
     @FXML
     private Button logoutButton;
     @FXML
@@ -71,7 +73,7 @@ public class HomeSceneController {
     @FXML
     private Button quitButton;
     @FXML
-    private AnchorPane searchPane1;
+    private AnchorPane searchPane;
     @FXML
     private Button searchRecipeButton;
     @FXML
@@ -112,6 +114,7 @@ public class HomeSceneController {
     private double x, y; // Used for manipulating window
     public ObservableList<Recipe> obj_list = FXCollections.observableArrayList(); // Table list of recipes from SQL query
     public ObservableList<Recipe> curPage = FXCollections.observableArrayList(); // Page of recipes from obList
+    public ObservableList<?> pantryList = FXCollections.observableArrayList(); // List of ingredients user has in kitchen
     private final int rowsPerPage = 25;
     private int pageIndex;
     private int maxPages;
@@ -121,7 +124,7 @@ public class HomeSceneController {
     void initialize() throws Exception {
         assert dateCol != null : "fx:id=\"dateCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert homeButton != null : "fx:id=\"homeButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
-        assert ingredient_Col != null : "fx:id=\"ingredCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
+        assert n_ingredients_Col != null : "fx:id=\"n_ingredients_col\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert logoutButton != null : "fx:id=\"logoutButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert minutesCol != null : "fx:id=\"minutesCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert nameCol != null : "fx:id=\"nameCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -130,7 +133,7 @@ public class HomeSceneController {
         assert prevPageButton != null : "fx:id=\"prevPageButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert profilePane != null : "fx:id=\"profilePane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert quitButton != null : "fx:id=\"quitButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
-        assert searchPane1 != null : "fx:id=\"searchPane1\" was not injected: check your FXML file 'homeSceneController.fxml'.";
+        assert searchPane != null : "fx:id=\"searchPane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert searchRecipeButton != null : "fx:id=\"searchRecipeButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert searchSubmitButton != null : "fx:id=\"searchSubmitButton1\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -138,6 +141,7 @@ public class HomeSceneController {
         assert stepsCol != null : "fx:id=\"stepsCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert deleteUserButton != null : "fx:id=\"deleteUserButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert confirmDeletionPane != null : "fx:id=\"confirmDeletionPane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
+        assert pantryPane != null : "fx:id=\"pantryPane\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         searchFilter.getItems().addAll(searchFilters);
         // Setup home page and connect to database
         profilePane.toFront();
@@ -158,21 +162,21 @@ public class HomeSceneController {
      */
     @FXML
     public void handleMenuClicks(ActionEvent event) throws Exception {
-        if (event.getSource() == homeButton) {
+        Object eventSource = event.getSource();
+        if (eventSource == homeButton) {
             profilePane.toFront();
         }
-        if (event.getSource() == settingsButton) {
+        if (eventSource == settingsButton) {
             settingsPane.toFront();
         }
-//        if (event.getSource() == browseRecipeButton) {
-//            browsePane.toFront();
-//            browseInitialize();
-//        }
-        if (event.getSource() == searchRecipeButton) {
-            searchSubmitButton.setDisable(true);
-            searchPane1.toFront();
+        if (eventSource == pantryButton) {
+            pantryPane.toFront();
         }
-        if (event.getSource() == logoutButton) {
+        if (eventSource == searchRecipeButton) {
+            searchSubmitButton.setDisable(true);
+            searchPane.toFront();
+        }
+        if (eventSource == logoutButton) {
             Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("loginSceneController.fxml")));
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
             Stage stage = (Stage) logoutButton.getScene().getWindow();
@@ -196,7 +200,6 @@ public class HomeSceneController {
         }
         if (eventSource == cancelDeletionButton) {
             confirmDeletionPane.toBack();
-            return;
         }
     }
     /**
@@ -206,16 +209,16 @@ public class HomeSceneController {
     public void handleSearchFilterEvent() {
         searchSubmitButton.setDisable(false);
         String boxValue = searchFilter.getValue();
-        if (boxValue == null || boxValue.equals("All Recipes"))
-            searchTextField.setDisable(true);
-        else searchTextField.setDisable(false);
-//        if (boxValue.equals("Rating"))
-//            searchTextField.setPromptText("Search by UserID");
-        /**
-         * if search by ingredient, turn into a list
-         */
+        searchTextField.setDisable(boxValue == null || boxValue.equals("All Recipes"));
     }
 
+    /**
+     * Handle the events that occur in the Pantry pane
+     */
+    public void handlePantryEvent(ActionEvent event) {
+        Object eventSource = event.getSource();
+        /** inventoryAddField populated; enable Add button */
+    }
     /**
      * Updates current page in browse tableView when user advances page number
      */
@@ -274,7 +277,6 @@ public class HomeSceneController {
         pageNumber.setPromptText(String.valueOf(pageIndex + 1));
     }
 
-
     /**
      * Set up tableview based on ResultSet rs
      * @throws SQLException on error retrieving data from populated resultSet
@@ -299,7 +301,7 @@ public class HomeSceneController {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         minutesCol.setCellValueFactory(new PropertyValueFactory<>("minutes"));
         stepsCol.setCellValueFactory(new PropertyValueFactory<>("n_steps"));
-        ingredient_Col.setCellValueFactory(new PropertyValueFactory<>("n_ingredients"));
+        n_ingredients_Col.setCellValueFactory(new PropertyValueFactory<>("n_ingredients"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("dateSubmitted"));
         updatePage(pageIndex);
     }

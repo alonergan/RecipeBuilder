@@ -27,6 +27,12 @@
       </top>
       <center>
          <StackPane BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="confirmDeletionPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" style="-fx-border-width: 15; -fx-border-color: #607D8B; -fx-background-color: #FFFFFF;">
+               <Button fx:id="confirmDeletionButton" layoutX="78.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleSettingsClicks" prefHeight="25.0" prefWidth="90.0" text="Yes" textFill="RED" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="75.0" />
+               <Button fx:id="cancelDeletionButton" layoutX="238.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleSettingsClicks" prefHeight="25.0" prefWidth="90.0" text="No" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="75.0" />
+               <Label alignment="CENTER" contentDisplay="CENTER" layoutX="186.0" layoutY="115.0" text="Continue with deletion?" textAlignment="CENTER" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+               <TextArea layoutX="80.0" layoutY="-30.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+            </AnchorPane>
             <Pane fx:id="profilePane">
                <VBox alignment="CENTER" prefHeight="676.0" prefWidth="965.0" spacing="25.0" style="-fx-background-color: #FFFFFF;">
                   <padding>
@@ -69,75 +75,16 @@
                   <StackPane prefHeight="150.0" prefWidth="200.0" />
                </VBox>
             </Pane>
-            <AnchorPane fx:id="searchPane2" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
+            <AnchorPane fx:id="settingsPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;">
                <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-                     <Label text="Step 2: Choose more ingredients you have or continue">
-                        <font>
-                           <Font size="29.0" />
-                        </font>
-                     </Label>
-                     <Button fx:id="searchSubmitButton2" mnemonicParsing="false" text="Submit">
-                        <font>
-                           <Font size="18.0" />
-                        </font>
-                     </Button>
-                  </HBox>
-                  <HBox prefHeight="675.0" prefWidth="965.0">
-                     <VBox alignment="CENTER" prefHeight="625.0" prefWidth="448.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
-                        <TableView fx:id="step2IngredientList" prefHeight="645.0" prefWidth="438.0">
-                           <columns>
-                              <TableColumn fx:id="step2IngredientName" prefWidth="360.0" text="Ingredient" />
-                              <TableColumn minWidth="0.0" prefWidth="77.0" />
-                           </columns>
-                        </TableView>
-                     </VBox>
-                     <VBox alignment="CENTER" prefHeight="625.0" prefWidth="533.0" spacing="10.0" style="-fx-border-color: #BDBDBD;" />
-                  </HBox>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Settings">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+                  <Label text="TODO - Make Settings Pane" />
+                  <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleSettingsClicks" text="Delete User" />
                </VBox>
-            </AnchorPane>
-            <AnchorPane fx:id="searchPane1" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
-               <HBox alignment="CENTER_RIGHT" layoutX="350.0" layoutY="329.0" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                  <VBox alignment="CENTER" prefHeight="675.0" prefWidth="256.0" spacing="10.0">
-                     <Label text="Search By">
-                        <font>
-                           <Font size="24.0" />
-                        </font>
-                     </Label>
-                     <ChoiceBox fx:id="searchFilter" onAction="#handleSearchFilterEvent" prefWidth="150.0" />
-                     <Label text="Describe Search Criteria Here" />
-                     <TextField fx:id="searchTextField" disable="true" prefHeight="25.0" prefWidth="166.0" promptText="Search" />
-                     <Button fx:id="searchSubmitButton" mnemonicParsing="false" onAction="#handleSearchSubmit" text="Submit" />
-                  </VBox>
-                  <AnchorPane prefHeight="675.0" prefWidth="800.0">
-                     <VBox alignment="TOP_CENTER" prefHeight="675.0" prefWidth="965.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <padding>
-                           <Insets top="15.0" />
-                        </padding>
-                        <Label text="Browse Recipes">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
-                              <Button fx:id="prevPageButton" mnemonicParsing="false" onAction="#handlePageEvent" prefHeight="25.0" prefWidth="25.0" text="&lt;" />
-                              <TextField fx:id="pageNumber" alignment="CENTER" onKeyTyped="#handlePageEvent" prefHeight="25.0" prefWidth="37.0" promptText="1" />
-                              <Button fx:id="nextPageButton" mnemonicParsing="false" onAction="#handlePageEvent" prefHeight="25.0" prefWidth="25.0" text="&gt;" />
-                           </HBox>
-                        </HBox>
-                        <TableView fx:id="searchTable" onMouseClicked="#selectRecipe" prefHeight="625.0" prefWidth="900.0" style="-fx-background-color: #FFFFFF;">
-                           <columns>
-                              <TableColumn fx:id="nameCol" editable="false" prefWidth="375.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Name" />
-                              <TableColumn fx:id="minutesCol" editable="false" prefWidth="75.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Minutes" />
-                              <TableColumn fx:id="stepsCol" editable="false" prefWidth="75.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Steps" />
-                              <TableColumn fx:id="ingredient_Col" editable="false" prefWidth="100.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="# Ingredients" />
-                              <TableColumn fx:id="dateCol" editable="false" minWidth="50.0" prefWidth="123.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Date" />
-                           </columns>
-                        </TableView>
-                     </VBox>
-                  </AnchorPane>
-               </HBox>
             </AnchorPane>
             <AnchorPane fx:id="recipeViewPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;">
                <VBox alignment="CENTER" layoutX="433.0" layoutY="313.0" prefHeight="675.0" prefWidth="965.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -180,22 +127,89 @@
                   </HBox>
                </VBox>
             </AnchorPane>
-            <AnchorPane fx:id="settingsPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;">
-               <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Settings">
-                     <font>
-                        <Font size="48.0" />
-                     </font>
-                  </Label>
-                  <Label text="TODO - Make Settings Pane" />
-                  <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleSettingsClicks" text="Delete User" />
-               </VBox>
+            <AnchorPane fx:id="searchPane" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
+               <HBox alignment="CENTER_RIGHT" layoutX="350.0" layoutY="329.0" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox alignment="CENTER" prefHeight="675.0" prefWidth="256.0" spacing="10.0">
+                     <Label text="Search By">
+                        <font>
+                           <Font size="24.0" />
+                        </font>
+                     </Label>
+                     <ChoiceBox fx:id="searchFilter" onAction="#handleSearchFilterEvent" prefWidth="150.0" />
+                     <Label text="Describe Search Criteria Here" />
+                     <TextField fx:id="searchTextField" disable="true" prefHeight="25.0" prefWidth="166.0" promptText="Search" />
+                     <Button fx:id="searchSubmitButton" mnemonicParsing="false" onAction="#handleSearchSubmit" text="Submit" />
+                  </VBox>
+                  <AnchorPane prefHeight="675.0" prefWidth="800.0">
+                     <VBox alignment="TOP_CENTER" prefHeight="675.0" prefWidth="965.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <padding>
+                           <Insets top="15.0" />
+                        </padding>
+                        <Label text="Browse Recipes">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                              <Button fx:id="prevPageButton" mnemonicParsing="false" onAction="#handlePageEvent" prefHeight="25.0" prefWidth="25.0" text="&lt;" />
+                              <TextField fx:id="pageNumber" alignment="CENTER" onKeyTyped="#handlePageEvent" prefHeight="25.0" prefWidth="37.0" promptText="1" />
+                              <Button fx:id="nextPageButton" mnemonicParsing="false" onAction="#handlePageEvent" prefHeight="25.0" prefWidth="25.0" text="&gt;" />
+                           </HBox>
+                        </HBox>
+                        <TableView fx:id="searchTable" onMouseClicked="#selectRecipe" prefHeight="625.0" prefWidth="900.0" style="-fx-background-color: #FFFFFF;">
+                           <columns>
+                              <TableColumn fx:id="nameCol" editable="false" prefWidth="375.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Name" />
+                              <TableColumn fx:id="minutesCol" editable="false" prefWidth="75.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Minutes" />
+                              <TableColumn fx:id="stepsCol" editable="false" prefWidth="75.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Steps" />
+                              <TableColumn fx:id="n_ingredients_Col" editable="false" prefWidth="100.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="# Ingredients" />
+                              <TableColumn fx:id="dateCol" editable="false" minWidth="50.0" prefWidth="123.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #BDBDBD;" text="Date" />
+                           </columns>
+                        </TableView>
+                     </VBox>
+                  </AnchorPane>
+               </HBox>
             </AnchorPane>
-            <AnchorPane fx:id="confirmDeletionPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" style="-fx-border-width: 15; -fx-border-color: #607D8B; -fx-background-color: #FFFFFF;">
-               <Button fx:id="confirmDeletionButton" layoutX="78.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleSettingsClicks" prefHeight="25.0" prefWidth="90.0" text="Yes" textFill="RED" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="75.0" />
-               <Button fx:id="cancelDeletionButton" layoutX="238.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleSettingsClicks" prefHeight="25.0" prefWidth="90.0" text="No" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="75.0" />
-               <Label alignment="CENTER" contentDisplay="CENTER" layoutX="186.0" layoutY="115.0" text="Continue with deletion?" textAlignment="CENTER" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-               <TextArea layoutX="80.0" layoutY="-30.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+            <AnchorPane fx:id="pantryPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
+               <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                     <Label prefHeight="50.0" prefWidth="325.0" text="Your Kitchen's Inventory">
+                        <font>
+                           <Font size="29.0" />
+                        </font>
+                     </Label>
+                     <TextArea editable="false" prefHeight="50.0" prefWidth="380.0" text="Add and remove what you currently have in your kitchen. Find recipes containing some of your ingredients in the Search window" wrapText="true" />
+                     <Button fx:id="inventorySearchButton" mnemonicParsing="false" onAction="#handlePantryEvent" text="Search">
+                        <font>
+                           <Font size="18.0" />
+                        </font>
+                     </Button>
+                     <Spinner fx:id="inventorySearchSpinner" prefHeight="37.0" prefWidth="64.0">
+                        <HBox.margin>
+                           <Insets left="-10.0" />
+                        </HBox.margin>
+                     </Spinner>
+                  </HBox>
+                  <HBox prefHeight="675.0" prefWidth="965.0">
+                     <VBox alignment="CENTER" prefHeight="625.0" prefWidth="448.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
+                        <HBox prefHeight="12.0" prefWidth="441.0" VBox.vgrow="NEVER">
+                           <children>
+                              <TextField fx:id="inventoryAddField" maxWidth="500.0" onAction="#handlePantryEvent" prefHeight="6.0" prefWidth="387.0" promptText="Enter a new ingredient" />
+                              <Button fx:id="inventoryAddButton" mnemonicParsing="false" onAction="#handlePantryEvent" prefHeight="25.0" prefWidth="57.0" text="Add" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="-20.0" />
+                           </VBox.margin></HBox>
+                        <TableView fx:id="inventoryListView" prefHeight="571.0" prefWidth="441.0">
+                           <columns>
+                              <TableColumn fx:id="step2IngredientName" prefWidth="385.0" text="Ingredient" />
+                              <TableColumn prefWidth="55.0" text="Remove" />
+                           </columns>
+                        </TableView>
+                     </VBox>
+                     <VBox alignment="CENTER" prefHeight="605.0" prefWidth="528.0" spacing="10.0" style="-fx-border-color: #BDBDBD;" />
+                  </HBox>
+               </VBox>
             </AnchorPane>
          </StackPane>
       </center>
