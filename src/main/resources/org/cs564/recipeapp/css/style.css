@@ -13,4 +13,15 @@
 
 .pane {
     -fx-background-color: #CFD8DC;
+    -fx-border-color: #BDBDBD;
+}
+
+.table-view {
+    -fx-background-color: #CFD8DC;
+    -fx-border-color: #BDBDBD;
+}
+
+.table-column {
+    -fx-background-color: #CFD8DC;
+    -fx-border-color: #BDBDBD;
 }

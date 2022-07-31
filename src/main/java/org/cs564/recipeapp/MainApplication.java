@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainApplication extends Application {
     private double x, y;
@@ -14,8 +15,8 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Load login page
-        Parent root = FXMLLoader.load(getClass().getResource("homeSceneController.fxml"));
-        root.getStylesheets().add(getClass().getResource("css/style.css").toExternalForm());
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("homeSceneController.fxml")));
+        root.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Recipe Builder");
         primaryStage.initStyle(StageStyle.UNDECORATED);
