@@ -141,47 +141,6 @@
                   </HBox>
                </VBox>
             </AnchorPane>
-            <AnchorPane fx:id="pantryPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
-               <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-                     <Label prefHeight="50.0" prefWidth="325.0" text="Your Kitchen's Inventory">
-                        <font>
-                           <Font size="29.0" />
-                        </font>
-                     </Label>
-                     <TextArea editable="false" prefHeight="50.0" prefWidth="380.0" text="Add and remove what you currently have in your kitchen. Find recipes containing some of your ingredients in the Search window" wrapText="true" />
-                     <Button fx:id="inventorySearchButton" mnemonicParsing="false" text="Search">
-                        <font>
-                           <Font size="18.0" />
-                        </font>
-                     </Button>
-                     <Spinner fx:id="inventorySearchSpinner" prefHeight="37.0" prefWidth="64.0">
-                        <HBox.margin>
-                           <Insets left="-10.0" />
-                        </HBox.margin>
-                     </Spinner>
-                  </HBox>
-                  <HBox prefHeight="675.0" prefWidth="965.0">
-                     <VBox alignment="CENTER" prefHeight="625.0" prefWidth="448.0" spacing="10.0" style="-fx-border-color: #BDBDBD;">
-                        <HBox prefHeight="12.0" prefWidth="441.0" VBox.vgrow="NEVER">
-                           <children>
-                              <TextField fx:id="inventoryAddField" maxWidth="500.0" prefHeight="6.0" prefWidth="387.0" promptText="Enter a new ingredient" />
-                              <Button fx:id="inventoryAddButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Add" />
-                           </children>
-                           <VBox.margin>
-                              <Insets top="-20.0" />
-                           </VBox.margin></HBox>
-                        <TableView fx:id="inventoryListView" prefHeight="571.0" prefWidth="441.0">
-                           <columns>
-                              <TableColumn fx:id="step2IngredientName" prefWidth="385.0" text="Ingredient" />
-                              <TableColumn prefWidth="55.0" text="Remove" />
-                           </columns>
-                        </TableView>
-                     </VBox>
-                     <VBox alignment="CENTER" prefHeight="605.0" prefWidth="528.0" spacing="10.0" style="-fx-border-color: #BDBDBD;" />
-                  </HBox>
-               </VBox>
-            </AnchorPane>
             <AnchorPane fx:id="searchPane" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
                <HBox alignment="CENTER_RIGHT" layoutX="350.0" layoutY="329.0" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <VBox alignment="CENTER" prefHeight="675.0" prefWidth="256.0" spacing="10.0">
@@ -219,6 +178,49 @@
                      </TableView>
                   </AnchorPane>
                </HBox>
+            </AnchorPane>
+            <AnchorPane fx:id="pantryPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
+               <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox prefHeight="675.0" prefWidth="965.0">
+                     <VBox alignment="CENTER" prefHeight="625.0" prefWidth="336.0" spacing="15.0" style="-fx-border-color: #BDBDBD;">
+                        <children>
+                           <Label alignment="CENTER" prefHeight="50.0" prefWidth="325.0" text="Your Kitchen's Inventory" textAlignment="CENTER">
+                              <font>
+                                 <Font size="24.0" />
+                              </font>
+                           </Label>
+                           <TextField fx:id="inventoryAddField" maxWidth="500.0" prefHeight="25.0" prefWidth="286.0" promptText="Add or search for an ingredient" />
+                           <HBox alignment="CENTER" prefHeight="12.0" prefWidth="441.0" spacing="7.0" VBox.vgrow="NEVER">
+                              <children>
+                                 <Button fx:id="inventoryAddButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Add" />
+                                 <Button fx:id="inventoryAddButton1" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Search" />
+                              </children>
+                              <VBox.margin>
+                                 <Insets />
+                              </VBox.margin>
+                           </HBox>
+                           <Label text="Add and remove what you currently have in your kitchen. Find recipes containing some of your ingredients in the Search window" textAlignment="CENTER" wrapText="true">
+                              <padding>
+                                 <Insets left="20.0" right="20.0" />
+                              </padding>
+                           </Label>
+                           <Spinner fx:id="inventorySearchSpinner" prefHeight="37.0" prefWidth="64.0" />
+                        </children>
+                        <padding>
+                           <Insets left="20.0" right="20.0" />
+                        </padding></VBox>
+                     <AnchorPane prefHeight="675.0" prefWidth="694.0">
+                        <children>
+                           <TableView fx:id="inventoryListView" prefHeight="675.3333333333334" prefWidth="661.3333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <columns>
+                                 <TableColumn fx:id="step2IngredientName" prefWidth="593.3333637714386" text="Ingredient" />
+                                 <TableColumn prefWidth="66.0" text="Remove" />
+                              </columns>
+                           </TableView>
+                        </children>
+                     </AnchorPane>
+                  </HBox>
+               </VBox>
             </AnchorPane>
          </StackPane>
       </center>
