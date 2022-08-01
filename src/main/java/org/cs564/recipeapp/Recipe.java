@@ -12,8 +12,10 @@ public class Recipe {
     int recipe_id;
     String description;
 
+    double rating;
+
     // Main constructor
-    public Recipe(String name, int minutes, int n_steps, int n_ingredients, String dateSubmitted, int recipe_id, String description) {
+    public Recipe(String name, int minutes, int n_steps, int n_ingredients, String dateSubmitted, int recipe_id, String description, double rating) {
         this.recipe_id = recipe_id;
         this.n_ingredients = n_ingredients;
         this.minutes = minutes;
@@ -21,16 +23,17 @@ public class Recipe {
         this.name = name;
         this.dateSubmitted = dateSubmitted;
         this.description = description;
+        this.rating = rating;
     }
 
-    // Used for browse function
-    public Recipe(String name, int minutes, int n_steps, int n_ingredients, String dateSubmitted) {
-        this.n_ingredients = n_ingredients;
-        this.minutes = minutes;
-        this.n_steps = n_steps;
-        this.name = name;
-        this.dateSubmitted = dateSubmitted;
+    public double getRating() {
+        return rating;
     }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
     public int getId() {
         return recipe_id;
     }
