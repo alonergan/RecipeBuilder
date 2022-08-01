@@ -114,6 +114,10 @@ public class HomeSceneController {
     private Label filterDescriptionTextBox;
     @FXML
     private ProgressBar ratingBar;
+    @FXML
+    private Label ratingTextLabel;
+    @FXML
+    private Label numberResultsLabel;
 
     // Global variables
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
@@ -126,6 +130,7 @@ public class HomeSceneController {
     private int maxPages;
     public Connection connection;
     public ResultSet rs;
+    public ResultSet averageRatings;
     @FXML
     void initialize() throws Exception {
         assert dateCol != null : "fx:id=\"dateCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -296,6 +301,10 @@ public class HomeSceneController {
     private void constructRecipeTable(TableView<Recipe> recipeTableView) throws SQLException {
         // Clear obj_list, and add contents
         obj_list.clear();
+        // Get average ratings table
+        String getRecipeRating = "SELECT recipe_id, AVG(rating) rating FROM Review r GROUP BY recipe_id;";
+        averageRatings = executeQuery(getRecipeRating);
+
         while (rs.next()) {
             // If an empty recipe, skip
             if (rs.getInt("n_ingredients") == 0) {
@@ -303,10 +312,10 @@ public class HomeSceneController {
             }
 
             // Get rating for each recipe TODO: Get average rating for each recipe_id
-            //System.out.println("Getting rating");
-            //String getRecipeRating = "SELECT AVG(rating) rating FROM Review r WHERE r.recipe_id = " + rs.getInt("recipe_id") + ";";
-            //ResultSet rating = executeQuery(getRecipeRating);
             double rating = 0.0;
+            if (averageRatings.next()) {
+                rating = averageRatings.getDouble("rating");
+            }
 
             // Add new recipe
             obj_list.add(new Recipe(rs.getString("recipe_name"),
@@ -314,6 +323,12 @@ public class HomeSceneController {
                     rs.getInt("n_ingredients"), rs.getString("submitted"),
                     rs.getInt("recipe_id"), rs.getString("description"), rating));
         }
+
+        int count = 0;
+        if (!obj_list.isEmpty()) {
+            count = obj_list.size();
+        }
+        numberResultsLabel.setText("Results: " + count);
 
         // Set pages and update table
         pageIndex = 0;
@@ -432,6 +447,7 @@ public class HomeSceneController {
             ResultSet ingredientData = executeQuery(ingredientQuery);
             String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + selectedRecipe.recipe_id;
             ResultSet stepData = executeQuery(stepQuery);
+            double rating = selectedRecipe.rating / 5.0;
 
             // Set ingredients
             while (ingredientData.next()) {
@@ -450,6 +466,9 @@ public class HomeSceneController {
             if (!selectedRecipe.description.isEmpty()) {
                 descriptionTextArea.setText(selectedRecipe.description);
             }
+            ratingBar.setProgress(rating);
+            ratingTextLabel.setText("Rating " + selectedRecipe.rating + " / 5.0");
+
 
             // Bring recipeViewPane to front
             recipeViewPane.toFront();
