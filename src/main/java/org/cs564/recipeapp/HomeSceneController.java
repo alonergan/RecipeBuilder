@@ -72,6 +72,8 @@ public class HomeSceneController {
     @FXML
     public AnchorPane pantryListAnchor;
     @FXML
+    public Label pantryMessageLabel;
+    @FXML
     private TableColumn<Recipe, String> dateCol;
     @FXML
     private Button homeButton;
@@ -151,6 +153,7 @@ public class HomeSceneController {
     public ResultSet rs;
     public ResultSet averageRatings;
     public String username = "";
+    private boolean isPantryListFront = true;  // if pantryListAnchor (inventory) is in front of pantryListSearchAnchor (search by ingredient)
 
     /**
      * TODO: add remaining assertions
@@ -217,7 +220,7 @@ public class HomeSceneController {
     /// APP MANAGEMENT FUNCTIONS ↓  ///
     /// Functions that exclusively  ///
     /// Modify and initialize views ///
-    /// Independent of queries      ///
+    /// or handle events            ///
     ///////////////////////////////////
 
     /**
@@ -281,6 +284,24 @@ public class HomeSceneController {
     }
 
     /**
+     * Instead of using an extra pane/"page" for searching by ingredients in the pantryPane,
+     * enable/disable, set visibility, push to front
+     * @param pantryInFront = false if searching by ingredient, true if canceling search
+     */
+    private void changePantryView(boolean pantryInFront) {
+        isPantryListFront = pantryInFront;
+        // if searching by ingredient
+        if (!isPantryListFront) {
+            pantrySearchListAnchor.toFront();
+            pantryDeleteBtn.setDisable(true);
+        }
+        else {
+            pantryListAnchor.toFront();
+            pantryDeleteBtn.setDisable(false);
+        }
+    }
+
+    /**
      * handle clicks that occur in pantryPane
      * TODO: make checking pantryList better;
      * Make a custom ListView to go with the custom ListCell
@@ -292,16 +313,22 @@ public class HomeSceneController {
         String query = "";
         try {
             if (eventSource == pantryAddBtn) {  //TODO: any error cases?
-                if (!input.equals("")) {
+                if (isPantryListFront && !input.equals("")) {
                     pantryList.getItems().add(input);
-                    pantryList.refresh();
-                    // handle error handling for duplicate value
-                    query = "INSERT INTO User VALUES('" + username + "', '" + input + "');";
-                    executeUpdate(query);
-                    // Adjust the maximum number of ingredients to search by
-                    int max = pantryList.getItems().size();
-                    pantrySpinnerValues.setMax(max);
+
                 }
+                else {  // otherwise searching ingredients to add to pantry
+                    int index = pantryList.getSelectionModel().getSelectedIndex();
+                    input = pantryList.getItems().get(index);
+
+                }
+                pantryList.refresh();
+                // handle error handling for duplicate value
+                query = "INSERT INTO User VALUES('" + username + "', '" + input + "');";
+                executeUpdate(query);
+                // Adjust the maximum number of ingredients to search by
+                int max = pantryList.getItems().size();
+                pantrySpinnerValues.setMax(max);
                 return;
             }
             if (eventSource == pantrySearchRecipesBtn && pantryList.getItems().size() > 0) {
@@ -315,22 +342,16 @@ public class HomeSceneController {
                 constructRecipeTable();
                 return;
             }
-            if (eventSource == pantrySearchIngredientBtn) {
-//                pantrySearchListAnchor.toFront();
-//                pantrySearchListAnchor.setDisable(false);
-//                pantrySearchListAnchor.setVisible(true);
-//                pantryListAnchor.setDisable(true);
-//                pantrySearchIngredientBtn.setDisable(false);
-//                pantryListAnchor.setVisible(false);
-//                pantryListAnchor.setVisible();
-//                query = "SELECT ingredient_name " +
-//                        "FROM ingredient WHERE ingredient_name LIKE '%" + input + "%';";
-//                pantrySearchList.getItems().clear();
-//                while (rs.next()) {
-//                    pantrySearchList.getItems().add(rs.getString(1));
-//                }
-//                pantrySearchList.refresh();
-//                rs = executeQuery(query);
+            if (eventSource == pantrySearchIngredientBtn && !input.equals("")) {
+                changePantryView(false);
+                query = "SELECT ingredient_name " +
+                        "FROM ingredient WHERE ingredient_name LIKE '%" + input + "%';";
+                rs = executeQuery(query);
+                pantrySearchList.getItems().clear();
+                while (rs.next()) {
+                    pantrySearchList.getItems().add(rs.getString(1));
+                }
+                pantrySearchList.refresh();
                 return;
             }
             if (eventSource == pantryDeleteBtn) {
@@ -350,13 +371,9 @@ public class HomeSceneController {
                     return;
                 }
             }
-//            if (eventSource == pantryCancelButton) {
-//                pantrySearchListAnchor.setDisable(true);
-//                pantrySearchListAnchor.setVisible(false);
-//                pantryListAnchor.setDisable(false);
-//                pantryListAnchor.setVisible(true);
-//                pantryListAnchor.toFront();
-//            }
+            if (eventSource == pantryCancelButton) {
+                changePantryView(true);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
