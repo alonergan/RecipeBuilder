@@ -62,6 +62,16 @@ public class HomeSceneController {
     @FXML
     public Button pantryDeleteBtn;
     @FXML
+    public Label searchTableSizeLabel;
+    @FXML
+    public ListView<String> pantrySearchList;
+    @FXML
+    public Button pantryCancelButton;
+    @FXML
+    public AnchorPane pantrySearchListAnchor;
+    @FXML
+    public AnchorPane pantryListAnchor;
+    @FXML
     private TableColumn<Recipe, String> dateCol;
     @FXML
     private Button homeButton;
@@ -130,7 +140,7 @@ public class HomeSceneController {
     public ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
     public ObservableList<Recipe> recipeCurPage = FXCollections.observableArrayList(); // Page of recipes from obList
 //    public ObservableList<String> pantryObvList = FXCollections.observableArrayList(); // List of ingredients user has in kitchen
-    private SpinnerValueFactory.IntegerSpinnerValueFactory pantrySpinnerValues;
+    private SpinnerValueFactory.IntegerSpinnerValueFactory pantrySpinnerValues; // corresponds to minimum ingredients required in search
     private final int rowsPerPage = 27;
     private int pageIndex;
     private int maxPages;
@@ -139,7 +149,7 @@ public class HomeSceneController {
     public String username = "";
 
     /**
-     * TODO: add User
+     * TODO: add remaining assertions
      * @throws Exception for connecting to MySQL database
      */
     @FXML
@@ -189,9 +199,11 @@ public class HomeSceneController {
             while (rs.next()) {
                 pantryList.getItems().add(rs.getString(1));
             }
-            pantrySpinnerValues =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, pantryList.getItems().size(), 1);
+            int size = pantryList.getItems().size();
+            pantrySpinnerValues = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Math.max(size, 1), 1);
             pantrySearchSpinner.setValueFactory(pantrySpinnerValues);
+//            if (size == 0)
+//                pantrySearchSpinner.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -212,15 +224,19 @@ public class HomeSceneController {
         Object eventSource = event.getSource();
         if (eventSource == homeButton) {
             profilePane.toFront();
+            return;
         }
         if (eventSource == settingsButton) {
             settingsPane.toFront();
+            return;
         }
         if (eventSource == pantryButton) {
             pantryPane.toFront();
+            return;
         }
         if (eventSource == searchRecipeButton) {
             searchPane.toFront();
+            return;
         }
         if (eventSource == logoutButton) {
             Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("loginSceneController.fxml")));
@@ -264,7 +280,7 @@ public class HomeSceneController {
      * handle clicks that occur in pantryPane
      * TODO: make checking pantryList better;
      * Make a custom ListView to go with the custom ListCell
-     * @param event
+     * @param event the events that correspond to the buttons' clicks
      */
     public void handlePantryClicks(ActionEvent event) {
         String input = pantryAddField.getText();
@@ -278,40 +294,65 @@ public class HomeSceneController {
                     // handle error handling for duplicate value
                     query = "INSERT INTO User VALUES('" + username + "', '" + input + "');";
                     executeUpdate(query);
-                    int max = pantrySpinnerValues.getMax();
-                    pantrySpinnerValues.setMax(max + 1);
+                    // Adjust the maximum number of ingredients to search by
+                    int max = pantryList.getItems().size();
+                    pantrySpinnerValues.setMax(max);
                 }
                 return;
             }
-            if (eventSource == pantrySearchRecipesBtn) {
+            if (eventSource == pantrySearchRecipesBtn && pantryList.getItems().size() > 0) {
                 searchPane.toFront();
                 query = "SELECT r.* " +
                         "FROM recipe r, ingredient i " +
                         "WHERE r.recipe_id = i.recipe_id and i.ingredient_name IN( " +
-                            "SELECT ingredient_name FROM user WHERE user_id = '" + username + "') " +
+                            "SELECT ingredient_name FROM user WHERE username = '" + username + "') " +
                         "GROUP BY i.recipe_id HAVING COUNT(*) >= " + pantrySearchSpinner.getValue() + ";";
                 rs = executeQuery(query);
                 constructRecipeTable();
                 return;
             }
             if (eventSource == pantrySearchIngredientBtn) {
-                //TODO
-                // Requires ObservableList, ListFactory idk i'm tired
+//                pantrySearchListAnchor.toFront();
+//                pantrySearchListAnchor.setDisable(false);
+//                pantrySearchListAnchor.setVisible(true);
+//                pantryListAnchor.setDisable(true);
+//                pantrySearchIngredientBtn.setDisable(false);
+//                pantryListAnchor.setVisible(false);
+//                pantryListAnchor.setVisible();
+//                query = "SELECT ingredient_name " +
+//                        "FROM ingredient WHERE ingredient_name LIKE '%" + input + "%';";
+//                pantrySearchList.getItems().clear();
+//                while (rs.next()) {
+//                    pantrySearchList.getItems().add(rs.getString(1));
+//                }
+//                pantrySearchList.refresh();
+//                rs = executeQuery(query);
+                return;
             }
             if (eventSource == pantryDeleteBtn) {
                 int index = pantryList.getSelectionModel().getSelectedIndex();
-                query = "SELECT COUNT(*) FROM User WHERE " +
-                        "username = '" + username + "' AND ingredient_name='" + input + "';";
+                String indexStr = pantryList.getItems().get(index);
+                query = "SELECT * FROM User WHERE " +
+                        "username = '" + username + "' AND ingredient_name= '" + indexStr + "';";
                 rs = executeQuery(query);
                 if (rs.next()) {
                     query = "DELETE FROM User WHERE " +
-                            "username = '" + username + "' AND ingredient_name='" + input + "';";
+                            "username = '" + username + "' AND ingredient_name= '" + indexStr + "';";
                     executeUpdate(query);
+                    pantryList.getItems().remove(index);
                     int max = pantrySpinnerValues.getMax();
                     pantrySpinnerValues.setMax(max <= 2 ? max = 1 : max - 1);
                     pantryList.refresh();
+                    return;
                 }
             }
+//            if (eventSource == pantryCancelButton) {
+//                pantrySearchListAnchor.setDisable(true);
+//                pantrySearchListAnchor.setVisible(false);
+//                pantryListAnchor.setDisable(false);
+//                pantryListAnchor.setVisible(true);
+//                pantryListAnchor.toFront();
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -434,6 +475,8 @@ public class HomeSceneController {
         dateCol.setCellValueFactory(new PropertyValueFactory<>("dateSubmitted"));
         ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
         updatePage(pageIndex);
+        String resultSize = "Result Table: " + recipeObvList.size() + " entries";
+        searchTableSizeLabel.setText(resultSize);   //TODO: test
     }
 
     /**
