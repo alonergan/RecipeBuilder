@@ -14,7 +14,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,7 +58,7 @@ public class HomeSceneController {
     @FXML
     public Button pantryAddBtn;
     @FXML
-    public ListView<IngredientSearchCell> pantryList;
+    public ListView<String> pantryList;
     @FXML
     public Button pantryDeleteBtn;
     @FXML
@@ -130,7 +129,8 @@ public class HomeSceneController {
     private double x, y; // Used for manipulating window
     public ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
     public ObservableList<Recipe> recipeCurPage = FXCollections.observableArrayList(); // Page of recipes from obList
-    public ObservableList<IngredientSearchCell> pantryObvList = FXCollections.observableArrayList(); // List of ingredients user has in kitchen
+//    public ObservableList<String> pantryObvList = FXCollections.observableArrayList(); // List of ingredients user has in kitchen
+    private SpinnerValueFactory.IntegerSpinnerValueFactory pantrySpinnerValues;
     private final int rowsPerPage = 27;
     private int pageIndex;
     private int maxPages;
@@ -187,10 +187,12 @@ public class HomeSceneController {
         try {
             rs = executeQuery("SELECT ingredient_name FROM User WHERE username = '" + username + "';");
             while (rs.next()) {
-                pantryList.getItems().add(new IngredientSearchCell(rs.getString(1)));
+                pantryList.getItems().add(rs.getString(1));
             }
-
-        } catch (SQLException e) {
+            pantrySpinnerValues =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, pantryList.getItems().size(), 1);
+            pantrySearchSpinner.setValueFactory(pantrySpinnerValues);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -265,35 +267,53 @@ public class HomeSceneController {
      * @param event
      */
     public void handlePantryClicks(ActionEvent event) {
+        String input = pantryAddField.getText();
         Object eventSource = event.getSource();
         String query = "";
-        if (eventSource == pantryAddBtn) {
-            String ingredient = pantryAddField.getText();
-            if (!ingredient.equals("")) {
-                pantryList.getItems().add(new IngredientSearchCell(ingredient));
-                pantryList.refresh();
-                query = "INSERT INTO User VALUES('" + username + "', '" + ingredient + "');";
-                executeUpdate(query);
-            }
-        }
-        if (eventSource == pantrySearchRecipesBtn) {
-
-        }
-        if (eventSource == pantrySearchIngredientBtn) {
-
-        }
-        if (eventSource == pantryList) {
-            try {
-                if (pantryList.getUserData() != null) {
-                    String ingredient;
-                    ingredient = (String) pantryList.getUserData();
-                    query = "DELETE ingredient_name FROM User WHERE " +
-                            "username = '" + username + "' AND ingredient_name='" + ingredient + "';";
+        try {
+            if (eventSource == pantryAddBtn) {  //TODO: any error cases?
+                if (!input.equals("")) {
+                    pantryList.getItems().add(input);
+                    pantryList.refresh();
+                    // handle error handling for duplicate value
+                    query = "INSERT INTO User VALUES('" + username + "', '" + input + "');";
                     executeUpdate(query);
+                    int max = pantrySpinnerValues.getMax();
+                    pantrySpinnerValues.setMax(max + 1);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                return;
             }
+            if (eventSource == pantrySearchRecipesBtn) {
+                searchPane.toFront();
+                query = "SELECT r.* " +
+                        "FROM recipe r, ingredient i " +
+                        "WHERE r.recipe_id = i.recipe_id and i.ingredient_name IN( " +
+                            "SELECT ingredient_name FROM user WHERE user_id = '" + username + "') " +
+                        "GROUP BY i.recipe_id HAVING COUNT(*) >= " + pantrySearchSpinner.getValue() + ";";
+                rs = executeQuery(query);
+                constructRecipeTable();
+                return;
+            }
+            if (eventSource == pantrySearchIngredientBtn) {
+                //TODO
+                // Requires ObservableList, ListFactory idk i'm tired
+            }
+            if (eventSource == pantryDeleteBtn) {
+                int index = pantryList.getSelectionModel().getSelectedIndex();
+                query = "SELECT COUNT(*) FROM User WHERE " +
+                        "username = '" + username + "' AND ingredient_name='" + input + "';";
+                rs = executeQuery(query);
+                if (rs.next()) {
+                    query = "DELETE FROM User WHERE " +
+                            "username = '" + username + "' AND ingredient_name='" + input + "';";
+                    executeUpdate(query);
+                    int max = pantrySpinnerValues.getMax();
+                    pantrySpinnerValues.setMax(max <= 2 ? max = 1 : max - 1);
+                    pantryList.refresh();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -382,7 +402,7 @@ public class HomeSceneController {
      * Set up tableview based on ResultSet rs
      * @throws SQLException on error retrieving data from populated resultSet
      */
-    private void constructRecipeTable(TableView<Recipe> recipeTableView) throws SQLException {
+    private void constructRecipeTable() throws SQLException {
         // Clear recipeObvList, and add contents
         recipeObvList.clear();
         while (rs.next()) {
@@ -474,33 +494,25 @@ public class HomeSceneController {
      * @param query The SQL query
      * @return the result set, if successful
      */
-    public ResultSet executeQuery(String query) {
+    public ResultSet executeQuery(String query) throws SQLException{
         if (query == null || query.isEmpty()) {
             return null;
         }
-        try {
-            return connection.createStatement().executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return connection.createStatement().executeQuery(query);
     }
 
     /**
      * Updates a table
      */
-    public void executeUpdate(String cmd) {
+    public void executeUpdate(String cmd) throws SQLException {
         if (cmd == null || cmd.isEmpty()) {
             return;
         }
-        try {
-            connection.createStatement().executeUpdate(cmd);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        connection.createStatement().executeUpdate(cmd);
     }
+
     /**
-     * Handle search based on filter chosen
+     * Handle search based on filter chosen in searchPane
      */
     @FXML
     public void handleSearchSubmit() {
@@ -556,7 +568,7 @@ public class HomeSceneController {
         try {
             if (query == null) return;
             rs = executeQuery(query);
-            constructRecipeTable(searchTable);
+            constructRecipeTable();
         } catch (SQLException e) {
             Logger.getLogger(HomeSceneController.class.getName()).log(Level.SEVERE, null, e);
         }

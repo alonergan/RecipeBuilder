@@ -210,7 +210,10 @@
                            <Button fx:id="pantryDeleteBtn" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#handlePantryClicks" prefHeight="25.0" prefWidth="206.0" text="Delete" GridPane.columnIndex="1" />
                         </children>
                      </GridPane>
-                     <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" text="Add what you currently have in your kitchen&#10;&#10;Click on ingredients in the list and hit 'Delete' if you no longer have them on hand&#10;&#10;Search for ingredients in the database with a similar name&#10;&#10;Find recipes containing some of your ingredients in the Search window" wrapText="true" />
+                     <Label text="Add what you currently have in your kitchen" />
+                     <Label text="Click on ingredients in the list and hit 'Delete' if you no longer have them on hand" />
+                     <Label text="Search for ingredients in the database with a similar name" />
+                     <Label text="Find recipes containing some of your ingredients in the Search window" wrapText="true" />
                      <Spinner fx:id="pantrySearchSpinner" prefHeight="37.0" prefWidth="64.0" />
                      <Label prefHeight="34.0" prefWidth="207.0" text="Minimum number of ingredients required for recipe search" textAlignment="CENTER" wrapText="true" />
                   </VBox>
@@ -220,7 +223,7 @@
                            <Font size="14.0" />
                         </font>
                      </Label>
-                     <ListView fx:id="pantryList" layoutX="153.0" layoutY="238.0" onMouseClicked="#handlePantryClicks" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0" />
+                     <ListView fx:id="pantryList" layoutX="153.0" layoutY="238.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0" />
                   </AnchorPane>
                </HBox>
             </AnchorPane>
