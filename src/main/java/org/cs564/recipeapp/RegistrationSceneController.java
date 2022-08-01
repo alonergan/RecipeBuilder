@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class RegistrationSceneController {
 
@@ -74,7 +75,7 @@ public class RegistrationSceneController {
             successAlert.show();
 
             // Switch back to login page
-            Parent loginScene = FXMLLoader.load(MainApplication.class.getResource("loginSceneController.fxml"));
+            Parent loginScene = FXMLLoader.load(Objects.requireNonNull(MainApplication.class.getResource("loginSceneController.fxml")));
             Stage window = (Stage) submitButton.getScene().getWindow();
             window.setScene(new Scene(loginScene, 1200, 725));
         }
@@ -83,7 +84,7 @@ public class RegistrationSceneController {
     @FXML
     void returnButtonClicked() throws IOException {
         // Switch back to login page
-        Parent loginScene = FXMLLoader.load(MainApplication.class.getResource("loginSceneController.fxml"));
+        Parent loginScene = FXMLLoader.load(Objects.requireNonNull(MainApplication.class.getResource("loginSceneController.fxml")));
         Stage window = (Stage) submitButton.getScene().getWindow();
         window.setScene(new Scene(loginScene, 1200, 725));
     }

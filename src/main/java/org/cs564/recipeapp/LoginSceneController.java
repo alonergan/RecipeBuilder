@@ -1,6 +1,8 @@
 package org.cs564.recipeapp;
 
 import java.net.URL;
+import java.sql.Connection;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -36,13 +38,18 @@ public class LoginSceneController {
     @FXML
     private Button quitButton;
 
+    private Connection connection;
     @FXML
     void initialize() {
         assert newUserButton != null : "fx:id=\"newUserButton\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
         assert passwordTextField != null : "fx:id=\"passwordTextField\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
         assert signInButton != null : "fx:id=\"signInButton\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
         assert usernameTextField != null : "fx:id=\"usernameTextField\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
-
+        try {
+            connection = DatabaseConnector.getConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -64,24 +71,28 @@ public class LoginSceneController {
         }
 
         // Handle login
-
         if (!Users.verifyLogin(usernameText, passwordText)) {
             Alert loginError = new Alert(Alert.AlertType.ERROR);
             loginError.setContentText("Username and/or password invalid\nPlease try again");
             loginError.showAndWait();
         } else {
-            // Handle scene change and login information
-            Parent homeScene = FXMLLoader.load(MainApplication.class.getResource("homeSceneController.fxml"));
-            homeScene.getStylesheets().add(getClass().getResource("css/style.css").toExternalForm());
+            // Handle scene change; Pass login information and DB connection
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(MainApplication.class.getResource("homeSceneController.fxml")));
+            Parent homeScene = loader.load();
+            homeScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
+
+            // having trouble passing a controller with constructor params; using setting functions instead
+            HomeSceneController controller = loader.getController();
+            controller.setupUserComponents(usernameText, connection);
+
             Stage window = (Stage) signInButton.getScene().getWindow();
             window.setScene(new Scene(homeScene, 1200, 725));
         }
-
     }
     @FXML
     void loginNewUserButtonClicked() throws IOException {
         // Change scene or create popup window for registration
-        Parent registrationScene = FXMLLoader.load(MainApplication.class.getResource("registrationSceneController.fxml"));
+        Parent registrationScene = FXMLLoader.load(Objects.requireNonNull(MainApplication.class.getResource("registrationSceneController.fxml")));
         Stage window = (Stage) newUserButton.getScene().getWindow();
         window.setScene(new Scene(registrationScene, 1200, 725));
     }

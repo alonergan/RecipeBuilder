@@ -22,8 +22,6 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.cs564.recipeapp.Users.deleteAccount;
-
 public class HomeSceneController {
 
     // SCENE BUILDER CODE /////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,12 +32,12 @@ public class HomeSceneController {
 //    private URL location;
     @FXML
     public AnchorPane pantryPane;
-    @FXML
-    public TableColumn step2IngredientName;
-    @FXML
-    public TableView step2IngredientList;
-    @FXML
-    public Button searchSubmitButton2;
+//    @FXML
+//    public TableColumn step2IngredientName;
+//    @FXML
+//    public TableView step2IngredientList;
+//    @FXML
+//    public Button searchSubmitButton2;
     @FXML
     public AnchorPane appPane;
     @FXML
@@ -48,8 +46,22 @@ public class HomeSceneController {
     public Button confirmDeletionButton;
     @FXML
     public Button cancelDeletionButton;
+//    @FXML
+//    public TableView inventoryListView;
     @FXML
-    public TableView inventoryListView;
+    public Spinner<Integer> pantrySearchSpinner;
+    @FXML
+    public Button pantrySearchRecipesBtn;
+    @FXML
+    public Button pantrySearchIngredientBtn;
+    @FXML
+    public TextField pantryAddField;
+    @FXML
+    public Button pantryAddBtn;
+    @FXML
+    public ListView<IngredientSearchCell> pantryList;
+    @FXML
+    public Button pantryDeleteBtn;
     @FXML
     private TableColumn<Recipe, String> dateCol;
     @FXML
@@ -116,14 +128,20 @@ public class HomeSceneController {
     // Global variables
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
     private double x, y; // Used for manipulating window
-    public ObservableList<Recipe> obj_list = FXCollections.observableArrayList(); // Table list of recipes from SQL query
-    public ObservableList<Recipe> curPage = FXCollections.observableArrayList(); // Page of recipes from obList
-    public ObservableList<?> pantryList = FXCollections.observableArrayList(); // List of ingredients user has in kitchen
+    public ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
+    public ObservableList<Recipe> recipeCurPage = FXCollections.observableArrayList(); // Page of recipes from obList
+    public ObservableList<IngredientSearchCell> pantryObvList = FXCollections.observableArrayList(); // List of ingredients user has in kitchen
     private final int rowsPerPage = 27;
     private int pageIndex;
     private int maxPages;
     public Connection connection;
     public ResultSet rs;
+    public String username = "";
+
+    /**
+     * TODO: add User
+     * @throws Exception for connecting to MySQL database
+     */
     @FXML
     void initialize() throws Exception {
         assert dateCol != null : "fx:id=\"dateCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -151,10 +169,31 @@ public class HomeSceneController {
         profilePane.toFront();
         searchFilter.getItems().addAll(searchFilters);
         searchFilter.setValue(searchFilter.getItems().get(0));
-        connection = DatabaseConnector.getConnection();
+        // connection = DatabaseConnector.getConnection();
     }
 
     // END SCENE BUILDER CODE AND GLOBAL VARIABLE INITIALIZATION, ASSIGNMENT //////////////////////////////////
+
+    /**
+     * Assign username, set up pantry/inventory list
+     * TODO: Favorites?
+     * @param usr the username passed from LoginSceneController. Had issues loading a controller with a
+     *            parameterized constructor
+     */
+    protected void setupUserComponents(String usr, Connection connection) {
+        this.connection = connection;
+        username = usr;
+        // Construct user's inventoryList
+        try {
+            rs = executeQuery("SELECT ingredient_name FROM User WHERE username = '" + username + "';");
+            while (rs.next()) {
+                pantryList.getItems().add(new IngredientSearchCell(rs.getString(1)));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     ///////////////////////////////////
     /// APP MANAGEMENT FUNCTIONS ↓  ///
@@ -200,13 +239,64 @@ public class HomeSceneController {
             return;
         }
         if (eventSource == confirmDeletionButton) {
-            deleteAccount("branden");
+            try {
+                // delete username from User
+                String query = "DELETE FROM User WHERE username='" + username + "';";
+                connection.createStatement().executeQuery(query);
+                // Switch to LoginScene
+                Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("loginSceneController.fxml")));
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
+                Stage stage = (Stage) logoutButton.getScene().getWindow();
+                stage.setScene(new Scene(scene));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return;
         }
         if (eventSource == cancelDeletionButton) {
             confirmDeletionPane.toBack();
         }
     }
+
+    /**
+     * handle clicks that occur in pantryPane
+     * TODO: make checking pantryList better;
+     * Make a custom ListView to go with the custom ListCell
+     * @param event
+     */
+    public void handlePantryClicks(ActionEvent event) {
+        Object eventSource = event.getSource();
+        String query = "";
+        if (eventSource == pantryAddBtn) {
+            String ingredient = pantryAddField.getText();
+            if (!ingredient.equals("")) {
+                pantryList.getItems().add(new IngredientSearchCell(ingredient));
+                pantryList.refresh();
+                query = "INSERT INTO User VALUES('" + username + "', '" + ingredient + "');";
+                executeUpdate(query);
+            }
+        }
+        if (eventSource == pantrySearchRecipesBtn) {
+
+        }
+        if (eventSource == pantrySearchIngredientBtn) {
+
+        }
+        if (eventSource == pantryList) {
+            try {
+                if (pantryList.getUserData() != null) {
+                    String ingredient;
+                    ingredient = (String) pantryList.getUserData();
+                    query = "DELETE ingredient_name FROM User WHERE " +
+                            "username = '" + username + "' AND ingredient_name='" + ingredient + "';";
+                    executeUpdate(query);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * Change whether searchTextField is enabled, depending on searchFilter
      */
@@ -229,6 +319,7 @@ public class HomeSceneController {
         }
         filterDescriptionTextBox.setText(description);
     }
+
     /**
      * Updates current page in browse tableView when user advances page number
      */
@@ -261,7 +352,7 @@ public class HomeSceneController {
      * Given a page index, this function will fill tableView with the correct recipes or reviews
      */
     private void updatePage(int pageIndex) {
-        if (obj_list.size() == 0) {
+        if (recipeObvList.size() == 0) {
             System.out.println("oblist empty");
             return;
         }
@@ -269,21 +360,21 @@ public class HomeSceneController {
         // Get start index
         int i = pageIndex * rowsPerPage;
         int count = 0;
-        if (curPage.size() != 0) {
-            while (obj_list.get(i) != null && count < rowsPerPage) {
-                curPage.set(count, obj_list.get(i));
+        if (recipeCurPage.size() != 0) {
+            while (recipeObvList.get(i) != null && count < rowsPerPage) {
+                recipeCurPage.set(count, recipeObvList.get(i));
                 count++;
                 i++;
             }
         } else {
-            while (obj_list.get(i) != null && count < rowsPerPage) {
-                curPage.add(count, obj_list.get(i));
+            while (recipeObvList.get(i) != null && count < rowsPerPage) {
+                recipeCurPage.add(count, recipeObvList.get(i));
                 count++;
                 i++;
             }
         }
 
-        searchTable.setItems(curPage);
+        searchTable.setItems(recipeCurPage);
         pageNumber.setPromptText(String.valueOf(pageIndex + 1));
     }
 
@@ -292,8 +383,8 @@ public class HomeSceneController {
      * @throws SQLException on error retrieving data from populated resultSet
      */
     private void constructRecipeTable(TableView<Recipe> recipeTableView) throws SQLException {
-        // Clear obj_list, and add contents
-        obj_list.clear();
+        // Clear recipeObvList, and add contents
+        recipeObvList.clear();
         while (rs.next()) {
             // If an empty recipe, skip
             if (rs.getInt("n_ingredients") == 0) {
@@ -307,7 +398,7 @@ public class HomeSceneController {
             double rating = 0.0;
 
             // Add new recipe
-            obj_list.add(new Recipe(rs.getString("recipe_name"),
+            recipeObvList.add(new Recipe(rs.getString("recipe_name"),
                     rs.getInt("minutes"), rs.getInt("n_steps"),
                     rs.getInt("n_ingredients"), rs.getString("submitted"),
                     rs.getInt("recipe_id"), rs.getString("description"), rating));
@@ -315,7 +406,7 @@ public class HomeSceneController {
 
         // Set pages and update table
         pageIndex = 0;
-        maxPages = Math.ceilDiv(obj_list.size(), rowsPerPage);
+        maxPages = Math.ceilDiv(recipeObvList.size(), rowsPerPage);
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         minutesCol.setCellValueFactory(new PropertyValueFactory<>("minutes"));
         stepsCol.setCellValueFactory(new PropertyValueFactory<>("n_steps"));
@@ -324,6 +415,7 @@ public class HomeSceneController {
         ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
         updatePage(pageIndex);
     }
+
     /**
      * Close application
      */
@@ -337,19 +429,76 @@ public class HomeSceneController {
     /// Execute queries, call UI ///
     /// Functions to update scene///
     ////////////////////////////////
+    /**
+     * Opens recipe view pane when user selects recipe from table in browse or search
+     * @param event The event triggered by being clicked
+     */
+    @FXML
+    public void selectRecipe(MouseEvent event) throws SQLException {
+        if (event.getClickCount() > 1) {
+            // TODO CLEAR RECIPE DATA FROM PREVIOUS
 
+            // Grab recipe from row
+            Recipe selectedRecipe = searchTable.getSelectionModel().getSelectedItem();
+
+            // Execute SQL query to find ingredient and steps data from recipe in table
+            String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + selectedRecipe.recipe_id;
+            ResultSet ingredientData = executeQuery(ingredientQuery);
+            String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + selectedRecipe.recipe_id;
+            ResultSet stepData = executeQuery(stepQuery);
+
+            // Set ingredients
+            while (ingredientData.next()) {
+                ingredientListView.getItems().add(ingredientData.getString("ingredient_name"));
+            }
+
+            // Set steps
+            stepNumColumn.setCellValueFactory(new PropertyValueFactory<>("step_num"));
+            stepNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            while (stepData.next()) {
+                stepTableView.getItems().add(new Step(stepData.getInt("step_num"), stepData.getString("step_name")));
+            }
+
+            // Set remaining values and descriptions
+            recipeViewNameLabel.setText(selectedRecipe.name.substring(0, 1).toUpperCase() + selectedRecipe.name.substring(1));
+            if (!selectedRecipe.description.isEmpty()) {
+                descriptionTextArea.setText(selectedRecipe.description);
+            }
+
+            // Bring recipeViewPane to front
+            recipeViewPane.toFront();
+        }
+    }
     /**
      * Returns a sub-table/result set given an SQL query
      * @param query The SQL query
      * @return the result set, if successful
      */
-    public ResultSet executeQuery(String query) throws SQLException {
+    public ResultSet executeQuery(String query) {
         if (query == null || query.isEmpty()) {
             return null;
         }
-        return connection.createStatement().executeQuery(query);
+        try {
+            return connection.createStatement().executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
+    /**
+     * Updates a table
+     */
+    public void executeUpdate(String cmd) {
+        if (cmd == null || cmd.isEmpty()) {
+            return;
+        }
+        try {
+            connection.createStatement().executeUpdate(cmd);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * Handle search based on filter chosen
      */
@@ -410,47 +559,6 @@ public class HomeSceneController {
             constructRecipeTable(searchTable);
         } catch (SQLException e) {
             Logger.getLogger(HomeSceneController.class.getName()).log(Level.SEVERE, null, e);
-        }
-    }
-
-    /**
-     * Opens recipe view pane when user selects recipe from table in browse or search
-     * @param event The event triggered by being clicked
-     */
-    @FXML
-    public void selectRecipe(MouseEvent event) throws SQLException {
-        if (event.getClickCount() > 1) {
-            // TODO CLEAR RECIPE DATA FROM PREVIOUS
-
-            // Grab recipe from row
-            Recipe selectedRecipe = searchTable.getSelectionModel().getSelectedItem();
-
-            // Execute SQL query to find ingredient and steps data from recipe in table
-            String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + selectedRecipe.recipe_id;
-            ResultSet ingredientData = executeQuery(ingredientQuery);
-            String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + selectedRecipe.recipe_id;
-            ResultSet stepData = executeQuery(stepQuery);
-
-            // Set ingredients
-            while (ingredientData.next()) {
-                ingredientListView.getItems().add(ingredientData.getString("ingredient_name"));
-            }
-
-            // Set steps
-            stepNumColumn.setCellValueFactory(new PropertyValueFactory<>("step_num"));
-            stepNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-            while (stepData.next()) {
-                stepTableView.getItems().add(new Step(stepData.getInt("step_num"), stepData.getString("step_name")));
-            }
-
-            // Set remaining values and descriptions
-            recipeViewNameLabel.setText(selectedRecipe.name.substring(0, 1).toUpperCase() + selectedRecipe.name.substring(1));
-            if (!selectedRecipe.description.isEmpty()) {
-                descriptionTextArea.setText(selectedRecipe.description);
-            }
-
-            // Bring recipeViewPane to front
-            recipeViewPane.toFront();
         }
     }
 }
