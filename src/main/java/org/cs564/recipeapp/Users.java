@@ -45,6 +45,10 @@ public class Users {
             bw.close();
             fw.close();
             scnr.close();
+
+            String query = "INSERT INTO User VALUES ('" + username +"';";
+
+
             return true;
 
         } catch (IOException e) {

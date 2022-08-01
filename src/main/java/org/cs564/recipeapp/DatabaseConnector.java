@@ -21,13 +21,11 @@ public class DatabaseConnector {
         }
         return null;
     }
-
-    public static boolean init() throws Exception {
-        Connection connection = getConnection();
-
-        return false;
-    }
-
+//    public static boolean init() throws Exception {
+//        Connection connection = getConnection();
+//
+//        return false;
+//    }
     public static void main(String[] args) throws Exception {
         getConnection();
     }
