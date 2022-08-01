@@ -49,7 +49,7 @@ public class HomeSceneController {
     @FXML
     public Button cancelDeletionButton;
     @FXML
-    public TableView inventoryListView;
+    public TableView<?> inventoryListView;
     @FXML
     private TableColumn<Recipe, String> dateCol;
     @FXML
@@ -118,8 +118,13 @@ public class HomeSceneController {
     private Label ratingTextLabel;
     @FXML
     private Label numberResultsLabel;
+    @FXML
+    private TextField confirmUsernameTextField;
+    @FXML
+    private PasswordField confirmPasswordTextField;
 
     // Global variables
+    private Users currentUser;
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
     private double x, y; // Used for manipulating window
     public ObservableList<Recipe> obj_list = FXCollections.observableArrayList(); // Table list of recipes from SQL query
@@ -207,6 +212,7 @@ public class HomeSceneController {
             return;
         }
         if (eventSource == confirmDeletionButton) {
+
             deleteAccount("branden");
             return;
         }

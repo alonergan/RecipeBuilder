@@ -5,11 +5,11 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -42,12 +42,6 @@
       </top>
       <center>
          <StackPane BorderPane.alignment="CENTER">
-            <AnchorPane fx:id="confirmDeletionPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" style="-fx-border-width: 15; -fx-border-color: #607D8B; -fx-background-color: #FFFFFF;">
-               <Button fx:id="confirmDeletionButton" layoutX="78.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleSettingsClicks" prefHeight="25.0" prefWidth="90.0" text="Yes" textFill="RED" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="75.0" />
-               <Button fx:id="cancelDeletionButton" layoutX="238.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleSettingsClicks" prefHeight="25.0" prefWidth="90.0" text="No" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="75.0" />
-               <Label alignment="CENTER" contentDisplay="CENTER" layoutX="186.0" layoutY="115.0" text="Continue with deletion?" textAlignment="CENTER" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-               <TextArea layoutX="80.0" layoutY="-30.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-            </AnchorPane>
             <Pane fx:id="profilePane">
                <VBox alignment="CENTER" prefHeight="676.0" prefWidth="965.0" spacing="25.0" style="-fx-background-color: #FFFFFF;">
                   <padding>
@@ -99,49 +93,6 @@
                   </Label>
                   <Label text="TODO - Make Settings Pane" />
                   <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleSettingsClicks" text="Delete User" />
-               </VBox>
-            </AnchorPane>
-            <AnchorPane fx:id="pantryPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
-               <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                  <HBox prefHeight="675.0" prefWidth="965.0">
-                     <VBox alignment="CENTER" prefHeight="625.0" prefWidth="336.0" spacing="15.0" style="-fx-border-color: #BDBDBD;">
-                        <children>
-                           <Label alignment="CENTER" prefHeight="50.0" prefWidth="325.0" text="Your Kitchen's Inventory" textAlignment="CENTER">
-                              <font>
-                                 <Font size="24.0" />
-                              </font>
-                           </Label>
-                           <TextField fx:id="inventoryAddField" maxWidth="500.0" prefHeight="25.0" prefWidth="286.0" promptText="Add or search for an ingredient" />
-                           <HBox alignment="CENTER" prefHeight="12.0" prefWidth="441.0" spacing="7.0" VBox.vgrow="NEVER">
-                              <children>
-                                 <Button fx:id="inventoryAddButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Add" />
-                                 <Button fx:id="inventoryAddButton1" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Search" />
-                              </children>
-                              <VBox.margin>
-                                 <Insets />
-                              </VBox.margin>
-                           </HBox>
-                           <Label text="Add and remove what you currently have in your kitchen. Find recipes containing some of your ingredients in the Search window" textAlignment="CENTER" wrapText="true">
-                              <padding>
-                                 <Insets left="20.0" right="20.0" />
-                              </padding>
-                           </Label>
-                           <Spinner fx:id="inventorySearchSpinner" prefHeight="37.0" prefWidth="64.0" />
-                        </children>
-                        <padding>
-                           <Insets left="20.0" right="20.0" />
-                        </padding></VBox>
-                     <AnchorPane prefHeight="675.0" prefWidth="694.0">
-                        <children>
-                           <TableView fx:id="inventoryListView" prefHeight="675.3333333333334" prefWidth="661.3333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                              <columns>
-                                 <TableColumn fx:id="step2IngredientName" prefWidth="593.3333637714386" text="Ingredient" />
-                                 <TableColumn prefWidth="66.0" text="Remove" />
-                              </columns>
-                           </TableView>
-                        </children>
-                     </AnchorPane>
-                  </HBox>
                </VBox>
             </AnchorPane>
             <AnchorPane fx:id="recipeViewPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;">
@@ -228,6 +179,68 @@
                      </TableView>
                   </AnchorPane>
                </HBox>
+            </AnchorPane>
+            <AnchorPane fx:id="pantryPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
+               <VBox alignment="CENTER" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox prefHeight="675.0" prefWidth="965.0">
+                     <VBox alignment="CENTER" prefHeight="625.0" prefWidth="336.0" spacing="15.0" style="-fx-border-color: #BDBDBD;">
+                        <children>
+                           <Label alignment="CENTER" prefHeight="50.0" prefWidth="325.0" text="Your Kitchen's Inventory" textAlignment="CENTER">
+                              <font>
+                                 <Font size="24.0" />
+                              </font>
+                           </Label>
+                           <TextField fx:id="inventoryAddField" maxWidth="500.0" prefHeight="25.0" prefWidth="286.0" promptText="Add or search for an ingredient" />
+                           <HBox alignment="CENTER" prefHeight="12.0" prefWidth="441.0" spacing="7.0" VBox.vgrow="NEVER">
+                              <children>
+                                 <Button fx:id="inventoryAddButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Add" />
+                                 <Button fx:id="inventoryAddButton1" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Search" />
+                              </children>
+                              <VBox.margin>
+                                 <Insets />
+                              </VBox.margin>
+                           </HBox>
+                           <Label text="Add and remove what you currently have in your kitchen. Find recipes containing some of your ingredients in the Search window" textAlignment="CENTER" wrapText="true">
+                              <padding>
+                                 <Insets left="20.0" right="20.0" />
+                              </padding>
+                           </Label>
+                           <Spinner fx:id="inventorySearchSpinner" prefHeight="37.0" prefWidth="64.0" />
+                        </children>
+                        <padding>
+                           <Insets left="20.0" right="20.0" />
+                        </padding></VBox>
+                     <AnchorPane prefHeight="675.0" prefWidth="694.0">
+                        <children>
+                           <TableView fx:id="inventoryListView" prefHeight="675.3333333333334" prefWidth="661.3333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <columns>
+                                 <TableColumn fx:id="step2IngredientName" prefWidth="593.3333637714386" text="Ingredient" />
+                                 <TableColumn prefWidth="66.0" text="Remove" />
+                              </columns>
+                           </TableView>
+                        </children>
+                     </AnchorPane>
+                  </HBox>
+               </VBox>
+            </AnchorPane>
+            <AnchorPane fx:id="confirmDeletionPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" style="-fx-border-width: 15; -fx-border-color: #607D8B; -fx-background-color: #FFFFFF;">
+               <VBox alignment="CENTER" layoutX="46.0" layoutY="51.0" spacing="15.0">
+                  <children>
+                     <HBox alignment="CENTER" spacing="10.0">
+                        <children>
+                           <TextField fx:id="confirmUsernameTextField" promptText="Username" />
+                           <PasswordField fx:id="confirmPasswordTextField" promptText="Password" />
+                        </children>
+                     </HBox>
+                     <Label alignment="CENTER" contentDisplay="CENTER" text="Continue with deletion?" textAlignment="CENTER" />
+                     <HBox alignment="CENTER" spacing="10.0">
+                        <children>
+                           <Button fx:id="confirmDeletionButton" mnemonicParsing="false" onAction="#handleSettingsClicks" prefHeight="25.0" prefWidth="90.0" text="Yes" textFill="RED" />
+                           <Button fx:id="cancelDeletionButton" mnemonicParsing="false" onAction="#handleSettingsClicks" prefHeight="25.0" prefWidth="90.0" text="No" />
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
             </AnchorPane>
          </StackPane>
       </center>
