@@ -1,12 +1,16 @@
 package org.cs564.recipeapp;
 
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 
 import java.io.*;
+import java.sql.Connection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Users {
+
+    public Connection connection; // Users connection to database
 
     /**
      * Adds new login to users array and checks for duplicate usernames
@@ -124,5 +128,9 @@ public class Users {
         } catch (NoSuchElementException e) {
             e.printStackTrace();
         }
+    }
+
+    public void initialize() {
+
     }
 }

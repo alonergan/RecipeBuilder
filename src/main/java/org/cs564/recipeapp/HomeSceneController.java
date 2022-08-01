@@ -124,7 +124,7 @@ public class HomeSceneController {
     @FXML
     private TableColumn<Step, String> stepNameColumn;
     @FXML
-    private TextArea descriptionTextArea;
+    private Label descriptionTextArea;
     @FXML
     private TextField searchTextField;
     @FXML
@@ -138,7 +138,9 @@ public class HomeSceneController {
     @FXML
     private Label ratingBarLabel;
 
+
     // Global variables
+    private Users currentUser;
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
     private double x, y; // Used for manipulating window
     public ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
@@ -273,6 +275,7 @@ public class HomeSceneController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            deleteAccount("branden");
             return;
         }
         if (eventSource == cancelDeletionButton) {
@@ -461,6 +464,7 @@ public class HomeSceneController {
                 continue;
             }
 
+
             // Get rating for each recipe
             double rating = 0.0;
             if (averageRatings.next()) {
@@ -473,6 +477,12 @@ public class HomeSceneController {
                     rs.getInt("n_ingredients"), rs.getString("submitted"),
                     rs.getInt("recipe_id"), rs.getString("description"), rating));
         }
+
+        int count = 0;
+        if (!obj_list.isEmpty()) {
+            count = obj_list.size();
+        }
+        numberResultsLabel.setText("Results: " + count);
 
         // Set pages and update table
         pageIndex = 0;
@@ -626,6 +636,51 @@ public class HomeSceneController {
             constructRecipeTable();
         } catch (SQLException e) {
             Logger.getLogger(HomeSceneController.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+    
+    /**
+     * Opens recipe view pane when user selects recipe from table in browse or search
+     * @param event The event triggered by being clicked
+     */
+    @FXML
+    public void selectRecipe(MouseEvent event) throws SQLException {
+        if (event.getClickCount() > 1) {
+            // TODO CLEAR RECIPE DATA FROM PREVIOUS
+
+            // Grab recipe from row
+            Recipe selectedRecipe = searchTable.getSelectionModel().getSelectedItem();
+
+            // Execute SQL query to find ingredient and steps data from recipe in table
+            String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + selectedRecipe.recipe_id;
+            ResultSet ingredientData = executeQuery(ingredientQuery);
+            String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + selectedRecipe.recipe_id;
+            ResultSet stepData = executeQuery(stepQuery);
+            double rating = selectedRecipe.rating / 5.0;
+
+            // Set ingredients
+            while (ingredientData.next()) {
+                ingredientListView.getItems().add(ingredientData.getString("ingredient_name"));
+            }
+
+            // Set steps
+            stepNumColumn.setCellValueFactory(new PropertyValueFactory<>("step_num"));
+            stepNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            while (stepData.next()) {
+                stepTableView.getItems().add(new Step(stepData.getInt("step_num"), stepData.getString("step_name")));
+            }
+
+            // Set remaining values and descriptions
+            recipeViewNameLabel.setText(selectedRecipe.name.substring(0, 1).toUpperCase() + selectedRecipe.name.substring(1));
+            if (!selectedRecipe.description.isEmpty()) {
+                descriptionTextArea.setText(selectedRecipe.description);
+            }
+            ratingBar.setProgress(rating);
+            ratingTextLabel.setText("Rating " + selectedRecipe.rating + " / 5.0");
+
+
+            // Bring recipeViewPane to front
+            recipeViewPane.toFront();
         }
     }
 }
