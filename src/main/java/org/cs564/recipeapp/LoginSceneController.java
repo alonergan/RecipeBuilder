@@ -45,11 +45,6 @@ public class LoginSceneController {
         assert passwordTextField != null : "fx:id=\"passwordTextField\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
         assert signInButton != null : "fx:id=\"signInButton\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
         assert usernameTextField != null : "fx:id=\"usernameTextField\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
-        try {
-            connection = DatabaseConnector.getConnection();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
@@ -82,8 +77,8 @@ public class LoginSceneController {
             homeScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
 
             // having trouble passing a controller with constructor params; using setting functions instead
-            HomeSceneController controller = loader.getController();
-            controller.setupUserComponents(usernameText, connection);
+            // HomeSceneController controller = loader.getController();
+            // controller.setupUserComponents(usernameText, connection);
 
             Stage window = (Stage) signInButton.getScene().getWindow();
             window.setScene(new Scene(homeScene, 1200, 725));

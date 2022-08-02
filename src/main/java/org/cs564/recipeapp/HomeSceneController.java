@@ -159,7 +159,7 @@ public class HomeSceneController {
      * TODO: add remaining assertions
      */
     @FXML
-    void initialize() {
+    void initialize() throws Exception {
         assert dateCol != null : "fx:id=\"dateCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert homeButton != null : "fx:id=\"homeButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert n_ingredients_Col != null : "fx:id=\"n_ingredients_col\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -185,7 +185,7 @@ public class HomeSceneController {
         profilePane.toFront();
         searchFilter.getItems().addAll(searchFilters);
         searchFilter.setValue(searchFilter.getItems().get(0));
-        // connection = DatabaseConnector.getConnection();
+        connection = DatabaseConnector.getConnection();
     }
 
     // END SCENE BUILDER CODE AND GLOBAL VARIABLE INITIALIZATION, ASSIGNMENT //////////////////////////////////
@@ -371,6 +371,7 @@ public class HomeSceneController {
             }
             if (eventSource == pantryDeleteBtn && isPantryListFront) {
                 int index = pantryList.getSelectionModel().getSelectedIndex();
+                if (index < 0) {return;}
                 input = pantryList.getItems().get(index);
                 query = "SELECT * FROM User WHERE " +
                         "username = '" + username + "' AND ingredient_name= '" + input + "';";
