@@ -1,9 +1,9 @@
 package org.cs564.recipeapp;
 
-import java.net.URL;
+//import java.net.URL;
 import java.sql.Connection;
 import java.util.Objects;
-import java.util.ResourceBundle;
+//import java.util.ResourceBundle;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,11 +17,11 @@ import java.io.IOException;
 
 public class LoginSceneController {
 
-    @FXML
-    private ResourceBundle resources;
+//    @FXML
+//    private ResourceBundle resources;
 
-    @FXML
-    private URL location;
+//    @FXML
+//    private URL location;
 
     @FXML
     private Button newUserButton;
@@ -36,7 +36,7 @@ public class LoginSceneController {
     private TextField usernameTextField;
 
     @FXML
-    private Button quitButton;
+//    private Button quitButton;
 
     private Connection connection;
     @FXML
