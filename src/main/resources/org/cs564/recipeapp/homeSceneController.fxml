@@ -180,9 +180,8 @@
                         </Label>
                         <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" text="No Description" wrapText="true" />
                         <AnchorPane prefHeight="97.0" prefWidth="453.0">
-                           <Label fx:id="ratingBarLabel" layoutX="158.0" layoutY="22.0" text="Rating"/>
-                           <ProgressBar fx:id="ratingBar" layoutX="75.0" layoutY="57.0" prefWidth="200.0"
-                                        progress="0.0"/>
+                           <Label fx:id="ratingBarLabel" layoutX="158.0" layoutY="22.0" text="Rating" />
+                           <ProgressBar fx:id="ratingBar" layoutX="75.0" layoutY="57.0" prefWidth="200.0" progress="0.0" />
                         </AnchorPane>
                      </VBox>
                   </HBox>
@@ -217,8 +216,8 @@
                         <Button fx:id="pantrySearchRecipesBtn" mnemonicParsing="false" onAction="#handlePantryClicks" prefHeight="25.0" prefWidth="202.0" text="Search Recipes" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Button fx:id="pantryDeleteBtn" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#handlePantryClicks" prefHeight="25.0" prefWidth="180.0" text="Delete" GridPane.columnIndex="1" />
                      </GridPane>
-                     <Label fx:id="pantryMessageLabel" />
-                     <Label text="Add what you currently have in your kitchen" />
+                     <Label fx:id="pantryMessageLabel" textFill="RED" />
+                     <Label prefHeight="17.0" prefWidth="300.0" text="Add what you currently have in your kitchen" />
                      <Label text="Click on ingredients in the list and hit 'Delete' if you no longer have them on hand" wrapText="true" />
                      <Label text="Search for ingredients in the database with a similar name" wrapText="true" />
                      <Label text="Find recipes containing some of your ingredients in the Search window" wrapText="true" />
@@ -226,7 +225,7 @@
                      <Label prefHeight="34.0" prefWidth="207.0" text="Minimum number of ingredients required for recipe search" textAlignment="CENTER" wrapText="true" />
                   </VBox>
                   <AnchorPane prefHeight="675.0" prefWidth="640.0" style="-fx-background-color: #FFFFFF;">
-                     <AnchorPane fx:id="pantrySearchListAnchor" prefHeight="675.0" prefWidth="640.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <AnchorPane fx:id="pantrySearchListAnchor" prefHeight="675.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                         <ListView fx:id="pantrySearchList" layoutX="10.0" layoutY="38.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0" />
                         <Button fx:id="pantryCancelButton" layoutX="216.0" layoutY="2.0" mnemonicParsing="false" onAction="#handlePantryClicks" prefHeight="25.0" prefWidth="206.0" text="Cancel Search" textFill="#fc0000" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="0.0" />
                      </AnchorPane>

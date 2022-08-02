@@ -209,8 +209,6 @@ public class HomeSceneController {
             int size = pantryList.getItems().size();
             pantrySpinnerValues = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Math.max(size, 1), 1);
             pantrySearchSpinner.setValueFactory(pantrySpinnerValues);
-//            if (size == 0)
-//                pantrySearchSpinner.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -239,6 +237,7 @@ public class HomeSceneController {
         }
         if (eventSource == pantryButton) {
             pantryPane.toFront();
+            changePantryView(true);
             return;
         }
         if (eventSource == searchRecipeButton) {
@@ -290,6 +289,7 @@ public class HomeSceneController {
      */
     private void changePantryView(boolean pantryInFront) {
         isPantryListFront = pantryInFront;
+        pantryMessageLabel.setText("");
         // if searching by ingredient
         if (!isPantryListFront) {
             pantrySearchListAnchor.toFront();
@@ -303,7 +303,7 @@ public class HomeSceneController {
 
     /**
      * handle clicks that occur in pantryPane
-     * TODO: make checking pantryList better;
+     * TODO: test, consider potentially failing cases
      * Make a custom ListView to go with the custom ListCell
      * @param event the events that correspond to the buttons' clicks
      */
@@ -311,16 +311,17 @@ public class HomeSceneController {
         String input = pantryAddField.getText();
         Object eventSource = event.getSource();
         String query = "";
+        String message = "";
         try {
-            if (eventSource == pantryAddBtn) {  //TODO: any error cases?
+            // Add an ingredient to the pantry
+            if (eventSource == pantryAddBtn) {
                 if (isPantryListFront && !input.equals("")) {
                     pantryList.getItems().add(input);
-
                 }
                 else {  // otherwise searching ingredients to add to pantry
                     int index = pantryList.getSelectionModel().getSelectedIndex();
                     input = pantryList.getItems().get(index);
-
+                    pantryList.getItems().add(input);
                 }
                 pantryList.refresh();
                 // handle error handling for duplicate value
@@ -329,9 +330,17 @@ public class HomeSceneController {
                 // Adjust the maximum number of ingredients to search by
                 int max = pantryList.getItems().size();
                 pantrySpinnerValues.setMax(max);
+
+                message = "Added " + input + " to inventory";
+                pantryMessageLabel.setText(message);
                 return;
             }
-            if (eventSource == pantrySearchRecipesBtn && pantryList.getItems().size() > 0) {
+            // Switch views; go to recipe searchPane
+            if (eventSource == pantrySearchRecipesBtn) {
+                if (pantryList.getItems().size() > 0) {
+                    pantryMessageLabel.setText("Error: inventory is empty");
+                    return;
+                }
                 searchPane.toFront();
                 query = "SELECT r.* " +
                         "FROM recipe r, ingredient i " +
@@ -342,9 +351,12 @@ public class HomeSceneController {
                 constructRecipeTable();
                 return;
             }
+
             if (eventSource == pantrySearchIngredientBtn && !input.equals("")) {
+                message = "Searching for ingredients similar to " + input;
+                pantryMessageLabel.setText(message);
                 changePantryView(false);
-                query = "SELECT ingredient_name " +
+                query = "SELECT DISTINCT ingredient_name " +
                         "FROM ingredient WHERE ingredient_name LIKE '%" + input + "%';";
                 rs = executeQuery(query);
                 pantrySearchList.getItems().clear();
@@ -354,22 +366,28 @@ public class HomeSceneController {
                 pantrySearchList.refresh();
                 return;
             }
-            if (eventSource == pantryDeleteBtn) {
+            if (eventSource == pantryDeleteBtn && isPantryListFront) {
                 int index = pantryList.getSelectionModel().getSelectedIndex();
-                String indexStr = pantryList.getItems().get(index);
+                input = pantryList.getItems().get(index);
                 query = "SELECT * FROM User WHERE " +
-                        "username = '" + username + "' AND ingredient_name= '" + indexStr + "';";
+                        "username = '" + username + "' AND ingredient_name= '" + input + "';";
                 rs = executeQuery(query);
                 if (rs.next()) {
                     query = "DELETE FROM User WHERE " +
-                            "username = '" + username + "' AND ingredient_name= '" + indexStr + "';";
+                            "username = '" + username + "' AND ingredient_name= '" + input + "';";
                     executeUpdate(query);
                     pantryList.getItems().remove(index);
                     int max = pantrySpinnerValues.getMax();
                     pantrySpinnerValues.setMax(max <= 2 ? max = 1 : max - 1);
                     pantryList.refresh();
-                    return;
+                    message = "Remove " + input + "was successful";
+                    pantryMessageLabel.setText(message);
                 }
+                else {
+                    message = "Failed to remove " + input;
+                    pantryMessageLabel.setText(message);
+                }
+                return;
             }
             if (eventSource == pantryCancelButton) {
                 changePantryView(true);
