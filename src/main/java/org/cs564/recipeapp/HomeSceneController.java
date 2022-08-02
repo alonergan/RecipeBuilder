@@ -316,13 +316,15 @@ public class HomeSceneController {
             // Add an ingredient to the pantry
             if (eventSource == pantryAddBtn) {
                 if (isPantryListFront && !input.equals("")) {
-                    pantryList.getItems().add(input);
                 }
-                else {  // otherwise searching ingredients to add to pantry
-                    int index = pantryList.getSelectionModel().getSelectedIndex();
-                    input = pantryList.getItems().get(index);
-                    pantryList.getItems().add(input);
+                else if (!isPantryListFront){  // otherwise searching ingredients to add to pantry
+                    int index = pantrySearchList.getSelectionModel().getSelectedIndex();
+                    input = pantrySearchList.getItems().get(index);
                 }
+                else return;
+                if (pantryList.getItems().contains(input))
+                    return;
+                pantryList.getItems().add(input);
                 pantryList.refresh();
                 // handle error handling for duplicate value
                 query = "INSERT INTO User VALUES('" + username + "', '" + input + "');";

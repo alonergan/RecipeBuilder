@@ -216,7 +216,7 @@
                         <Button fx:id="pantrySearchRecipesBtn" mnemonicParsing="false" onAction="#handlePantryClicks" prefHeight="25.0" prefWidth="202.0" text="Search Recipes" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Button fx:id="pantryDeleteBtn" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#handlePantryClicks" prefHeight="25.0" prefWidth="180.0" text="Delete" GridPane.columnIndex="1" />
                      </GridPane>
-                     <Label fx:id="pantryMessageLabel" textFill="RED" />
+                     <Label fx:id="pantryMessageLabel" prefHeight="34.0" prefWidth="286.0" textFill="RED" />
                      <Label prefHeight="17.0" prefWidth="300.0" text="Add what you currently have in your kitchen" />
                      <Label text="Click on ingredients in the list and hit 'Delete' if you no longer have them on hand" wrapText="true" />
                      <Label text="Search for ingredients in the database with a similar name" wrapText="true" />
