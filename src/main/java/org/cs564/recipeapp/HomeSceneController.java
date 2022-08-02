@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,10 +14,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -139,10 +145,26 @@ public class HomeSceneController {
     private ProgressBar ratingBar;
     @FXML
     private Label ratingBarLabel;
+    @FXML
+    private Button setUpSQLButton;
+    @FXML
+    private Button deleteRecipeButton;
+    @FXML
+    private TextField confirmUsernameTextField;
+    @FXML
+    private PasswordField confirmPasswordTextField;
+    @FXML
+    private AnchorPane sqlInitAnchorPane;
+    @FXML
+    private Button browseFilesButton;
+    @FXML
+    private Button submitPathButton;
+    @FXML
+    private TextField pathToCSV;
 
     // Global variables
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
-//    private double x, y; // Used for manipulating window
+    private double x, y; // Used for manipulating window
     public ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
     public ObservableList<Recipe> recipeCurPage = FXCollections.observableArrayList(); // Page of recipes from obList
     private SpinnerValueFactory.IntegerSpinnerValueFactory pantrySpinnerValues; // corresponds to minimum ingredients required in search
@@ -155,6 +177,7 @@ public class HomeSceneController {
     public String username = "";
     private boolean isPantryListFront = true;  // if pantryListAnchor (inventory) is in front of pantryListSearchAnchor (search by ingredient)
 
+    public File csvPath; // paths to csv files for data
     /**
      * TODO: add remaining assertions
      */
@@ -306,10 +329,11 @@ public class HomeSceneController {
      * Make a custom ListView to go with the custom ListCell
      * @param event the events that correspond to the buttons' clicks
      */
-    public void handlePantryClicks(ActionEvent event) {
+    public void handlePantryClicks(ActionEvent event) throws SQLException {
         String input = pantryAddField.getText();
         Object eventSource = event.getSource();
         String message;
+        Statement statement = connection.createStatement();
         try {
             // Add an ingredient to the pantry
             String query;
@@ -329,7 +353,7 @@ public class HomeSceneController {
                 pantryList.refresh();
                 // handle error handling for duplicate value
                 query = "INSERT INTO User VALUES('" + username + "', '" + input + "');";
-                executeUpdate(query);
+                statement.executeUpdate(query);
                 // adjust the maximum number of minimum ingredients in inventory for searching recipes
                 int max = pantryList.getItems().size();
                 pantrySpinnerValues.setMax(max);
@@ -379,7 +403,7 @@ public class HomeSceneController {
                 if (rs.next()) {
                     query = "DELETE FROM User WHERE " +
                             "username = '" + username + "' AND ingredient_name= '" + input + "';";
-                    executeUpdate(query);
+                    statement.executeUpdate(query);
                     pantryList.getItems().remove(index);
                     int max = pantrySpinnerValues.getMax();
                     pantrySpinnerValues.setMax(max <= 2 ? 1 : max - 1);
@@ -520,6 +544,31 @@ public class HomeSceneController {
     }
 
     /**
+     * TODO: Get root username and password and pass them to DatabaseConnector
+     * Handles clicks for buttons on user menu when setting up server
+     * @param event
+     */
+    @FXML
+    void handleSetupClicks(Event event) throws Exception {
+        if (event.getSource() == setUpSQLButton) {
+            sqlInitAnchorPane.toFront();
+        }
+        if (event.getSource() == browseFilesButton) {
+            DirectoryChooser chooser = new DirectoryChooser();
+            csvPath = chooser.showDialog(sqlInitAnchorPane.getScene().getWindow());
+            if (csvPath != null) {
+                pathToCSV.setText(csvPath.getAbsolutePath());
+            }
+        }
+        if (event.getSource() == submitPathButton) {
+            if (DatabaseConnector.initializeDatabase(csvPath)) {
+                System.out.println("Success initializing database");
+                profilePane.toFront();
+            }
+        }
+    }
+
+    /**
      * Close application
      */
     @FXML
@@ -588,16 +637,6 @@ public class HomeSceneController {
             return null;
         }
         return connection.createStatement().executeQuery(query);
-    }
-
-    /**
-     * Updates a table
-     */
-    public void executeUpdate(String cmd) throws SQLException {
-        if (cmd == null || cmd.isEmpty()) {
-            return;
-        }
-        connection.createStatement().executeUpdate(cmd);
     }
 
     /**

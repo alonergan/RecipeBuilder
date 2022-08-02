@@ -15,7 +15,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Load login page
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("loginSceneController.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("homeSceneController.fxml")));
         root.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Recipe Builder");

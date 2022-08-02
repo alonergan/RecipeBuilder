@@ -1,5 +1,6 @@
 package org.cs564.recipeapp;
 
+import java.io.File;
 import java.sql.*;
 
 public class DatabaseConnector {
@@ -47,7 +48,7 @@ public class DatabaseConnector {
      * @return
      * @throws Exception
      */
-    public boolean initializeDatabase() throws Exception {
+    public static boolean initializeDatabase(File csvPath) throws Exception {
         try {
             // Connect to SQL as root and add new User
             Connection connection = DriverManager.getConnection(url, "root", "root"); // TODO: Figure out common root user/password
@@ -101,12 +102,45 @@ public class DatabaseConnector {
                     "review text(64000)," +
                     "primary key (user_id, recipe_id));";
             statement.executeUpdate(query);
-            // Populate Tables TODO: Find way to populate tables with data (local infile? but how to get paths?)
-                // Recipe
-                // Tag
-                // Ingredient
-                // Step
+            // Populate Tables TODO: Test if this works
+            File[] files = csvPath.listFiles();
+            assert files != null;
+                // Ingredients
+            query = "BULK INSERT Ingredient" +
+                    "FROM '" + files[0].getAbsolutePath() + "'" +
+                    "WITH (" +
+                    "FIELDTERMINATOR = '|'," +
+                    "ROWTERMINATOR = '\r\n')";
+            statement.executeUpdate(query);
+                // Recipes
+            query = "BULK INSERT Recipe" +
+                    "FROM '" + files[1].getAbsolutePath() + "'" +
+                    "WITH (" +
+                    "FIELDTERMINATOR = '|'," +
+                    "ROWTERMINATOR = '\r\n')";
+            statement.executeUpdate(query);
                 // Review
+            query = "BULK INSERT Review" +
+                    "FROM '" + files[2].getAbsolutePath() + "'" +
+                    "WITH (" +
+                    "FIELDTERMINATOR = '|'," +
+                    "ROWTERMINATOR = '\r\n')";
+            statement.executeUpdate(query);
+                // Step
+            query = "BULK INSERT Step" +
+                    "FROM '" + files[3].getAbsolutePath() + "'" +
+                    "WITH (" +
+                    "FIELDTERMINATOR = '|'," +
+                    "ROWTERMINATOR = '\r\n')";
+            statement.executeUpdate(query);
+                // Tags
+            query = "BULK INSERT Tag" +
+                    "FROM '" + files[4].getAbsolutePath() + "'" +
+                    "WITH (" +
+                    "FIELDTERMINATOR = '|'," +
+                    "ROWTERMINATOR = '\r\n')";
+            statement.executeUpdate(query);
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
