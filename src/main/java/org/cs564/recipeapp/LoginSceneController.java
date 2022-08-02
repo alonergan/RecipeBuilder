@@ -39,7 +39,6 @@ public class LoginSceneController {
     private Button quitButton;
 
     private Connection connection;
-    private double x,y;
     @FXML
     void initialize() {
         assert newUserButton != null : "fx:id=\"newUserButton\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
@@ -88,35 +87,14 @@ public class LoginSceneController {
 
             Stage window = (Stage) signInButton.getScene().getWindow();
             window.setScene(new Scene(homeScene, 1200, 725));
-
-            homeScene.setOnMousePressed(event -> {
-                x = event.getSceneX();
-                y = event.getSceneY();
-            });
-
-            homeScene.setOnMouseDragged(event -> {
-                window.setX(event.getScreenX() - x);
-                window.setY(event.getScreenY() - y);
-            });
         }
     }
     @FXML
     void loginNewUserButtonClicked() throws IOException {
         // Change scene or create popup window for registration
         Parent registrationScene = FXMLLoader.load(Objects.requireNonNull(MainApplication.class.getResource("registrationSceneController.fxml")));
-        registrationScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
         Stage window = (Stage) newUserButton.getScene().getWindow();
         window.setScene(new Scene(registrationScene, 1200, 725));
-
-        registrationScene.setOnMousePressed(event -> {
-            x = event.getSceneX();
-            y = event.getSceneY();
-        });
-
-        registrationScene.setOnMouseDragged(event -> {
-            window.setX(event.getScreenX() - x);
-            window.setY(event.getScreenY() - y);
-        });
     }
 
     @FXML

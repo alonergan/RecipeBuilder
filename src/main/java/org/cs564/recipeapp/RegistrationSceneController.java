@@ -30,8 +30,6 @@ public class RegistrationSceneController {
     @FXML
     private TextField usernameTextField;
 
-    private double x,y;
-
     @FXML
     void initialize() {
         assert confirmPasswordTextField != null : "fx:id=\"confirmPasswordTextField\" was not injected: check your FXML file 'registrationSceneController.fxml'.";
@@ -49,7 +47,7 @@ public class RegistrationSceneController {
         String passwordConfirmation = confirmPasswordTextField.getText();
 
         // Check for format issues
-        if (username.isEmpty() || username.equals(" ") || username.length() > 64) {
+        if (username.isEmpty() || username.equals(" ")) {
             Alert usernameError = new Alert(Alert.AlertType.ERROR);
             usernameError.setContentText("Please enter a valid username");
             usernameError.showAndWait();
@@ -78,19 +76,8 @@ public class RegistrationSceneController {
 
             // Switch back to login page
             Parent loginScene = FXMLLoader.load(Objects.requireNonNull(MainApplication.class.getResource("loginSceneController.fxml")));
-            loginScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
             Stage window = (Stage) submitButton.getScene().getWindow();
             window.setScene(new Scene(loginScene, 1200, 725));
-
-            loginScene.setOnMousePressed(event -> {
-                x = event.getSceneX();
-                y = event.getSceneY();
-            });
-
-            loginScene.setOnMouseDragged(event -> {
-                window.setX(event.getScreenX() - x);
-                window.setY(event.getScreenY() - y);
-            });
         }
     }
 
@@ -98,18 +85,7 @@ public class RegistrationSceneController {
     void returnButtonClicked() throws IOException {
         // Switch back to login page
         Parent loginScene = FXMLLoader.load(Objects.requireNonNull(MainApplication.class.getResource("loginSceneController.fxml")));
-        loginScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
         Stage window = (Stage) submitButton.getScene().getWindow();
         window.setScene(new Scene(loginScene, 1200, 725));
-
-        loginScene.setOnMousePressed(event -> {
-            x = event.getSceneX();
-            y = event.getSceneY();
-        });
-
-        loginScene.setOnMouseDragged(event -> {
-            window.setX(event.getScreenX() - x);
-            window.setY(event.getScreenY() - y);
-        });
     }
 }
