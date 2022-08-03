@@ -12,7 +12,7 @@
 }
 
 .pane {
-    -fx-background-color: #CFD8DC;
+    -fx-background-color: #FFFFFF;
     -fx-border-color: #BDBDBD;
 }
 
@@ -22,6 +22,11 @@
 }
 
 .table-column {
+    -fx-background-color: #CFD8DC;
+    -fx-border-color: #BDBDBD;
+}
+
+.anchor-pane {
     -fx-background-color: #CFD8DC;
     -fx-border-color: #BDBDBD;
 }

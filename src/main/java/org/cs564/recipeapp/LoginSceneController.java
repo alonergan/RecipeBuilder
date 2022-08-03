@@ -1,9 +1,9 @@
 package org.cs564.recipeapp;
 
-import java.net.URL;
+//import java.net.URL;
 import java.sql.Connection;
 import java.util.Objects;
-import java.util.ResourceBundle;
+//import java.util.ResourceBundle;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,11 +17,11 @@ import java.io.IOException;
 
 public class LoginSceneController {
 
-    @FXML
-    private ResourceBundle resources;
+//    @FXML
+//    private ResourceBundle resources;
 
-    @FXML
-    private URL location;
+//    @FXML
+//    private URL location;
 
     @FXML
     private Button newUserButton;
@@ -36,21 +36,15 @@ public class LoginSceneController {
     private TextField usernameTextField;
 
     @FXML
-    private Button quitButton;
+//    private Button quitButton;
 
     private Connection connection;
-    private double x,y;
     @FXML
     void initialize() {
         assert newUserButton != null : "fx:id=\"newUserButton\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
         assert passwordTextField != null : "fx:id=\"passwordTextField\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
         assert signInButton != null : "fx:id=\"signInButton\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
         assert usernameTextField != null : "fx:id=\"usernameTextField\" was not injected: check your FXML file 'loginSceneController_modern.fxml'.";
-        try {
-            connection = DatabaseConnector.getConnection();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
@@ -83,40 +77,19 @@ public class LoginSceneController {
             homeScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
 
             // having trouble passing a controller with constructor params; using setting functions instead
-            HomeSceneController controller = loader.getController();
-            controller.setupUserComponents(usernameText, connection);
+            // HomeSceneController controller = loader.getController();
+            // controller.setupUserComponents(usernameText, connection);
 
             Stage window = (Stage) signInButton.getScene().getWindow();
             window.setScene(new Scene(homeScene, 1200, 725));
-
-            homeScene.setOnMousePressed(event -> {
-                x = event.getSceneX();
-                y = event.getSceneY();
-            });
-
-            homeScene.setOnMouseDragged(event -> {
-                window.setX(event.getScreenX() - x);
-                window.setY(event.getScreenY() - y);
-            });
         }
     }
     @FXML
     void loginNewUserButtonClicked() throws IOException {
         // Change scene or create popup window for registration
         Parent registrationScene = FXMLLoader.load(Objects.requireNonNull(MainApplication.class.getResource("registrationSceneController.fxml")));
-        registrationScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
         Stage window = (Stage) newUserButton.getScene().getWindow();
         window.setScene(new Scene(registrationScene, 1200, 725));
-
-        registrationScene.setOnMousePressed(event -> {
-            x = event.getSceneX();
-            y = event.getSceneY();
-        });
-
-        registrationScene.setOnMouseDragged(event -> {
-            window.setX(event.getScreenX() - x);
-            window.setY(event.getScreenY() - y);
-        });
     }
 
     @FXML
