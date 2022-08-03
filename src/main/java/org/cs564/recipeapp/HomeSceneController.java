@@ -466,14 +466,12 @@ public class HomeSceneController {
             if (averageRatings.next()) {
                 rating = averageRatings.getDouble("rating");
             }
-
             // Add new recipe
             recipeObvList.add(new Recipe(rs.getString("recipe_name"),
                     rs.getInt("minutes"), rs.getInt("n_steps"),
                     rs.getInt("n_ingredients"), rs.getString("submitted"),
                     rs.getInt("recipe_id"), rs.getString("description"), rating));
         }
-
         // Set pages and update table
         pageIndex = 0;
         maxPages = Math.ceilDiv(recipeObvList.size(), rowsPerPage);
