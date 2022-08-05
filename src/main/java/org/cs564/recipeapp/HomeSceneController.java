@@ -37,12 +37,6 @@ public class HomeSceneController {
 //    private URL location;
     @FXML
     public AnchorPane pantryPane;
-//    @FXML
-//    public TableColumn step2IngredientName;
-//    @FXML
-//    public TableView step2IngredientList;
-//    @FXML
-//    public Button searchSubmitButton2;
     @FXML
     public AnchorPane appPane;
     @FXML
@@ -51,8 +45,6 @@ public class HomeSceneController {
     public Button confirmDeletionButton;
     @FXML
     public Button cancelDeletionButton;
-//    @FXML
-//    public TableView inventoryListView;
     @FXML
     public Spinner<Integer> pantrySearchSpinner;
     @FXML
@@ -161,8 +153,11 @@ public class HomeSceneController {
     private Button submitPathButton;
     @FXML
     private TextField pathToCSV;
+    @FXML
+    private Button favoriteButton;
 
     // Global variables
+    public Stage stage;
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
     private double x, y; // Used for manipulating window
     public ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
@@ -174,9 +169,9 @@ public class HomeSceneController {
     public Connection connection;
     public ResultSet rs;
     public ResultSet averageRatings;
-    public String username = "";
+    private User currentUser;
+    public int selectedRecipeID;
     private boolean isPantryListFront = true;  // if pantryListAnchor (inventory) is in front of pantryListSearchAnchor (search by ingredient)
-
     public File csvPath; // paths to csv files for data
     /**
      * TODO: add remaining assertions
@@ -208,7 +203,6 @@ public class HomeSceneController {
         profilePane.toFront();
         searchFilter.getItems().addAll(searchFilters);
         searchFilter.setValue(searchFilter.getItems().get(0));
-        connection = DatabaseConnector.getConnection();
     }
 
     // END SCENE BUILDER CODE AND GLOBAL VARIABLE INITIALIZATION, ASSIGNMENT //////////////////////////////////
@@ -216,15 +210,13 @@ public class HomeSceneController {
     /**
      * Assign username, set up pantry/inventory list
      * TODO: Favorites?
-     * @param usr the username passed from LoginSceneController. Had issues loading a controller with a
-     *            parameterized constructor
      */
-    protected void setupUserComponents(String usr, Connection connection) {
+    protected void setupUserComponents(String username, String password, Connection connection) {
         this.connection = connection;
-        username = usr;
+        this.currentUser = new User(username, password);
         // Construct user's inventoryList
         try {
-            rs = executeQuery("SELECT ingredient_name FROM User WHERE username = '" + username + "';");
+            rs = executeQuery("SELECT ingredient_name FROM inPantry WHERE username = '" + currentUser.username + "';");
             while (rs.next()) {
                 pantryList.getItems().add(rs.getString(1));
             }
@@ -287,7 +279,7 @@ public class HomeSceneController {
         if (eventSource == confirmDeletionButton) {
             try {
                 // delete username from User
-                String query = "DELETE FROM User WHERE username='" + username + "';";
+                String query = "DELETE FROM User WHERE username='" + currentUser.username + "';";
                 connection.createStatement().executeQuery(query);
                 // Switch to LoginScene
                 Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("loginSceneController.fxml")));
@@ -352,13 +344,14 @@ public class HomeSceneController {
                 pantryList.getItems().add(input);
                 pantryList.refresh();
                 // handle error handling for duplicate value
-                query = "INSERT INTO User VALUES('" + username + "', '" + input + "');";
+                query = "INSERT INTO inPantry VALUES('" + currentUser.username + "', '" + input + "');";
                 statement.executeUpdate(query);
                 // adjust the maximum number of minimum ingredients in inventory for searching recipes
                 int max = pantryList.getItems().size();
                 pantrySpinnerValues.setMax(max);
 
                 message = "Added " + input + " to inventory";
+                pantrySpinnerValues.setValue(pantrySpinnerValues.getValue() + 1);
                 pantryMessageLabel.setText(message);
                 return;
             }
@@ -372,7 +365,7 @@ public class HomeSceneController {
                 query = "SELECT r.* " +
                         "FROM recipe r, ingredient i " +
                         "WHERE r.recipe_id = i.recipe_id and i.ingredient_name IN( " +
-                            "SELECT ingredient_name FROM user WHERE username = '" + username + "') " +
+                            "SELECT ingredient_name FROM inPantry WHERE username = '" + currentUser.username + "') " +
                         "GROUP BY i.recipe_id HAVING COUNT(*) >= " + pantrySearchSpinner.getValue() + ";";
                 rs = executeQuery(query);
                 constructRecipeTable();
@@ -397,12 +390,12 @@ public class HomeSceneController {
                 int index = pantryList.getSelectionModel().getSelectedIndex();
                 if (index < 0) {return;}
                 input = pantryList.getItems().get(index);
-                query = "SELECT * FROM User WHERE " +
-                        "username = '" + username + "' AND ingredient_name= '" + input + "';";
+                query = "SELECT * FROM inPantry WHERE " +
+                        "username = '" + currentUser.username + "' AND ingredient_name= '" + input + "';";
                 rs = executeQuery(query);
                 if (rs.next()) {
-                    query = "DELETE FROM User WHERE " +
-                            "username = '" + username + "' AND ingredient_name= '" + input + "';";
+                    query = "DELETE FROM inPantry WHERE " +
+                            "username = '" + currentUser.username + "' AND ingredient_name= '" + input + "';";
                     statement.executeUpdate(query);
                     pantryList.getItems().remove(index);
                     int max = pantrySpinnerValues.getMax();
@@ -568,6 +561,11 @@ public class HomeSceneController {
         }
     }
 
+    @FXML
+    public void handleFavoriteButton() {
+
+    }
+
     /**
      * Close application
      */
@@ -592,6 +590,7 @@ public class HomeSceneController {
             try {
                 // Grab recipe from row
                 Recipe selectedRecipe = searchTable.getSelectionModel().getSelectedItem();
+                selectedRecipeID = selectedRecipe.recipe_id;
 
                 // Execute SQL query to find ingredient and steps data from recipe in table
                 String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + selectedRecipe.recipe_id;

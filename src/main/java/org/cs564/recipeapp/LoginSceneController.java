@@ -48,7 +48,7 @@ public class LoginSceneController {
     }
 
     @FXML
-    void loginSubmitButtonClicked() throws IOException {
+    void loginSubmitButtonClicked() throws Exception {
         String usernameText = usernameTextField.getText();
         String passwordText = passwordTextField.getText();
 
@@ -66,7 +66,7 @@ public class LoginSceneController {
         }
 
         // Handle login
-        if (!Users.verifyLogin(usernameText, passwordText)) {
+        if (!User.verifyLogin(usernameText, passwordText)) {
             Alert loginError = new Alert(Alert.AlertType.ERROR);
             loginError.setContentText("Username and/or password invalid\nPlease try again");
             loginError.showAndWait();
@@ -77,8 +77,8 @@ public class LoginSceneController {
             homeScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
 
             // having trouble passing a controller with constructor params; using setting functions instead
-            // HomeSceneController controller = loader.getController();
-            // controller.setupUserComponents(usernameText, connection);
+            HomeSceneController controller = loader.getController();
+            controller.setupUserComponents(usernameText, passwordText, DatabaseConnector.getConnection());
 
             Stage window = (Stage) signInButton.getScene().getWindow();
             window.setScene(new Scene(homeScene, 1200, 725));

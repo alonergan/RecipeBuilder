@@ -65,7 +65,7 @@ public class RegistrationSceneController {
         }
 
         // Try to add username
-        if (!Users.addLogin(username, password)) {
+        if (!User.addLogin(username, password)) {
             Alert registrationError = new Alert(Alert.AlertType.ERROR);
             registrationError.setContentText("Username already exists");
             registrationError.showAndWait();

@@ -3,10 +3,18 @@ package org.cs564.recipeapp;
 import javafx.scene.control.Alert;
 
 import java.io.*;
+import java.sql.Connection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class Users {
+public class User {
+    String username;
+    String password;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     /**
      * Adds new login to users array and checks for duplicate usernames
