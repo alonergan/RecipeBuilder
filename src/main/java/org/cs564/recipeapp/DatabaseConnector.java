@@ -48,10 +48,10 @@ public class DatabaseConnector {
      * @return
      * @throws Exception
      */
-    public static boolean initializeDatabase(File csvPath) throws Exception {
+    public static boolean initializeDatabase(File csvPath, String username, String password) throws Exception {
         try {
             // Connect to SQL as root and add new User
-            Connection connection = DriverManager.getConnection(url, "root", "root"); // TODO: Figure out common root user/password
+            Connection connection = DriverManager.getConnection(url, username, password); // TODO: Figure out common root user/password
             if (connection == null) {
                 System.out.println("Error connecting to database, is MySQL installed?");
                 return false;
@@ -101,6 +101,18 @@ public class DatabaseConnector {
                     "rating int," +
                     "review text(64000)," +
                     "primary key (user_id, recipe_id));";
+            statement.executeUpdate(query);
+                // inPantry
+            query = "CREATE TABLE inPantry (" +
+                    "username varchar(64)," +
+                    "ingredient_name varchar(256)," +
+                    "primary key(username, ingredient_name));";
+            statement.executeUpdate(query);
+                // Favorites
+            query = "CREATE TABLE Favorites (" +
+                    "username varchar(64)," +
+                    "recipe_id int," +
+                    "primary key(username, recipe_id));";
             statement.executeUpdate(query);
             // Populate Tables TODO: Test if this works
             File[] files = csvPath.listFiles();

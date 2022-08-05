@@ -155,6 +155,18 @@ public class HomeSceneController {
     private TextField pathToCSV;
     @FXML
     private Button favoriteButton;
+    @FXML
+    private Button unfavoriteButton;
+    @FXML
+    private Label searchTimeLabel;
+    @FXML
+    private Label constructTableTimeLabel;
+    @FXML
+    private TextField sqlUsernameTextField;
+    @FXML
+    private TextField sqlPasswordTextField;
+    @FXML
+    private Label favoriteSuccessLabel;
 
     // Global variables
     public Stage stage;
@@ -554,7 +566,16 @@ public class HomeSceneController {
             }
         }
         if (event.getSource() == submitPathButton) {
-            if (DatabaseConnector.initializeDatabase(csvPath)) {
+            String username = sqlUsernameTextField.getText();
+            String password = sqlPasswordTextField.getText();
+            if (username.isEmpty() || password.isEmpty()) {
+                Alert loginError = new Alert(Alert.AlertType.ERROR);
+                loginError.setContentText("You must enter a valid username and password");
+                loginError.showAndWait();
+                return;
+            }
+
+            if (DatabaseConnector.initializeDatabase(csvPath, username, password)) {
                 System.out.println("Success initializing database");
                 profilePane.toFront();
             }
@@ -562,8 +583,34 @@ public class HomeSceneController {
     }
 
     @FXML
-    public void handleFavoriteButton() {
-
+    public void handleFavoriteButton(Event event) throws SQLException {
+        if (event.getSource() == favoriteButton) {
+            String query = "SELECT recipe_id FROM Favorites WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipeID + ";";
+            rs = executeQuery(query);
+            // If found
+            if (rs.next()) {
+                favoriteSuccessLabel.setText("You have already favorited this recipe");
+                return;
+            } else {
+                // Add recipe
+                query = "INSERT INTO Favorites VALUES('" + currentUser.username + "', " + selectedRecipeID + ");";
+                connection.createStatement().executeUpdate(query);
+                System.out.println("Added to favorites");
+                favoriteSuccessLabel.setText("Successfully added to favorites");
+                return;
+            }
+        }
+        if (event.getSource() == unfavoriteButton) {
+            String query = "SELECT * FROM Favorites WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipeID + ";";
+            rs = executeQuery(query);
+            if (rs.next()) {
+                query = "DELETE FROM Favorites WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipeID + ";";
+                connection.createStatement().executeUpdate(query);
+                favoriteSuccessLabel.setText("Recipe successfully unfavorited");
+            } else {
+                favoriteSuccessLabel.setText("You have not favorited this recipe");
+            }
+        }
     }
 
     /**
@@ -579,6 +626,7 @@ public class HomeSceneController {
     /// Execute queries, call UI ///
     /// Functions to update scene///
     ////////////////////////////////
+
     /**
      * Opens recipe view pane when user selects recipe from table in browse or search
      * @param event The event triggered by being clicked
@@ -618,6 +666,7 @@ public class HomeSceneController {
                 double rating = selectedRecipe.rating / 5.0;
                 ratingBar.setProgress(rating);
                 ratingBarLabel.setText("Rating " + selectedRecipe.rating + " / 5.0");
+                favoriteSuccessLabel.setText(" ");
 
                 // Bring recipeViewPane to front
                 recipeViewPane.toFront();
@@ -684,8 +733,15 @@ public class HomeSceneController {
         // Execute query and populate table
         try {
             if (query == null) return;
+            long startTime = System.currentTimeMillis();
             rs = executeQuery(query);
+            long endTime = System.currentTimeMillis();
+            searchTimeLabel.setText("Query Time: " + String.valueOf((endTime - startTime) / 1000.0) + "s");
+
+            startTime = System.currentTimeMillis();
             constructRecipeTable();
+            endTime = System.currentTimeMillis();
+            constructTableTimeLabel.setText("Construct Table Time: " + String.valueOf((endTime - startTime) / 1000.0) + "s");
         } catch (SQLException e) {
             Logger.getLogger(HomeSceneController.class.getName()).log(Level.SEVERE, null, e);
         }

@@ -80,80 +80,6 @@
                   </children>
                </VBox>
             </AnchorPane>
-            <Pane fx:id="profilePane">
-               <VBox alignment="CENTER" prefHeight="676.0" prefWidth="965.0" spacing="25.0" style="-fx-background-color: #FFFFFF;">
-                  <padding>
-                     <Insets top="100.0" />
-                  </padding>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@images/user.png" />
-                  </ImageView>
-                  <Label alignment="CENTER" style="-fx-background-color: #FFFFFF;" text="User Profile">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
-                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                        <Label text="#00">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label text="Reviews" />
-                     </VBox>
-                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                        <Label text="#00">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label text="Recipes" />
-                     </VBox>
-                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                        <Label text="#00">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label text="Favorites" />
-                     </VBox>
-                  </HBox>
-                  <VBox alignment="CENTER" spacing="10.0">
-                     <children>
-                        <Label text="If this is your first time using the app you must initialize the database" />
-                        <Button fx:id="setUpSQLButton" mnemonicParsing="false" onAction="#handleSetupClicks" text="Set Up SQL Server" />
-                     </children>
-                  </VBox>
-               </VBox>
-            </Pane>
-            <AnchorPane fx:id="sqlInitAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="601.0" styleClass="pane">
-               <children>
-                  <VBox alignment="CENTER" prefHeight="400.0" prefWidth="601.3333333333334" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label text="Please enter your path to folder with the data and root SQL login" wrapText="true" />
-                        <HBox alignment="CENTER" prefHeight="23.0" prefWidth="599.0" spacing="10.0">
-                           <children>
-                              <Label text="Files:">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="pathToCSV" />
-                              <Button fx:id="browseFilesButton" mnemonicParsing="false" onAction="#handleSetupClicks" text="Browse" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" spacing="10.0">
-                           <children>
-                              <TextField fx:id="sqlUsernameTextField" promptText="Username" />
-                              <TextField fx:id="sqlPasswordTextField" promptText="Password" />
-                           </children>
-                        </HBox>
-                        <Button fx:id="submitPathButton" mnemonicParsing="false" onAction="#handleSetupClicks" text="Submit" />
-                     </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="pantryPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
                <HBox prefHeight="675.0" prefWidth="965.0">
                   <VBox alignment="CENTER" prefHeight="686.0" prefWidth="331.0" spacing="15.0" style="-fx-border-color: #BDBDBD;">
@@ -207,6 +133,53 @@
                   </AnchorPane>
                </HBox>
             </AnchorPane>
+            <Pane fx:id="profilePane">
+               <VBox alignment="CENTER" prefHeight="676.0" prefWidth="965.0" spacing="25.0" style="-fx-background-color: #FFFFFF;">
+                  <padding>
+                     <Insets top="100.0" />
+                  </padding>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <Image url="@images/user.png" />
+                  </ImageView>
+                  <Label alignment="CENTER" style="-fx-background-color: #FFFFFF;" text="User Profile">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                        <Label text="#00">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Reviews" />
+                     </VBox>
+                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                        <Label text="#00">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Recipes" />
+                     </VBox>
+                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                        <Label text="#00">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Favorites" />
+                     </VBox>
+                  </HBox>
+                  <VBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Label text="If this is your first time using the app you must initialize the database" />
+                        <Button fx:id="setUpSQLButton" mnemonicParsing="false" onAction="#handleSetupClicks" text="Set Up SQL Server" />
+                     </children>
+                  </VBox>
+               </VBox>
+            </Pane>
             <AnchorPane fx:id="searchPane" prefHeight="200.0" prefWidth="850.0" style="-fx-background-color: #FFFFFF;">
                <HBox alignment="CENTER_RIGHT" layoutX="350.0" layoutY="329.0" prefHeight="675.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <VBox alignment="CENTER" prefHeight="675.0" prefWidth="256.0" spacing="10.0">
@@ -229,6 +202,8 @@
                         <Button fx:id="nextPageButton" mnemonicParsing="false" onAction="#handlePageEvent" prefHeight="25.0" prefWidth="30.0" text="&gt;" />
                      </HBox>
                      <Label fx:id="searchTableSizeLabel" text="Results: " textAlignment="CENTER" />
+                     <Label fx:id="searchTimeLabel" text="Query Time:" textAlignment="CENTER" />
+                     <Label fx:id="constructTableTimeLabel" text="Construct Table Time:" textAlignment="CENTER" />
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -249,6 +224,33 @@
                      </TableView>
                   </AnchorPane>
                </HBox>
+            </AnchorPane>
+            <AnchorPane fx:id="sqlInitAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="601.0" styleClass="pane">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="400.0" prefWidth="601.3333333333334" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label text="Please enter your path to folder with the data and root SQL login" wrapText="true" />
+                        <HBox alignment="CENTER" prefHeight="23.0" prefWidth="599.0" spacing="10.0">
+                           <children>
+                              <Label text="Files:">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="pathToCSV" />
+                              <Button fx:id="browseFilesButton" mnemonicParsing="false" onAction="#handleSetupClicks" text="Browse" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <TextField fx:id="sqlUsernameTextField" promptText="Username" />
+                              <TextField fx:id="sqlPasswordTextField" promptText="Password" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="submitPathButton" mnemonicParsing="false" onAction="#handleSetupClicks" text="Submit" />
+                     </children>
+                  </VBox>
+               </children>
             </AnchorPane>
             <AnchorPane fx:id="recipeViewPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF;">
                <VBox alignment="TOP_CENTER" layoutX="433.0" layoutY="313.0" prefHeight="675.0" prefWidth="965.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -287,10 +289,24 @@
                         </Label>
                         <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" text="No Description" wrapText="true" />
                         <AnchorPane prefHeight="102.0" prefWidth="349.0">
-                           <Label fx:id="ratingBarLabel" layoutX="158.0" layoutY="22.0" text="Rating" />
-                           <ProgressBar fx:id="ratingBar" layoutX="75.0" layoutY="57.0" prefWidth="200.0" progress="0.0" />
+                           <VBox alignment="CENTER" layoutX="75.0" layoutY="24.0" prefHeight="102.0" prefWidth="349.3333333333333" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <children>
+                                 <Label fx:id="ratingBarLabel" text="Rating" />
+                                 <ProgressBar fx:id="ratingBar" prefWidth="200.0" progress="0.0" />
+                              </children>
+                           </VBox>
                         </AnchorPane>
-                        <Button fx:id="favoriteButton" mnemonicParsing="false" onAction="#handleFavoriteButton" text="Favorite" />
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <Button fx:id="unfavoriteButton" mnemonicParsing="false" onAction="#handleFavoriteButton" text="Unfavorite" />
+                              <Button fx:id="favoriteButton" mnemonicParsing="false" onAction="#handleFavoriteButton" text="Favorite" />
+                           </children>
+                        </HBox>
+                        <Label fx:id="favoriteSuccessLabel" text=" ">
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </Label>
                      </VBox>
                   </HBox>
                   <opaqueInsets>
