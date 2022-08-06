@@ -1,7 +1,6 @@
 package org.cs564.recipeapp;
 
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,11 +14,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.File;
 import java.sql.Connection;
@@ -36,7 +32,7 @@ public class HomeSceneController {
     @FXML // PANES (MAIN WINDOWS)
     private Pane profilePane, settingsPane;
     @FXML
-    private AnchorPane pantryPane, appPane, searchPane, recipeViewPane, favoritesPane;
+    private AnchorPane pantryPane, searchPane, recipeViewPane, favoritesPane;
     @FXML // Sub-containers
     private AnchorPane pantrySearchListAnchor, pantryListAnchor, confirmDeletionPane, sqlInitAnchorPane;
     @FXML // ListViews and TableViews
@@ -82,7 +78,7 @@ public class HomeSceneController {
     private Label searchTimeLabel, constructTableTimeLabel, searchTableSizeLabel, userFaveCountLabel,
             faveSearchTableSizeLabel;
     @FXML // Labels: Messages + Etc
-    private Label pantryMessageLabel, filterDescriptionTextBox, userRecipeCountLabel, recipeViewNameLabel,
+    private Label pantryMessageLabel, filterDescriptionTextBox, recipeViewNameLabel,
             ratingBarLabel, favoriteSuccessLabel;
     @FXML // Text Fields
     private TextField pageNumber, pantryAddField, searchTextField, pathToCSV, sqlUsernameTextField,
@@ -96,16 +92,14 @@ public class HomeSceneController {
     @FXML
     private ProgressBar ratingBar;
     // Global variables
-    private Stage stage;
-    private ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
-    private ObservableList<Recipe> recipeCurPage = FXCollections.observableArrayList(); // Page of recipes from obList
+    private final ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
+    private final ObservableList<Recipe> recipeCurPage = FXCollections.observableArrayList(); // Page of recipes from obList
     private SpinnerValueFactory.IntegerSpinnerValueFactory pantrySpinnerValues; // corresponds to minimum ingredients required in search
     private User currentUser;
     private File csvPath; // paths to csv files for data
     private Connection connection;
     private ResultSet rs;
     private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
-    private double x, y; // Used for manipulating window
     private final int rowsPerPage = 27;
     private boolean isPantryListFront = true;   // if pantryListAnchor (inventory) is in front of pantryListSearchAnchor (search by ingredient)
     private int pageIndex;
@@ -116,7 +110,7 @@ public class HomeSceneController {
      * TODO: add remaining assertions
      */
     @FXML
-    void initialize() throws Exception {
+    void initialize() {
         assert dateCol != null : "fx:id=\"dateCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert homeButton != null : "fx:id=\"homeButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert n_ingredients_Col != null : "fx:id=\"n_ingredients_col\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -199,7 +193,7 @@ public class HomeSceneController {
                         rs.getDouble("avg_rating")));
             }
             favoritesCount = favoritesTable.getItems().size();
-            userFaveCountLabel.setText("#" + String.valueOf(favoritesCount));
+            userFaveCountLabel.setText("#" + favoritesCount);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -220,7 +214,7 @@ public class HomeSceneController {
         Object eventSource = event.getSource();
         if (eventSource == homeButton) {
             profilePane.toFront();
-            userFaveCountLabel.setText("#" + String.valueOf(favoritesCount));
+            userFaveCountLabel.setText("#" + favoritesCount);
             return;
         }
         if (eventSource == settingsButton) {
