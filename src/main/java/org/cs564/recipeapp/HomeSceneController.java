@@ -76,7 +76,7 @@ public class HomeSceneController {
     private Button favoriteButton, unfavoriteButton;
     @FXML // Labels: Timing + Count
     private Label searchTimeLabel, constructTableTimeLabel, searchTableSizeLabel, userFaveCountLabel,
-            faveSearchTableSizeLabel;
+            recipePageQueryTimeLabel, recipePageBuildTimeLabel, faveSearchTableSizeLabel;
     @FXML // Labels: Messages + Etc
     private Label pantryMessageLabel, filterDescriptionTextBox, recipeViewNameLabel,
             ratingBarLabel, favoriteSuccessLabel;
@@ -231,6 +231,7 @@ public class HomeSceneController {
             return;
         }
         if (eventSource == toFavoritesButton) {
+            faveSearchTableSizeLabel.setText("Number of favorites: " + favoritesCount);
             favoritesPane.toFront();
             return;
         }
@@ -599,10 +600,20 @@ public class HomeSceneController {
 
                 // Execute SQL query to find ingredient and steps data from recipe in table
                 String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + selectedRecipe.recipe_id;
-                ResultSet ingredientData = executeQuery(ingredientQuery);
                 String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + selectedRecipe.recipe_id;
+                long startQueryTime = System.currentTimeMillis();
+                ResultSet ingredientData = executeQuery(ingredientQuery);
                 ResultSet stepData = executeQuery(stepQuery);
-
+                rs = executeQuery("SELECT * FROM Review WHERE recipe_id = " + selectedRecipeID + ";");
+                long startConstructTime = System.currentTimeMillis();
+                long queryTime = startConstructTime - startQueryTime;
+                // Load in reviews
+                reviewTable.getItems().clear();
+                while (rs.next()) {
+                    reviewTable.getItems().add(new Review(rs.getInt("user_id"),
+                            rs.getInt("recipe_id"), rs.getInt("rating"),
+                            rs.getString("submitted"), rs.getString("review")));
+                }
                 // Set ingredients
                 while (ingredientData.next()) {
                     ingredientListView.getItems().add(ingredientData.getString("ingredient_name"));
@@ -625,15 +636,10 @@ public class HomeSceneController {
                 ratingBarLabel.setText("Rating " + selectedRecipe.rating + " / 5.0");
                 favoriteSuccessLabel.setText(" ");
 
-                // Load in reviews
-                reviewTable.getItems().clear();
-                rs = executeQuery("SELECT * FROM Review WHERE recipe_id = " + selectedRecipeID + ";");
-                while (rs.next()) {
-                    reviewTable.getItems().add(new Review(rs.getInt("user_id"),
-                            rs.getInt("recipe_id"), rs.getInt("rating"),
-                            rs.getString("submitted"), rs.getString("review")));
-                }
+                long constructTime = System.currentTimeMillis() - startConstructTime;
                 // Bring recipeViewPane to front
+                recipePageQueryTimeLabel.setText("Query Time: " + (queryTime / 1000) + "s");
+                recipePageBuildTimeLabel.setText("Page Construction Time: "+ (constructTime / 1000) + "s");
                 recipeViewPane.toFront();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -701,12 +707,12 @@ public class HomeSceneController {
             long startTime = System.currentTimeMillis();
             rs = connection.createStatement().executeQuery(query);
             long endTime = System.currentTimeMillis();
-            searchTimeLabel.setText("Query Time: " + String.valueOf((endTime - startTime) / 1000.0) + "s");
+            searchTimeLabel.setText("Query Time: " + ((endTime - startTime) / 1000.0) + "s");
 
             startTime = System.currentTimeMillis();
             constructRecipeTable();
             endTime = System.currentTimeMillis();
-            constructTableTimeLabel.setText("Construct Table Time: " + String.valueOf((endTime - startTime) / 1000.0) + "s");
+            constructTableTimeLabel.setText("Construct Table Time: " + ((endTime - startTime) / 1000.0) + "s");
         } catch (SQLException e) {
             Logger.getLogger(HomeSceneController.class.getName()).log(Level.SEVERE, null, e);
         }
