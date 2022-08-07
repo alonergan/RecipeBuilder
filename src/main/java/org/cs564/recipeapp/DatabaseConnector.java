@@ -34,9 +34,20 @@ public class DatabaseConnector {
      * @param password  password
      * @return true if successfully added
      */
-    public boolean addUser(String username, String password) throws Exception {
+    public static boolean addUser(Connection connection, String username, String password) throws Exception {
         try {
             // TODO: Add user function
+            if (connection == null) {
+                System.out.println("Error with connection in addUser");
+                return false;
+            }
+            Statement statement = connection.createStatement();
+            String query = "CREATE USER '" + username + "'@'localhost' IDENTIFIED BY '" + password + "';";
+            statement.executeUpdate(query);
+            query = "GRANT ALL PRIVILEGES ON *.* TO '" + username + "'@'localhost' WITH GRANT OPTION;"; // MAJOR SECURITY ISSUE, SHOULD NOT GIVE ROOT PERMISSIONS (For simplicity ignore this)
+            statement.executeUpdate(query);
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,10 +59,10 @@ public class DatabaseConnector {
      * @return
      * @throws Exception
      */
-    public static boolean initializeDatabase(File csvPath, String username, String password) throws Exception {
+    public static boolean initializeDatabase(File csvPath, String rootUsername, String rootPassword, String username, String password) throws Exception {
         try {
             // Connect to SQL as root and add new User
-            Connection connection = DriverManager.getConnection(url, username, password); // TODO: Figure out common root user/password
+            Connection connection = DriverManager.getConnection(url, rootUsername, rootPassword);
             if (connection == null) {
                 System.out.println("Error connecting to database, is MySQL installed?");
                 return false;
@@ -162,6 +173,11 @@ public class DatabaseConnector {
                     ") v ON r.recipe_id = v.recipe_id" +
                     "SET r.avg_rating = v.avg_rating;";
             statement.executeUpdate(query);
+
+            // Add new user to server
+            if (!addUser(connection, username, password)) {
+                return false;
+            }
 
             return true;
         } catch (Exception e) {

@@ -103,6 +103,7 @@ public class HomeSceneController {
     private int maxPages;
     private int favoritesCount;
     private Recipe selectedRecipe;  // pointer
+    private double x,y;     // For page dragging
     /**
      * TODO: add remaining assertions
      */
@@ -240,6 +241,16 @@ public class HomeSceneController {
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
             Stage stage = (Stage) logoutButton.getScene().getWindow();
             stage.setScene(new Scene(scene));
+
+            scene.setOnMousePressed(event1 -> {
+                x = event1.getSceneX();
+                y = event1.getSceneY();
+            });
+
+            scene.setOnMouseDragged(event1 -> {
+                stage.setX(event1.getScreenX() - x);
+                stage.setY(event1.getScreenY() - y);
+            });
         }
     }
     /**
@@ -551,7 +562,7 @@ public class HomeSceneController {
                 return;
             }
 
-            if (DatabaseConnector.initializeDatabase(csvPath, username, password)) {
+            if (DatabaseConnector.initializeDatabase(csvPath, username, password, currentUser.username, currentUser.password)) {
                 System.out.println("Success initializing database");
                 profilePane.toFront();
             }

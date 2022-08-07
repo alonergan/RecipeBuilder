@@ -30,6 +30,8 @@ public class RegistrationSceneController {
     @FXML
     private TextField usernameTextField;
 
+    private double x,y;
+
     @FXML
     void initialize() {
         assert confirmPasswordTextField != null : "fx:id=\"confirmPasswordTextField\" was not injected: check your FXML file 'registrationSceneController.fxml'.";
@@ -78,6 +80,16 @@ public class RegistrationSceneController {
             Parent loginScene = FXMLLoader.load(Objects.requireNonNull(MainApplication.class.getResource("loginSceneController.fxml")));
             Stage window = (Stage) submitButton.getScene().getWindow();
             window.setScene(new Scene(loginScene, 1200, 725));
+
+            loginScene.setOnMousePressed(event -> {
+                x = event.getSceneX();
+                y = event.getSceneY();
+            });
+
+            loginScene.setOnMouseDragged(event -> {
+                window.setX(event.getScreenX() - x);
+                window.setY(event.getScreenY() - y);
+            });
         }
     }
 
@@ -87,5 +99,16 @@ public class RegistrationSceneController {
         Parent loginScene = FXMLLoader.load(Objects.requireNonNull(MainApplication.class.getResource("loginSceneController.fxml")));
         Stage window = (Stage) submitButton.getScene().getWindow();
         window.setScene(new Scene(loginScene, 1200, 725));
+
+        loginScene.setOnMousePressed(event -> {
+            x = event.getSceneX();
+            y = event.getSceneY();
+        });
+
+        loginScene.setOnMouseDragged(event -> {
+            window.setX(event.getScreenX() - x);
+            window.setY(event.getScreenY() - y);
+        });
+
     }
 }
