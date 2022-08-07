@@ -70,6 +70,7 @@ public class DatabaseConnector {
                     "n_ingredients int," +
                     "submitted date," +
                     "description varchar(2048)," +
+                    "avg_rating double DEFAULT 0.0," +
                     "primary key (recipe_id));";
             statement.executeUpdate(query);
                 // Tag
@@ -108,12 +109,13 @@ public class DatabaseConnector {
                     "ingredient_name varchar(256)," +
                     "primary key(username, ingredient_name));";
             statement.executeUpdate(query);
-                // Favorites
-            query = "CREATE TABLE Favorites (" +
+                // isFavorite
+            query = "CREATE TABLE isFavorite (" +
                     "username varchar(64)," +
                     "recipe_id int," +
                     "primary key(username, recipe_id));";
             statement.executeUpdate(query);
+
             // Populate Tables TODO: Test if this works
             File[] files = csvPath.listFiles();
             assert files != null;
@@ -151,6 +153,14 @@ public class DatabaseConnector {
                     "WITH (" +
                     "FIELDTERMINATOR = '|'," +
                     "ROWTERMINATOR = '\r\n')";
+            statement.executeUpdate(query);
+
+            // Update avg_rating in Recipe
+            query = "UPDATE Recipe r JOIN (" +
+                    "SELECT recipe_id, AVG(rating) as avg_rating" +
+                    "FROM Review v GROUP BY recipe_id" +
+                    ") v ON r.recipe_id = v.recipe_id" +
+                    "SET r.avg_rating = v.avg_rating;";
             statement.executeUpdate(query);
 
             return true;

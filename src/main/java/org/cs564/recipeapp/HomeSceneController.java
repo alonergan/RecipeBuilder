@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -30,11 +29,9 @@ public class HomeSceneController {
     // SCENE BUILDER CODE /////////////////////////////////////////////////////////////////////////////////////////////
 
     @FXML // PANES (MAIN WINDOWS)
-    private Pane profilePane, settingsPane;
-    @FXML
-    private AnchorPane pantryPane, searchPane, recipeViewPane, favoritesPane;
+    private AnchorPane pantryPane, searchPane, recipeViewPane, favoritesPane, profilePane, settingsPane;
     @FXML // Sub-containers
-    private AnchorPane pantrySearchListAnchor, pantryListAnchor, confirmDeletionPane, sqlInitAnchorPane;
+    private AnchorPane pantrySearchListAnchor, pantryListAnchor, confirmDeletionPane, sqlInitAnchorPane, recipeDeletionPane;
     @FXML // ListViews and TableViews
     private ListView<String> pantryList, pantrySearchList, ingredientListView;
     @FXML
@@ -65,7 +62,7 @@ public class HomeSceneController {
     @FXML // Buttons: Main menu
     private Button toFavoritesButton, settingsButton, pantryButton, quitButton, logoutButton, homeButton;
     @FXML // Buttons: Deletion settings
-    private Button deleteUserButton, confirmDeletionButton, cancelDeletionButton;
+    private Button deleteRecipeButton, deleteUserButton, confirmDeletionButton, cancelDeletionButton, confirmRecipeDeletionButton, cancelRecipeDeletionButton;
     @FXML // Buttons: Pantry
     private Button pantryDeleteBtn, pantrySearchIngredientBtn, pantrySearchRecipesBtn, pantryAddBtn, pantryCancelButton;
     @FXML // Buttons: Recipe Search
@@ -82,7 +79,7 @@ public class HomeSceneController {
             ratingBarLabel, favoriteSuccessLabel;
     @FXML // Text Fields
     private TextField pageNumber, pantryAddField, searchTextField, pathToCSV, sqlUsernameTextField,
-            sqlPasswordTextField;
+            sqlPasswordTextField, confirmPasswordTextField, confirmUsernameTextField;
     @FXML
     private TextArea descriptionTextArea;
     @FXML
@@ -246,10 +243,9 @@ public class HomeSceneController {
         }
     }
     /**
-     * Main function for settings/options pane
-     * Add more settings later?
+     * Handles when user clicks button to delete something
      */
-    public void handleSettingsClicks(ActionEvent event) {
+    public void handleDeleteClicks(ActionEvent event) throws SQLException {
         Object eventSource = event.getSource();
         if (eventSource == deleteUserButton) {
             confirmDeletionPane.toFront();
@@ -257,9 +253,15 @@ public class HomeSceneController {
         }
         if (eventSource == confirmDeletionButton) {
             try {
-                // delete username from User
-                String query = "DELETE FROM User WHERE username='" + currentUser.username + "';";
-                connection.createStatement().executeQuery(query);
+                // Verify login and delete user
+                if (!User.verifyLogin(confirmUsernameTextField.getText(), confirmPasswordTextField.getText())) {
+                    Alert loginError = new Alert(Alert.AlertType.ERROR);
+                    loginError.setContentText("Username or password incorrect");
+                    loginError.showAndWait();
+                    return;
+                }
+                User.deleteAccount(currentUser.username);
+
                 // Switch to LoginScene
                 Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("loginSceneController.fxml")));
                 scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
@@ -272,6 +274,29 @@ public class HomeSceneController {
         }
         if (eventSource == cancelDeletionButton) {
             confirmDeletionPane.toBack();
+        }
+        // DELETE RECIPE
+        if (eventSource == deleteRecipeButton) {
+            recipeDeletionPane.toFront();
+        }
+        if (eventSource == confirmRecipeDeletionButton) {
+            // Delete recipe from recipe, review, and isFavorite
+            String query = "DELETE * FROM Recipe WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+            connection.createStatement().executeUpdate(query);
+            query = "DELETE * FROM Review WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+            connection.createStatement().executeUpdate(query);
+
+            ResultSet result = connection.createStatement().executeQuery("SELECT COUNT(recipe_id) AS num FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
+            if (result.getInt("num") == 1) {
+                query = "DELETE * FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+                connection.createStatement().executeUpdate(query);
+                favoritesCount--;
+            }
+            // Change pane
+            profilePane.toFront();
+        }
+        if (eventSource == cancelDeletionButton) {
+            recipeDeletionPane.toBack();
         }
     }
 
@@ -471,6 +496,7 @@ public class HomeSceneController {
      * @throws SQLException on error retrieving data from populated resultSet
      */
     private void constructRecipeTable() throws SQLException {
+        System.out.println("Constructing Recipe Table");
         // Clear recipeObvList, and add contents
         recipeObvList.clear();
 
@@ -707,7 +733,7 @@ public class HomeSceneController {
                         ");";
             }
             case "Ingredient" -> query = "SELECT r.* " +
-                    "FROM Recipe r INNER JOIN Ingredient i ON r.recipe_id = i.recipe_id" +
+                    "FROM Recipe r INNER JOIN Ingredient i ON r.recipe_id = i.recipe_id " +
                     "WHERE i.ingredient_name LIKE '%" + input + "%';";
         }
 
