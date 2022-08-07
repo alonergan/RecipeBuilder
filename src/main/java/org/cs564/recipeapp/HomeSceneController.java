@@ -105,7 +105,7 @@ public class HomeSceneController {
     private int pageIndex;
     private int maxPages;
     private int favoritesCount;
-    public int selectedRecipeID;
+    private Recipe selectedRecipe;  // pointer
     /**
      * TODO: add remaining assertions
      */
@@ -155,6 +155,9 @@ public class HomeSceneController {
         reviewTableRatingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
         //reviewTableDateCol.setCellValueFactory(new PropertyValueFactory<>("dateSubmitted"));
         reviewTableReviewCol.setCellValueFactory(new PropertyValueFactory<>("reviewArea"));
+
+        stepNumColumn.setCellValueFactory(new PropertyValueFactory<>("step_num"));
+        stepNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
     }
 
@@ -502,7 +505,7 @@ public class HomeSceneController {
      */
     @FXML
     public void handleSetupClicks(Event event) throws Exception {
-        if (event.getSource() == setUpSQLButton) {
+            if (event.getSource() == setUpSQLButton) {
             sqlInitAnchorPane.toFront();
         }
         if (event.getSource() == browseFilesButton) {
@@ -529,18 +532,24 @@ public class HomeSceneController {
         }
     }
 
+    /**
+     * selectedRecipe has to be assigned in order to trigger this event (in recipeViewPane)
+     * @param event
+     * @throws SQLException
+     */
     @FXML
-    public void handleFavoriteButton(Event event) throws SQLException {
+    public void handleFavoriteButton(Event event) throws Exception {
         if (event.getSource() == favoriteButton) {
-            String query = "SELECT recipe_id FROM isFavorite WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipeID + ";";
+            String query = "SELECT recipe_id FROM isFavorite WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipe.recipe_id + ";";
             rs = executeQuery(query);
             // If found
             if (rs.next()) {
                 favoriteSuccessLabel.setText("You have already favorited this recipe");
             } else {
                 // Add recipe
-                query = "INSERT INTO isFavorite VALUES('" + currentUser.username + "', " + selectedRecipeID + ");";
+                query = "INSERT INTO isFavorite VALUES('" + currentUser.username + "', " + selectedRecipe.recipe_id + ");";
                 connection.createStatement().executeUpdate(query);
+                favoritesTable.getItems().add(selectedRecipe);
                 System.out.println("Added to isFavorite");
                 favoriteSuccessLabel.setText("Successfully added to isFavorite");
                 favoritesCount++;
@@ -549,11 +558,13 @@ public class HomeSceneController {
         }
         if (event.getSource() == unfavoriteButton) {
             // split into two queries to handle empty result set / no favorites
-            String query = "SELECT * FROM isFavorite WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipeID + ";";
+            String query = "SELECT * FROM isFavorite WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipe.recipe_id + ";";
             rs = executeQuery(query);
             if (rs.next()) {
-                query = "DELETE FROM isFavorite WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipeID + ";";
+                query = "DELETE FROM isFavorite WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipe.recipe_id + ";";
                 connection.createStatement().executeUpdate(query);
+                int index = favoritesTable.getItems().indexOf(selectedRecipe);
+                favoritesTable.getItems().remove(index);
                 favoritesCount--;
                 favoriteSuccessLabel.setText("Recipe successfully unfavorited");
             } else {
@@ -582,8 +593,11 @@ public class HomeSceneController {
      */
     @FXML
     public void selectRecipe(MouseEvent event) {
+
+        reviewTable.getItems().clear();
+        ingredientListView.getItems().clear();
+        stepTableView.getItems().clear();
         if (event.getClickCount() > 1) {
-            // TODO CLEAR RECIPE DATA FROM PREVIOUS
             TableView<Recipe> tablePointer;
             if(event.getSource() == searchTable)
                 tablePointer = searchTable;
@@ -595,20 +609,19 @@ public class HomeSceneController {
             }
             try {
                 // Grab recipe from row
-                Recipe selectedRecipe = tablePointer.getSelectionModel().getSelectedItem();
-                selectedRecipeID = selectedRecipe.recipe_id;
+                selectedRecipe = tablePointer.getSelectionModel().getSelectedItem();
 
                 // Execute SQL query to find ingredient and steps data from recipe in table
                 String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + selectedRecipe.recipe_id;
                 String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + selectedRecipe.recipe_id;
-                long startQueryTime = System.currentTimeMillis();
+                long startTime = System.currentTimeMillis();
                 ResultSet ingredientData = executeQuery(ingredientQuery);
                 ResultSet stepData = executeQuery(stepQuery);
-                rs = executeQuery("SELECT * FROM Review WHERE recipe_id = " + selectedRecipeID + ";");
-                long startConstructTime = System.currentTimeMillis();
-                long queryTime = startConstructTime - startQueryTime;
+                rs = executeQuery("SELECT * FROM Review WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
+                long endTime = System.currentTimeMillis();
+                recipePageQueryTimeLabel.setText("Query Time: " + ((endTime - startTime) / 1000.0) + "s");
+                startTime = endTime;
                 // Load in reviews
-                reviewTable.getItems().clear();
                 while (rs.next()) {
                     reviewTable.getItems().add(new Review(rs.getInt("user_id"),
                             rs.getInt("recipe_id"), rs.getInt("rating"),
@@ -619,9 +632,6 @@ public class HomeSceneController {
                     ingredientListView.getItems().add(ingredientData.getString("ingredient_name"));
                 }
 
-                // Set steps
-                stepNumColumn.setCellValueFactory(new PropertyValueFactory<>("step_num"));
-                stepNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
                 while (stepData.next()) {
                     stepTableView.getItems().add(new Step(stepData.getInt("step_num"), stepData.getString("step_name")));
                 }
@@ -635,11 +645,9 @@ public class HomeSceneController {
                 ratingBar.setProgress(rating);
                 ratingBarLabel.setText("Rating " + selectedRecipe.rating + " / 5.0");
                 favoriteSuccessLabel.setText(" ");
-
-                long constructTime = System.currentTimeMillis() - startConstructTime;
+                endTime = System.currentTimeMillis();
                 // Bring recipeViewPane to front
-                recipePageQueryTimeLabel.setText("Query Time: " + (queryTime / 1000) + "s");
-                recipePageBuildTimeLabel.setText("Page Construction Time: "+ (constructTime / 1000) + "s");
+                recipePageBuildTimeLabel.setText("Page Construction Time: " + ((endTime - startTime) / 1000.0) + "s");
                 recipeViewPane.toFront();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -664,6 +672,7 @@ public class HomeSceneController {
     @FXML
     public void handleSearchSubmit() {
         // Get input
+        searchTimeLabel.setText("");
         String filter = searchFilter.getValue();
         String input = searchTextField.getText();
         String query = null;
@@ -682,9 +691,10 @@ public class HomeSceneController {
                     "WHERE r.minutes < " + input + ";";
             case "Rating" -> {
                 double rating = Double.parseDouble(input);
-                if (rating < 0 || rating > 5)
+                if (rating < 0 || rating > 5) {
+                    searchTimeLabel.setText("Please enter a rating between 0 and 5.");
                     return;
-                // Maybe add some more UI effects to remind the user to enter a valid number.
+                }
                 query = "SELECT r.* " +
                         "FROM Recipe r " +
                         "WHERE r.recipe_id IN ( " +
