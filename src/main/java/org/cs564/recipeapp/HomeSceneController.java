@@ -523,7 +523,7 @@ public class HomeSceneController {
             if (rs.getInt("n_ingredients") == 0) {
                 continue;
             }
-
+            
             // Add new recipe
             recipeObvList.add(new Recipe(rs.getString("recipe_name"),
                     rs.getInt("minutes"), rs.getInt("n_steps"),
@@ -531,7 +531,6 @@ public class HomeSceneController {
                     rs.getInt("recipe_id"), rs.getString("description"),
                     rs.getDouble("avg_rating")));
         }
-
         // Set pages and update table
         pageIndex = 0;
         maxPages = Math.ceilDiv(recipeObvList.size(), rowsPerPage);
