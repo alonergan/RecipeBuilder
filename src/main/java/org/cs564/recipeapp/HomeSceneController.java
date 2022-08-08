@@ -13,9 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -28,161 +26,89 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class HomeSceneController {
-
     // SCENE BUILDER CODE /////////////////////////////////////////////////////////////////////////////////////////////
-//    @FXML
-//    private ResourceBundle resources;
 
-//    @FXML
-//    private URL location;
+    @FXML // PANES (MAIN WINDOWS)
+    private AnchorPane pantryPane, searchPane, recipeViewPane, favoritesPane, profilePane, settingsPane;
+    @FXML // Sub-containers
+    private AnchorPane pantrySearchListAnchor, pantryListAnchor, confirmDeletionPane, sqlInitAnchorPane, recipeDeletionPane;
+    @FXML // ListViews and TableViews
+    private ListView<String> pantryList, pantrySearchList, ingredientListView;
     @FXML
-    public AnchorPane pantryPane;
-//    @FXML
-//    public TableColumn step2IngredientName;
-//    @FXML
-//    public TableView step2IngredientList;
-//    @FXML
-//    public Button searchSubmitButton2;
+    private TableView<Step> stepTableView;
     @FXML
-    public AnchorPane appPane;
+    private TableView<Recipe> searchTable, favoritesTable;
     @FXML
-    public Button pantryButton;
+    private TableView<Review> reviewTable;
     @FXML
-    public Button confirmDeletionButton;
+    private TableColumn<Recipe, String> dateCol, nameCol, faveDateCol, faveNameCol;
     @FXML
-    public Button cancelDeletionButton;
-//    @FXML
-//    public TableView inventoryListView;
-    @FXML
-    public Spinner<Integer> pantrySearchSpinner;
-    @FXML
-    public Button pantrySearchRecipesBtn;
-    @FXML
-    public Button pantrySearchIngredientBtn;
-    @FXML
-    public TextField pantryAddField;
-    @FXML
-    public Button pantryAddBtn;
-    @FXML
-    public ListView<String> pantryList;
-    @FXML
-    public Button pantryDeleteBtn;
-    @FXML
-    public Label searchTableSizeLabel;
-    @FXML
-    public ListView<String> pantrySearchList;
-    @FXML
-    public Button pantryCancelButton;
-    @FXML
-    public AnchorPane pantrySearchListAnchor;
-    @FXML
-    public AnchorPane pantryListAnchor;
-    @FXML
-    public Label pantryMessageLabel;
-    @FXML
-    private TableColumn<Recipe, String> dateCol;
-    @FXML
-    private Button homeButton;
-    @FXML
-    private TableColumn<Recipe, Integer> n_ingredients_Col;
-    @FXML
-    private Button logoutButton;
-    @FXML
-    private TableColumn<Recipe, Integer> minutesCol;
-    @FXML
-    private TableColumn<Recipe, String> nameCol;
-    @FXML
-    private Button nextPageButton;
-    @FXML
-    private TextField pageNumber;
-    @FXML
-    private Button prevPageButton;
-    @FXML
-    private Pane profilePane;
-    @FXML
-    private Button quitButton;
-    @FXML
-    private AnchorPane searchPane;
-    @FXML
-    private Button searchRecipeButton;
-    @FXML
-    private Button searchSubmitButton;
-    @FXML
-    private Button settingsButton;
-    @FXML
-    private Button deleteUserButton;
-    @FXML
-    private Pane settingsPane;
-    @FXML
-    private AnchorPane confirmDeletionPane;
-    @FXML
-    private TableColumn<Recipe, Integer> stepsCol;
+    private TableColumn<Recipe, Integer> stepsCol, faveN_ingredients_Col, faveStepsCol, faveMinutesCol,
+            n_ingredients_Col, minutesCol;
     @FXML
     private TableColumn<Recipe, Double> ratingCol;
-    @FXML
-    private AnchorPane recipeViewPane;
-    @FXML
-    private Label recipeViewNameLabel;
-    @FXML
-    private ListView<String> ingredientListView;
-    @FXML
-    private TableView<Step>  stepTableView;
     @FXML
     private TableColumn<Step, Integer> stepNumColumn;
     @FXML
     private TableColumn<Step, String> stepNameColumn;
     @FXML
+    public TableColumn<Review, Integer> reviewTableRatingCol;
+    @FXML
+    public TableColumn<Review, String> reviewTableDateCol;
+    @FXML
+    public TableColumn<Review, TextArea> reviewTableReviewCol;
+    @FXML
+    private TableColumn<Recipe, Double> faveRatingCol;
+    @FXML // Buttons: Main menu
+    private Button toFavoritesButton, settingsButton, pantryButton, quitButton, logoutButton, homeButton;
+    @FXML // Buttons: Deletion settings
+    private Button deleteRecipeButton, deleteUserButton, confirmDeletionButton, cancelDeletionButton, confirmRecipeDeletionButton, cancelRecipeDeletionButton;
+    @FXML // Buttons: Pantry
+    private Button pantryDeleteBtn, pantrySearchIngredientBtn, pantrySearchRecipesBtn, pantryAddBtn, pantryCancelButton;
+    @FXML // Buttons: Recipe Search
+    private Button searchRecipeButton, searchSubmitButton, prevPageButton, nextPageButton;
+    @FXML // Buttons: Database Connector
+    private Button setUpSQLButton, browseFilesButton, submitPathButton;
+    @FXML // Buttons: recipePane
+    private Button favoriteButton, unfavoriteButton;
+    @FXML // Labels: Timing + Count
+    private Label searchTimeLabel, constructTableTimeLabel, searchTableSizeLabel, userFaveCountLabel,
+            recipePageQueryTimeLabel, recipePageBuildTimeLabel, faveSearchTableSizeLabel;
+    @FXML // Labels: Messages + Etc
+    private Label pantryMessageLabel, filterDescriptionTextBox, recipeViewNameLabel,
+            ratingBarLabel, favoriteSuccessLabel;
+    @FXML // Text Fields
+    private TextField pageNumber, pantryAddField, searchTextField, pathToCSV, sqlUsernameTextField,
+            sqlPasswordTextField, confirmPasswordTextField, confirmUsernameTextField;
+    @FXML
     private TextArea descriptionTextArea;
     @FXML
-    private TextField searchTextField;
+    private Spinner<Integer> pantrySearchSpinner;
     @FXML
     private ChoiceBox<String> searchFilter;
     @FXML
-    private TableView<Recipe> searchTable;
-    @FXML
-    private Label filterDescriptionTextBox;
-    @FXML
     private ProgressBar ratingBar;
-    @FXML
-    private Label ratingBarLabel;
-    @FXML
-    private Button setUpSQLButton;
-    @FXML
-    private Button deleteRecipeButton;
-    @FXML
-    private TextField confirmUsernameTextField;
-    @FXML
-    private PasswordField confirmPasswordTextField;
-    @FXML
-    private AnchorPane sqlInitAnchorPane;
-    @FXML
-    private Button browseFilesButton;
-    @FXML
-    private Button submitPathButton;
-    @FXML
-    private TextField pathToCSV;
-
     // Global variables
-    private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
-    private double x, y; // Used for manipulating window
-    public ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
-    public ObservableList<Recipe> recipeCurPage = FXCollections.observableArrayList(); // Page of recipes from obList
+    private final ObservableList<Recipe> recipeObvList = FXCollections.observableArrayList(); // Table list of recipes from SQL query
+    private final ObservableList<Recipe> recipeCurPage = FXCollections.observableArrayList(); // Page of recipes from obList
     private SpinnerValueFactory.IntegerSpinnerValueFactory pantrySpinnerValues; // corresponds to minimum ingredients required in search
+    private User currentUser;
+    private File csvPath; // paths to csv files for data
+    private Connection connection;
+    private ResultSet rs;
+    private final String[] searchFilters = {"All Recipes", "Name", "Tag", "Time", "Rating", "Ingredient"};
     private final int rowsPerPage = 27;
+    private boolean isPantryListFront = true;   // if pantryListAnchor (inventory) is in front of pantryListSearchAnchor (search by ingredient)
     private int pageIndex;
     private int maxPages;
-    public Connection connection;
-    public ResultSet rs;
-    public ResultSet averageRatings;
-    public String username = "";
-    private boolean isPantryListFront = true;  // if pantryListAnchor (inventory) is in front of pantryListSearchAnchor (search by ingredient)
-
-    public File csvPath; // paths to csv files for data
+    private int favoritesCount;
+    private Recipe selectedRecipe;  // pointer
+    private double x,y;     // For page dragging
     /**
      * TODO: add remaining assertions
      */
     @FXML
-    void initialize() throws Exception {
+    void initialize() {
         assert dateCol != null : "fx:id=\"dateCol\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert homeButton != null : "fx:id=\"homeButton\" was not injected: check your FXML file 'homeSceneController.fxml'.";
         assert n_ingredients_Col != null : "fx:id=\"n_ingredients_col\" was not injected: check your FXML file 'homeSceneController.fxml'.";
@@ -208,29 +134,67 @@ public class HomeSceneController {
         profilePane.toFront();
         searchFilter.getItems().addAll(searchFilters);
         searchFilter.setValue(searchFilter.getItems().get(0));
-        connection = DatabaseConnector.getConnection();
+        // construct factory objects for tableViews -searchTable, favoritesTable, and reviewTable
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        minutesCol.setCellValueFactory(new PropertyValueFactory<>("minutes"));
+        stepsCol.setCellValueFactory(new PropertyValueFactory<>("n_steps"));
+        n_ingredients_Col.setCellValueFactory(new PropertyValueFactory<>("n_ingredients"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("dateSubmitted"));
+        ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
+        faveNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        faveMinutesCol.setCellValueFactory(new PropertyValueFactory<>("minutes"));
+        faveStepsCol.setCellValueFactory(new PropertyValueFactory<>("n_steps"));
+        faveN_ingredients_Col.setCellValueFactory(new PropertyValueFactory<>("n_ingredients"));
+        faveDateCol.setCellValueFactory(new PropertyValueFactory<>("dateSubmitted"));
+        faveRatingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
+        reviewTableDateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        reviewTableRatingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        //reviewTableDateCol.setCellValueFactory(new PropertyValueFactory<>("dateSubmitted"));
+        reviewTableReviewCol.setCellValueFactory(new PropertyValueFactory<>("reviewArea"));
+
+        stepNumColumn.setCellValueFactory(new PropertyValueFactory<>("step_num"));
+        stepNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
     }
 
     // END SCENE BUILDER CODE AND GLOBAL VARIABLE INITIALIZATION, ASSIGNMENT //////////////////////////////////
 
     /**
-     * Assign username, set up pantry/inventory list
-     * TODO: Favorites?
-     * @param usr the username passed from LoginSceneController. Had issues loading a controller with a
-     *            parameterized constructor
+     * Constructs user's inventory and modifies any other views corresponding to the user
+     * @param username passed from loginSceneController
+     * @param password passed from loginSceneController
+     * @param connection initialized in loginSceneController, assigned to homeScene
      */
-    protected void setupUserComponents(String usr, Connection connection) {
+    protected void setupUserComponents(String username, String password, Connection connection) {
         this.connection = connection;
-        username = usr;
+        this.currentUser = new User(username, password);
         // Construct user's inventoryList
         try {
-            rs = executeQuery("SELECT ingredient_name FROM User WHERE username = '" + username + "';");
+            // Construct pantry, assign values to spinner
+            // TODO: exception thrown here. it's harmless; User "Test" just doesn't have any entries in isFavorite
+            rs = executeQuery("SELECT ingredient_name FROM inPantry WHERE username = '" + currentUser.username + "';");
             while (rs.next()) {
                 pantryList.getItems().add(rs.getString(1));
             }
             int size = pantryList.getItems().size();
             pantrySpinnerValues = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Math.max(size, 1), 1);
             pantrySearchSpinner.setValueFactory(pantrySpinnerValues);
+            // assign values for the countLabels on the profile (main) pane
+
+            rs = executeQuery("SELECT r.* FROM recipe r INNER JOIN isFavorite f ON r.recipe_id=f.recipe_id " +
+                    "WHERE username='"+username+"';");
+            while(rs.next()) {
+                // Add new recipe
+                favoritesTable.getItems().add(new Recipe(rs.getString("recipe_name"),
+                        rs.getInt("minutes"), rs.getInt("n_steps"),
+                        rs.getInt("n_ingredients"), rs.getString("submitted"),
+                        rs.getInt("recipe_id"), rs.getString("description"),
+                        rs.getDouble("avg_rating")));
+            }
+            favoritesCount = favoritesTable.getItems().size();
+            userFaveCountLabel.setText("#" + favoritesCount);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -251,6 +215,7 @@ public class HomeSceneController {
         Object eventSource = event.getSource();
         if (eventSource == homeButton) {
             profilePane.toFront();
+            userFaveCountLabel.setText("#" + favoritesCount);
             return;
         }
         if (eventSource == settingsButton) {
@@ -266,19 +231,32 @@ public class HomeSceneController {
             searchPane.toFront();
             return;
         }
+        if (eventSource == toFavoritesButton) {
+            faveSearchTableSizeLabel.setText("Number of favorites: " + favoritesCount);
+            favoritesPane.toFront();
+            return;
+        }
         if (eventSource == logoutButton) {
             Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("loginSceneController.fxml")));
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
             Stage stage = (Stage) logoutButton.getScene().getWindow();
             stage.setScene(new Scene(scene));
+
+            scene.setOnMousePressed(event1 -> {
+                x = event1.getSceneX();
+                y = event1.getSceneY();
+            });
+
+            scene.setOnMouseDragged(event1 -> {
+                stage.setX(event1.getScreenX() - x);
+                stage.setY(event1.getScreenY() - y);
+            });
         }
     }
-
     /**
-     * Main function for settings/options pane
-     * Add more settings later?
+     * Handles when user clicks button to delete something
      */
-    public void handleSettingsClicks(ActionEvent event) {
+    public void handleDeleteClicks(ActionEvent event) throws SQLException {
         Object eventSource = event.getSource();
         if (eventSource == deleteUserButton) {
             confirmDeletionPane.toFront();
@@ -286,9 +264,15 @@ public class HomeSceneController {
         }
         if (eventSource == confirmDeletionButton) {
             try {
-                // delete username from User
-                String query = "DELETE FROM User WHERE username='" + username + "';";
-                connection.createStatement().executeQuery(query);
+                // Verify login and delete user
+                if (!User.verifyLogin(confirmUsernameTextField.getText(), confirmPasswordTextField.getText())) {
+                    Alert loginError = new Alert(Alert.AlertType.ERROR);
+                    loginError.setContentText("Username or password incorrect");
+                    loginError.showAndWait();
+                    return;
+                }
+                User.deleteAccount(currentUser.username);
+
                 // Switch to LoginScene
                 Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("loginSceneController.fxml")));
                 scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
@@ -301,6 +285,29 @@ public class HomeSceneController {
         }
         if (eventSource == cancelDeletionButton) {
             confirmDeletionPane.toBack();
+        }
+        // DELETE RECIPE
+        if (eventSource == deleteRecipeButton) {
+            recipeDeletionPane.toFront();
+        }
+        if (eventSource == confirmRecipeDeletionButton) {
+            // Delete recipe from recipe, review, and isFavorite
+            String query = "DELETE * FROM Recipe WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+            connection.createStatement().executeUpdate(query);
+            query = "DELETE * FROM Review WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+            connection.createStatement().executeUpdate(query);
+
+            ResultSet result = connection.createStatement().executeQuery("SELECT COUNT(recipe_id) AS num FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
+            if (result.getInt("num") == 1) {
+                query = "DELETE * FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+                connection.createStatement().executeUpdate(query);
+                favoritesCount--;
+            }
+            // Change pane
+            profilePane.toFront();
+        }
+        if (eventSource == cancelDeletionButton) {
+            recipeDeletionPane.toBack();
         }
     }
 
@@ -325,7 +332,6 @@ public class HomeSceneController {
 
     /**
      * handle clicks that occur in pantryPane
-     * TODO: test, consider potentially failing cases
      * Make a custom ListView to go with the custom ListCell
      * @param event the events that correspond to the buttons' clicks
      */
@@ -352,19 +358,20 @@ public class HomeSceneController {
                 pantryList.getItems().add(input);
                 pantryList.refresh();
                 // handle error handling for duplicate value
-                query = "INSERT INTO User VALUES('" + username + "', '" + input + "');";
+                query = "INSERT INTO inPantry VALUES('" + currentUser.username + "', '" + input + "');";
                 statement.executeUpdate(query);
                 // adjust the maximum number of minimum ingredients in inventory for searching recipes
                 int max = pantryList.getItems().size();
                 pantrySpinnerValues.setMax(max);
 
                 message = "Added " + input + " to inventory";
+                pantrySpinnerValues.setValue(pantrySpinnerValues.getValue() + 1);
                 pantryMessageLabel.setText(message);
                 return;
             }
             // Switch views; go to recipe searchPane
             if (eventSource == pantrySearchRecipesBtn) {
-                if (pantryList.getItems().size() > 0) {
+                if (pantryList.getItems().size() <= 0) {
                     pantryMessageLabel.setText("Error: inventory is empty");
                     return;
                 }
@@ -372,7 +379,7 @@ public class HomeSceneController {
                 query = "SELECT r.* " +
                         "FROM recipe r, ingredient i " +
                         "WHERE r.recipe_id = i.recipe_id and i.ingredient_name IN( " +
-                            "SELECT ingredient_name FROM user WHERE username = '" + username + "') " +
+                            "SELECT ingredient_name FROM inPantry WHERE username = '" + currentUser.username + "') " +
                         "GROUP BY i.recipe_id HAVING COUNT(*) >= " + pantrySearchSpinner.getValue() + ";";
                 rs = executeQuery(query);
                 constructRecipeTable();
@@ -397,18 +404,18 @@ public class HomeSceneController {
                 int index = pantryList.getSelectionModel().getSelectedIndex();
                 if (index < 0) {return;}
                 input = pantryList.getItems().get(index);
-                query = "SELECT * FROM User WHERE " +
-                        "username = '" + username + "' AND ingredient_name= '" + input + "';";
+                query = "SELECT * FROM inPantry WHERE " +
+                        "username = '" + currentUser.username + "' AND ingredient_name= '" + input + "';";
                 rs = executeQuery(query);
                 if (rs.next()) {
-                    query = "DELETE FROM User WHERE " +
-                            "username = '" + username + "' AND ingredient_name= '" + input + "';";
+                    query = "DELETE FROM inPantry WHERE " +
+                            "username = '" + currentUser.username + "' AND ingredient_name= '" + input + "';";
                     statement.executeUpdate(query);
                     pantryList.getItems().remove(index);
                     int max = pantrySpinnerValues.getMax();
                     pantrySpinnerValues.setMax(max <= 2 ? 1 : max - 1);
                     pantryList.refresh();
-                    message = "Remove " + input + "was successful";
+                    message = "Remove " + input + " was successful";
                     pantryMessageLabel.setText(message);
                 }
                 else {
@@ -459,8 +466,6 @@ public class HomeSceneController {
         if (eventSource == pageNumber) {
             assert pageNumber != null;
             int input = Integer.parseInt(pageNumber.getCharacters().toString());
-            //System.out.println("HERE -----------");
-
             if (input > 0 && input < maxPages) {
                 updatePage(input - 1);
                 pageNumber.setPromptText(String.valueOf(pageIndex));
@@ -476,7 +481,6 @@ public class HomeSceneController {
             System.out.println("observableList empty");
             return;
         }
-
         // Get start index
         int i = pageIndex * rowsPerPage;
         int count = 0;
@@ -503,12 +507,9 @@ public class HomeSceneController {
      * @throws SQLException on error retrieving data from populated resultSet
      */
     private void constructRecipeTable() throws SQLException {
+        System.out.println("Constructing Recipe Table");
         // Clear recipeObvList, and add contents
         recipeObvList.clear();
-
-        // Get average ratings table
-        String getRecipeRating = "SELECT recipe_id, AVG(rating) rating FROM Review r GROUP BY recipe_id;";
-        averageRatings = executeQuery(getRecipeRating);
 
         while (rs.next()) {
             // If an empty recipe, skip
@@ -516,30 +517,30 @@ public class HomeSceneController {
                 continue;
             }
 
+<<<<<<< HEAD
             // Get rating for each recipe
             double rating = 0.0;
             if (averageRatings.next()) {
                 rating = averageRatings.getDouble("rating");
             }
+=======
+>>>>>>> d38b74964b9edc67601c42f0803b6712719748f4
             // Add new recipe
             recipeObvList.add(new Recipe(rs.getString("recipe_name"),
                     rs.getInt("minutes"), rs.getInt("n_steps"),
                     rs.getInt("n_ingredients"), rs.getString("submitted"),
-                    rs.getInt("recipe_id"), rs.getString("description"), rating));
+                    rs.getInt("recipe_id"), rs.getString("description"),
+                    rs.getDouble("avg_rating")));
         }
         // Set pages and update table
         pageIndex = 0;
         maxPages = Math.ceilDiv(recipeObvList.size(), rowsPerPage);
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        minutesCol.setCellValueFactory(new PropertyValueFactory<>("minutes"));
-        stepsCol.setCellValueFactory(new PropertyValueFactory<>("n_steps"));
-        n_ingredients_Col.setCellValueFactory(new PropertyValueFactory<>("n_ingredients"));
-        dateCol.setCellValueFactory(new PropertyValueFactory<>("dateSubmitted"));
-        ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
         updatePage(pageIndex);
         String resultSize = "Results: " + recipeObvList.size();
         searchTableSizeLabel.setText(resultSize);   //TODO: test
     }
+
 
     /**
      * TODO: Get root username and password and pass them to DatabaseConnector
@@ -547,8 +548,8 @@ public class HomeSceneController {
      * @param event
      */
     @FXML
-    void handleSetupClicks(Event event) throws Exception {
-        if (event.getSource() == setUpSQLButton) {
+    public void handleSetupClicks(Event event) throws Exception {
+            if (event.getSource() == setUpSQLButton) {
             sqlInitAnchorPane.toFront();
         }
         if (event.getSource() == browseFilesButton) {
@@ -559,9 +560,59 @@ public class HomeSceneController {
             }
         }
         if (event.getSource() == submitPathButton) {
-            if (DatabaseConnector.initializeDatabase(csvPath)) {
+            String username = sqlUsernameTextField.getText();
+            String password = sqlPasswordTextField.getText();
+            if (username.isEmpty() || password.isEmpty()) {
+                Alert loginError = new Alert(Alert.AlertType.ERROR);
+                loginError.setContentText("You must enter a valid username and password");
+                loginError.showAndWait();
+                return;
+            }
+
+            if (DatabaseConnector.initializeDatabase(csvPath, username, password, currentUser.username, currentUser.password)) {
                 System.out.println("Success initializing database");
                 profilePane.toFront();
+            }
+        }
+    }
+
+    /**
+     * selectedRecipe has to be assigned in order to trigger this event (in recipeViewPane)
+     * @param event
+     * @throws SQLException
+     */
+    @FXML
+    public void handleFavoriteButton(Event event) throws Exception {
+        if (event.getSource() == favoriteButton) {
+            String query = "SELECT recipe_id FROM isFavorite WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipe.recipe_id + ";";
+            rs = executeQuery(query);
+            // If found
+            if (rs.next()) {
+                favoriteSuccessLabel.setText("You have already favorited this recipe");
+            } else {
+                // Add recipe
+                query = "INSERT INTO isFavorite VALUES('" + currentUser.username + "', " + selectedRecipe.recipe_id + ");";
+                connection.createStatement().executeUpdate(query);
+                favoritesTable.getItems().add(selectedRecipe);
+                System.out.println("Added to isFavorite");
+                favoriteSuccessLabel.setText("Successfully added to isFavorite");
+                favoritesCount++;
+            }
+            return;
+        }
+        if (event.getSource() == unfavoriteButton) {
+            // split into two queries to handle empty result set / no favorites
+            String query = "SELECT * FROM isFavorite WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipe.recipe_id + ";";
+            rs = executeQuery(query);
+            if (rs.next()) {
+                query = "DELETE FROM isFavorite WHERE username = '" + currentUser.username + "' AND recipe_id = " + selectedRecipe.recipe_id + ";";
+                connection.createStatement().executeUpdate(query);
+                int index = favoritesTable.getItems().indexOf(selectedRecipe);
+                favoritesTable.getItems().remove(index);
+                favoritesCount--;
+                favoriteSuccessLabel.setText("Recipe successfully unfavorited");
+            } else {
+                favoriteSuccessLabel.setText("You have not favorited this recipe");
             }
         }
     }
@@ -579,32 +630,52 @@ public class HomeSceneController {
     /// Execute queries, call UI ///
     /// Functions to update scene///
     ////////////////////////////////
+
     /**
      * Opens recipe view pane when user selects recipe from table in browse or search
      * @param event The event triggered by being clicked
      */
     @FXML
     public void selectRecipe(MouseEvent event) {
+
+        reviewTable.getItems().clear();
+        ingredientListView.getItems().clear();
+        stepTableView.getItems().clear();
         if (event.getClickCount() > 1) {
-            // TODO CLEAR RECIPE DATA FROM PREVIOUS
+            TableView<Recipe> tablePointer;
+            if(event.getSource() == searchTable)
+                tablePointer = searchTable;
+            else if (event.getSource() == favoritesTable)
+                tablePointer = favoritesTable;
+            else {
+                System.err.print("selectRecipe: unexpected event source\n");
+                return;
+            }
             try {
                 // Grab recipe from row
-                Recipe selectedRecipe = searchTable.getSelectionModel().getSelectedItem();
+                selectedRecipe = tablePointer.getSelectionModel().getSelectedItem();
 
                 // Execute SQL query to find ingredient and steps data from recipe in table
                 String ingredientQuery = "SELECT * FROM Ingredient i WHERE i.recipe_id = " + selectedRecipe.recipe_id;
-                ResultSet ingredientData = executeQuery(ingredientQuery);
                 String stepQuery = "SELECT * FROM Step s WHERE s.recipe_id = " + selectedRecipe.recipe_id;
+                long startTime = System.currentTimeMillis();
+                ResultSet ingredientData = executeQuery(ingredientQuery);
                 ResultSet stepData = executeQuery(stepQuery);
-
+                rs = executeQuery("SELECT * FROM Review WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
+                long endTime = System.currentTimeMillis();
+                recipePageQueryTimeLabel.setText("Query Time: " + ((endTime - startTime) / 1000.0) + "s");
+                startTime = endTime;
+                // Load in reviews
+                while (rs.next()) {
+                    reviewTable.getItems().add(new Review(rs.getInt("user_id"),
+                            rs.getInt("recipe_id"), rs.getInt("rating"),
+                            rs.getString("submitted"), rs.getString("review")));
+                }
                 // Set ingredients
                 while (ingredientData.next()) {
                     ingredientListView.getItems().add(ingredientData.getString("ingredient_name"));
                 }
 
-                // Set steps
-                stepNumColumn.setCellValueFactory(new PropertyValueFactory<>("step_num"));
-                stepNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
                 while (stepData.next()) {
                     stepTableView.getItems().add(new Step(stepData.getInt("step_num"), stepData.getString("step_name")));
                 }
@@ -617,8 +688,10 @@ public class HomeSceneController {
                 double rating = selectedRecipe.rating / 5.0;
                 ratingBar.setProgress(rating);
                 ratingBarLabel.setText("Rating " + selectedRecipe.rating + " / 5.0");
-
+                favoriteSuccessLabel.setText(" ");
+                endTime = System.currentTimeMillis();
                 // Bring recipeViewPane to front
+                recipePageBuildTimeLabel.setText("Page Construction Time: " + ((endTime - startTime) / 1000.0) + "s");
                 recipeViewPane.toFront();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -643,6 +716,7 @@ public class HomeSceneController {
     @FXML
     public void handleSearchSubmit() {
         // Get input
+        searchTimeLabel.setText("");
         String filter = searchFilter.getValue();
         String input = searchTextField.getText();
         String query = null;
@@ -661,9 +735,10 @@ public class HomeSceneController {
                     "WHERE r.minutes < " + input + ";";
             case "Rating" -> {
                 double rating = Double.parseDouble(input);
-                if (rating < 0 || rating > 5)
+                if (rating < 0 || rating > 5) {
+                    searchTimeLabel.setText("Please enter a rating between 0 and 5.");
                     return;
-                // Maybe add some more UI effects to remind the user to enter a valid number.
+                }
                 query = "SELECT r.* " +
                         "FROM Recipe r " +
                         "WHERE r.recipe_id IN ( " +
@@ -676,15 +751,22 @@ public class HomeSceneController {
                         ");";
             }
             case "Ingredient" -> query = "SELECT r.* " +
-                    "FROM Recipe r INNER JOIN Ingredient i ON r.recipe_id = i.recipe_id" +
+                    "FROM Recipe r INNER JOIN Ingredient i ON r.recipe_id = i.recipe_id " +
                     "WHERE i.ingredient_name LIKE '%" + input + "%';";
         }
 
         // Execute query and populate table
         try {
             if (query == null) return;
-            rs = executeQuery(query);
+            long startTime = System.currentTimeMillis();
+            rs = connection.createStatement().executeQuery(query);
+            long endTime = System.currentTimeMillis();
+            searchTimeLabel.setText("Query Time: " + ((endTime - startTime) / 1000.0) + "s");
+
+            startTime = System.currentTimeMillis();
             constructRecipeTable();
+            endTime = System.currentTimeMillis();
+            constructTableTimeLabel.setText("Construct Table Time: " + ((endTime - startTime) / 1000.0) + "s");
         } catch (SQLException e) {
             Logger.getLogger(HomeSceneController.class.getName()).log(Level.SEVERE, null, e);
         }

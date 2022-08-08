@@ -34,9 +34,20 @@ public class DatabaseConnector {
      * @param password  password
      * @return true if successfully added
      */
-    public boolean addUser(String username, String password) throws Exception {
+    public static boolean addUser(Connection connection, String username, String password) throws Exception {
         try {
             // TODO: Add user function
+            if (connection == null) {
+                System.out.println("Error with connection in addUser");
+                return false;
+            }
+            Statement statement = connection.createStatement();
+            String query = "CREATE USER '" + username + "'@'localhost' IDENTIFIED BY '" + password + "';";
+            statement.executeUpdate(query);
+            query = "GRANT ALL PRIVILEGES ON *.* TO '" + username + "'@'localhost' WITH GRANT OPTION;"; // MAJOR SECURITY ISSUE, SHOULD NOT GIVE ROOT PERMISSIONS (For simplicity ignore this)
+            statement.executeUpdate(query);
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,10 +59,10 @@ public class DatabaseConnector {
      * @return
      * @throws Exception
      */
-    public static boolean initializeDatabase(File csvPath) throws Exception {
+    public static boolean initializeDatabase(File csvPath, String rootUsername, String rootPassword, String username, String password) throws Exception {
         try {
             // Connect to SQL as root and add new User
-            Connection connection = DriverManager.getConnection(url, "root", "root"); // TODO: Figure out common root user/password
+            Connection connection = DriverManager.getConnection(url, rootUsername, rootPassword);
             if (connection == null) {
                 System.out.println("Error connecting to database, is MySQL installed?");
                 return false;
@@ -70,6 +81,7 @@ public class DatabaseConnector {
                     "n_ingredients int," +
                     "submitted date," +
                     "description varchar(2048)," +
+                    "avg_rating double DEFAULT 0.0," +
                     "primary key (recipe_id));";
             statement.executeUpdate(query);
                 // Tag
@@ -102,6 +114,19 @@ public class DatabaseConnector {
                     "review text(64000)," +
                     "primary key (user_id, recipe_id));";
             statement.executeUpdate(query);
+                // inPantry
+            query = "CREATE TABLE inPantry (" +
+                    "username varchar(64)," +
+                    "ingredient_name varchar(256)," +
+                    "primary key(username, ingredient_name));";
+            statement.executeUpdate(query);
+                // isFavorite
+            query = "CREATE TABLE isFavorite (" +
+                    "username varchar(64)," +
+                    "recipe_id int," +
+                    "primary key(username, recipe_id));";
+            statement.executeUpdate(query);
+
             // Populate Tables TODO: Test if this works
             File[] files = csvPath.listFiles();
             assert files != null;
@@ -140,6 +165,19 @@ public class DatabaseConnector {
                     "FIELDTERMINATOR = '|'," +
                     "ROWTERMINATOR = '\r\n')";
             statement.executeUpdate(query);
+
+            // Update avg_rating in Recipe
+            query = "UPDATE Recipe r JOIN (" +
+                    "SELECT recipe_id, AVG(rating) as avg_rating" +
+                    "FROM Review v GROUP BY recipe_id" +
+                    ") v ON r.recipe_id = v.recipe_id" +
+                    "SET r.avg_rating = v.avg_rating;";
+            statement.executeUpdate(query);
+
+            // Add new user to server
+            if (!addUser(connection, username, password)) {
+                return false;
+            }
 
             return true;
         } catch (Exception e) {

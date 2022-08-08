@@ -6,7 +6,14 @@ import java.io.*;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class Users {
+public class User {
+    String username;
+    String password;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     /**
      * Adds new login to users array and checks for duplicate usernames
@@ -19,7 +26,6 @@ public class Users {
         try {
             File file = new File("src/main/resources/org/cs564/recipeapp/data/logins.txt");
             Scanner scnr = new Scanner(file);
-            scnr.nextLine(); // Skip header
             String line;
             String[] userData;
 
@@ -41,9 +47,6 @@ public class Users {
             bw.close();
             fw.close();
             scnr.close();
-
-            String query = "INSERT INTO User VALUES ('" + username +"';";
-
 
             return true;
 
@@ -69,7 +72,6 @@ public class Users {
         try {
             File file = new File("src/main/resources/org/cs564/recipeapp/data/logins.txt");
             Scanner scnr = new Scanner(file);
-            scnr.nextLine(); // Skip header
             String line;
             String[] userData;
 
@@ -78,9 +80,11 @@ public class Users {
                 line = scnr.nextLine();
                 userData = line.split(",");
                 if (userData[0].equals(username) && userData[1].equals(password)) {
+                    scnr.close();
                     return true;
                 }
             }
+            scnr.close();
             return false;
 
         } catch (IOException e) {
@@ -102,20 +106,31 @@ public class Users {
      */
     public static void deleteAccount(String username) {
         try {
-            File file = new File("src/main/resources/org/cs564/recipeapp/data/logins.txt");
-            Scanner scnr = new Scanner(file);
-            scnr.nextLine(); // Skip header
+            File oldFile = new File("src/main/resources/org/cs564/recipeapp/data/logins.txt");
+            File newFile = new File("src/main/resources/org/cs564/recipeapp/data/tmp.txt");
+            FileWriter fw = new FileWriter(newFile, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            Scanner scnr = new Scanner(oldFile);
             String line;
-            String[] userData;
+            String[] tokens;
 
-            // Find username
             while (scnr.hasNextLine()) {
                 line = scnr.nextLine();
-                userData = line.split(",");
-                if (userData[0].equals(username)) {
+                tokens = line.split(",");
+                if (!tokens[0].equalsIgnoreCase(username)) {
+                    // Push line to print writer
+                    pw.println(line);
                 }
             }
 
+            scnr.close();
+            pw.flush();
+            pw.close();
+            boolean deleted = oldFile.delete();
+            if (deleted) {System.out.println("Deleted File");}
+            File dump = new File("src/main/resources/org/cs564/recipeapp/data/logins.txt");
+            newFile.renameTo(dump);
         } catch (IOException e) {
             Alert ioError = new Alert(Alert.AlertType.ERROR);
             ioError.setContentText("IOException: Could not find user data");
