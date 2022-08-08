@@ -293,23 +293,37 @@ public class HomeSceneController {
         }
         if (eventSource == confirmRecipeDeletionButton) {
             // Delete recipe from recipe, review, and isFavorite
-            String query = "DELETE FROM Recipe WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
-            ResultSet result = connection.createStatement().executeQuery("SELECT COUNT(recipe_id) AS num FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
-            connection.createStatement().executeUpdate(query);
-            query = "DELETE FROM Review WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
-            connection.createStatement().executeUpdate(query);
 
+            String query = "";
 
-            if (result.getInt(1) == 1) {
-                query = "DELETE FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
-                connection.createStatement().executeUpdate(query);
-                favoritesCount--;
+            try {
+                ResultSet result;
+                result = connection.createStatement().executeQuery("SELECT COUNT(recipe_id) AS num FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
+                if (result.next()) {
+                    query = "DELETE FROM Review WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+                    connection.createStatement().executeUpdate(query);
+                }
+                result = connection.createStatement().executeQuery("SELECT COUNT(recipe_id) FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
+                if (result.next()) {
+                    query = "DELETE FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+                    connection.createStatement().executeUpdate(query);
+                    favoritesCount--;
+                }
+                result = connection.createStatement().executeQuery("SELECT COUNT(recipe_id) FROM ingredient WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
+                if (result.next()) {
+                    query = "DELETE FROM ingredient WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+                    connection.createStatement().executeUpdate(query);
+                }
+                result = connection.createStatement().executeQuery("SELECT COUNT(recipe_id) FROM step WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
+                if (result.next()) {
+                    query = "DELETE FROM step WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+                    connection.createStatement().executeUpdate(query);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            result = connection.createStatement().executeQuery("SELECT COUNT(recipe_id) AS num FROM ingredient WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
-            if (result.getInt(1) > 0) {
-                query = "DELETE FROM ingredient WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
-                connection.createStatement().executeUpdate(query);
-            }
+            query = "DELETE FROM Recipe WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+            connection.createStatement().executeUpdate(query);
             // Change pane
             profilePane.toFront();
         }
