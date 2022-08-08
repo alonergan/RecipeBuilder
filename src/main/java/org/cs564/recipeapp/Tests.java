@@ -98,11 +98,62 @@ public class Tests {
         return false;
     }
 
+
+
+     /**
+     * Tests if query returns correct results when finding recipe time
+     * @return
+     */
     public static boolean test4() {
+        int actual = 0;
+        String query = "SELECT * FROM Recipe r WHERE r.minutes < 30;";
+        if (connection != null) {
+            try {
+            rs = connection.createStatement().executeQuery(query);
+            while (rs.next()) {
+                actual = rs.getInt("minutes");
+                if (actual >= 30) {
+                    System.out.println("Test 4 Failed: result contains value greater than or eqaul to 30");
+                    return false;
+                }
+            }
+            System.out.println("Test 4 Passed");
+            return true;
+        }
+            catch(Exception e){
+                System.out.println("Test 4 Failed:");
+                e.printStackTrace();
+            }
+        }
         return false;
     }
-
+    /** 
+     * Tests if query returns at least 30 results when searching for recipes with common ingredients like eggs
+     * @return
+     */
     public static boolean test5() {
+        String query = "SELECT r.* FROM Recipe r INNER JOIN Ingredient i ON r.recipe_id = i.recipe_id WHERE i.ingredient_name LIKE '%eggs%';";
+        int iter = 0;
+        if (connection != null) {
+            try {
+            rs = connection.createStatement().executeQuery(query);
+            while (rs.next() && iter <30) {
+                iter++;
+            }
+            if (iter == 30) {
+                System.out.print("Test 5 Passed");
+                return true;
+            }
+            else {
+                System.out.print("Test 5 Failed: Should have at least 30 results, but only has:" + iter);
+                return false;
+            }
+        }
+            catch(Exception e){
+                System.out.println("Test 5 Failed:");
+                e.printStackTrace();
+            }
+        }
         return false;
     }
 }

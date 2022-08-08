@@ -516,15 +516,7 @@ public class HomeSceneController {
             if (rs.getInt("n_ingredients") == 0) {
                 continue;
             }
-
-<<<<<<< HEAD
-            // Get rating for each recipe
-            double rating = 0.0;
-            if (averageRatings.next()) {
-                rating = averageRatings.getDouble("rating");
-            }
-=======
->>>>>>> d38b74964b9edc67601c42f0803b6712719748f4
+            
             // Add new recipe
             recipeObvList.add(new Recipe(rs.getString("recipe_name"),
                     rs.getInt("minutes"), rs.getInt("n_steps"),
