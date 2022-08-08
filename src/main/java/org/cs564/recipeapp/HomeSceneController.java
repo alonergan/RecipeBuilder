@@ -62,7 +62,7 @@ public class HomeSceneController {
     @FXML // Buttons: Main menu
     private Button toFavoritesButton, settingsButton, pantryButton, quitButton, logoutButton, homeButton;
     @FXML // Buttons: Deletion settings
-    private Button deleteRecipeButton, deleteUserButton, confirmDeletionButton, cancelDeletionButton, confirmRecipeDeletionButton, cancelRecipeDeletionButton;
+    private Button deleteRecipeButton, deleteUserButton, confirmDeletionButton, cancelDeletionButton, confirmRecipeDeletionButton;
     @FXML // Buttons: Pantry
     private Button pantryDeleteBtn, pantrySearchIngredientBtn, pantrySearchRecipesBtn, pantryAddBtn, pantryCancelButton;
     @FXML // Buttons: Recipe Search
@@ -300,6 +300,8 @@ public class HomeSceneController {
             ResultSet result = connection.createStatement().executeQuery("SELECT COUNT(recipe_id) AS num FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";");
             if (result.getInt("num") == 1) {
                 query = "DELETE * FROM isFavorite WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
+                connection.createStatement().executeUpdate(query);
+                query = "DELETE * FROM ingredient WHERE recipe_id = " + selectedRecipe.recipe_id + ";";
                 connection.createStatement().executeUpdate(query);
                 favoritesCount--;
             }
