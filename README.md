@@ -5,10 +5,11 @@
 <div>
   <h4>Some concepts I worked on with this project:</h4>
   <ul>
-    <li>Creating and managing a database with ERD</li>
-    <li>Cleaning data and transofrming it into tables outlined in the ERD with Python</li>
-    <li>Connecting SQL database to stand alone applications</li>
-    <li>MVVM architechture and passing data between application pages</li>
+    <li>Creating and managing a fullstack project</li>
+    <li>Cleaning data and transforming it into tables outlined in the ERD with Python</li>
+    <li>Creating, managing, and connecting an SQL database to stand alone applications</li>
+    <li>Utilizing MVVM architechture for structure and passing data between application pages</li>
+    <li>Displaying content within an informative and easily navigable GUI</li>
   </ul>
 </div>
 
