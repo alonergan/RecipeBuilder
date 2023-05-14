@@ -1,6 +1,7 @@
 <h1>Recipe Builder</h1>
-<h3>Java desktop application that lets users search for recipes based on given ingredients</h3>
-<h6></h6>
+<h3>Java desktop application for finding recipes you can make with owned ingredients</h3>
+<h5>Users can search for recipes by owned ingredients, name, category, or rating</h5>
+<h5>User can view recipe steps, reviews, and ingredients and store favorite recipes in their profile</h5>
 
 <div>
   <h4>Some concepts I worked on with this project:</h4>
