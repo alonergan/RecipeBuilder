@@ -25,13 +25,31 @@
 
 <div>
   <h4>Images</h4>
-  <div display: grid>
+  <div>
     <div>
       <h5>Entity Relationship Diagram</h5>
       <img src="../assets/RB-ERD.PNG" width="400"></image> 
     </div>
- 
-    ![](../assets/RB-Login.PNG)
+    <div>
+      <h5>Entity Relationship Diagram</h5>
+      <img src="../assets/RB-Pantry.PNG" width="400"></image> 
+    </div>
+    <div>
+      <h5>Entity Relationship Diagram</h5>
+      <img src="../assets/RB-Search.PNG" width="400"></image> 
+    </div>
+    <div>
+      <h5>Entity Relationship Diagram</h5>
+      <img src="../assets/RB-View.PNG" width="400"></image> 
+    </div>
+    <div>
+      <h5>Entity Relationship Diagram</h5>
+      <img src="../assets/RB-Favorites.PNG" width="400"></image> 
+    </div>
+    <div>
+      <h5>Entity Relationship Diagram</h5>
+      <img src="../assets/RB-SQLSetup.PNG" width="400"></image> 
+    </div>
   </div>
   
 </div>
